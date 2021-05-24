@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="myresource">
+    <file>resource/delete-forever.png</file>
+
+  </qresource>
+</RCC>

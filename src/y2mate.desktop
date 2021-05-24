@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+GenericName=y2mate
+Name=y2mate
+Type=Application
+Icon=y2mate.png
+Keywords=youtube downloader;video downloader;music downloader;playlist downloader;full HD downloader;audio downloader; youtube; youtube music;
+Exec=y2mate %F
+Categories=Utility;Qt;
+Terminal=false
+Name[en_US]=Y2mate
