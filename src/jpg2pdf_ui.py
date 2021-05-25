@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1072, 585)
+        MainWindow.resize(1076, 585)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -75,6 +75,7 @@ class Ui_MainWindow(object):
         self.gridLayout_25.addWidget(self.remove_duplicate, 0, 3, 1, 1)
         self.selectall = QtWidgets.QComboBox(self.groupBox_4)
         self.selectall.setObjectName("selectall")
+        self.selectall.addItem("")
         self.selectall.addItem("")
         self.selectall.addItem("")
         self.gridLayout_25.addWidget(self.selectall, 0, 0, 1, 1)
@@ -342,8 +343,11 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName("actionAbout")
         self.actionClear_all = QtWidgets.QAction(MainWindow)
         self.actionClear_all.setObjectName("actionClear_all")
+        self.actionRemove_Selected = QtWidgets.QAction(MainWindow)
+        self.actionRemove_Selected.setObjectName("actionRemove_Selected")
         self.toolBar.addAction(self.actionAdd_image)
         self.toolBar.addAction(self.actionAdd_folder)
+        self.toolBar.addAction(self.actionRemove_Selected)
         self.toolBar.addAction(self.actionClear_all)
         self.toolBar.addAction(self.actionAccount)
         self.toolBar.addAction(self.actionAbout)
@@ -354,13 +358,15 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.tableWidget.setToolTip(_translate("MainWindow", "Double click to select"))
         self.groupBox_4.setTitle(_translate("MainWindow", " Operations"))
         self.movedown.setText(_translate("MainWindow", "Move Down"))
         self.image_label.setText(_translate("MainWindow", "Image 0 of 0"))
         self.change.setText(_translate("MainWindow", "Change"))
         self.remove_duplicate.setText(_translate("MainWindow", "Remove duplicates"))
-        self.selectall.setItemText(0, _translate("MainWindow", "Select All"))
-        self.selectall.setItemText(1, _translate("MainWindow", "Deselect All"))
+        self.selectall.setItemText(0, _translate("MainWindow", "Select Item"))
+        self.selectall.setItemText(1, _translate("MainWindow", "Select All"))
+        self.selectall.setItemText(2, _translate("MainWindow", "Deselect All"))
         self.start_convert.setText(_translate("MainWindow", "Start Convert"))
         self.movedown_2.setText(_translate("MainWindow", "Move Down"))
         self.label_49.setText(_translate("MainWindow", "Output path"))
@@ -388,5 +394,6 @@ class Ui_MainWindow(object):
         self.actionAccount.setText(_translate("MainWindow", "Account"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
         self.actionClear_all.setText(_translate("MainWindow", "Clear all"))
+        self.actionRemove_Selected.setText(_translate("MainWindow", "Remove Selected"))
 import dark_rc
 import light_rc

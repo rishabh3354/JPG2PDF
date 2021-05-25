@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1072</width>
+    <width>1076</width>
     <height>585</height>
    </rect>
   </property>
@@ -23,7 +23,11 @@
       <widget class="QWidget" name="verticalLayoutWidget_3">
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="QTableWidget" name="tableWidget"/>
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="toolTip">
+           <string>Double click to select</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_4">
@@ -91,6 +95,11 @@
              </item>
              <item row="0" column="0">
               <widget class="QComboBox" name="selectall">
+               <item>
+                <property name="text">
+                 <string>Select Item</string>
+                </property>
+               </item>
                <item>
                 <property name="text">
                  <string>Select All</string>
@@ -516,6 +525,7 @@
    </attribute>
    <addaction name="actionAdd_image"/>
    <addaction name="actionAdd_folder"/>
+   <addaction name="actionRemove_Selected"/>
    <addaction name="actionClear_all"/>
    <addaction name="actionAccount"/>
    <addaction name="actionAbout"/>
@@ -543,6 +553,11 @@
   <action name="actionClear_all">
    <property name="text">
     <string>Clear all</string>
+   </property>
+  </action>
+  <action name="actionRemove_Selected">
+   <property name="text">
+    <string>Remove Selected</string>
    </property>
   </action>
  </widget>
