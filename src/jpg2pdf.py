@@ -3,7 +3,7 @@ import sys
 from PIL import Image
 from PyQt5 import QtCore
 from PyQt5.QtCore import QProcessEnvironment, QUrl
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QGuiApplication
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView
 from qtpy.QtGui import QDesktopServices
@@ -39,6 +39,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.table_view_default_setting()
         self.progress_bar_disable()
+        largeWidth = QGuiApplication.primaryScreen().size().width()
+        self.ui.splitter_2.setSizes([largeWidth / 2, 120])
 
         initial_defines(self)
         self.counter = 0
@@ -66,7 +68,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.checkBox_protect_pdf.stateChanged.connect(self.enable_pdf_password)
 
         self.ui.tableWidget.itemDoubleClicked.connect(self.select_item_on_double_clicked)
-
         self.ui.moveup.clicked.connect(self.move_up_item)
         self.ui.movedown.clicked.connect(self.move_down_item)
 
@@ -180,6 +181,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableWidget.setStyleSheet("QAbstractItemView::indicator { width: 22px;height:22px;/*size of checkbox change here */} QTableWidget::item{width: 200px;height: 100px;} ")
 
     def remove_item_from_table(self):
         if self.all_images_list:
@@ -376,7 +378,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.show_full_path_flag = False
         self.toggle += 1
+        self.get_all_selected_items()
         self.process_images_into_table()
+        self.keep_selected_items(operation="stable")
 
     def get_all_selected_items(self):
         self.selected_list = []
@@ -394,6 +398,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     index = i - 1
                 elif operation == "down":
                     index = i + 1
+                elif operation == "stable":
+                    index = i
                 else:
                     index = i
                 item = self.ui.tableWidget.item(index, 0)

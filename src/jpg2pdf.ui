@@ -17,6 +17,24 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="cursor">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -24,9 +42,41 @@
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
          <widget class="QTableWidget" name="tableWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
           <property name="toolTip">
            <string>Double click to select</string>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="gridStyle">
+           <enum>Qt::SolidLine</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="horizontalHeaderCascadingSectionResizes">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="horizontalHeaderMinimumSectionSize">
+           <number>50</number>
+          </attribute>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>100</number>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
          </widget>
         </item>
         <item>
@@ -174,7 +224,14 @@
       <widget class="QWidget" name="verticalLayoutWidget_4">
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
-         <widget class="QGraphicsView" name="graphicsView"/>
+         <widget class="QGraphicsView" name="graphicsView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="image">
@@ -255,7 +312,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>zoom In</string>
+             <string>Zoom In</string>
             </property>
            </widget>
           </item>
@@ -345,6 +402,9 @@
                <property name="toolTip">
                 <string>Fill Author name</string>
                </property>
+               <property name="styleSheet">
+                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -387,6 +447,9 @@
                <property name="toolTip">
                 <string>Set Password to PDF</string>
                </property>
+               <property name="styleSheet">
+                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -428,6 +491,9 @@
                </property>
                <property name="toolTip">
                 <string>Fill keywords</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
                </property>
                <property name="text">
                 <string/>
@@ -483,6 +549,9 @@
                </property>
                <property name="toolTip">
                 <string>Fill subject</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
                </property>
                <property name="text">
                 <string/>
