@@ -43,6 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         initial_defines(self)
         self.counter = 0
         self.toggle = 0
+        self.default_selected = 0
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionAdd_folder.triggered.connect(self.load_folder)
@@ -66,6 +67,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ui.tableWidget.itemDoubleClicked.connect(self.select_item_on_double_clicked)
 
+        self.ui.moveup.clicked.connect(self.move_up_item)
+        self.ui.movedown.clicked.connect(self.move_down_item)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -76,6 +79,37 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
+
+    def move_up_item(self):
+        self.get_all_selected_items()
+        for selected_item in self.selected_list:
+            pos2 = selected_item
+            pos1 = pos2 - 1
+            if pos1 == -1:
+                return False
+            self.all_images_list[pos1], self.all_images_list[pos2] = self.all_images_list[pos2], self.all_images_list[pos1]
+            self.image_dimension[pos1], self.image_dimension[pos2] = self.image_dimension[pos2], self.image_dimension[pos1]
+            self.image_size[pos1], self.image_size[pos2] = self.image_size[pos2], self.image_size[pos1]
+            self.image_extension[pos1], self.image_extension[pos2] = self.image_extension[pos2], self.image_extension[pos1]
+        self.process_images_into_table()
+        self.keep_selected_items(operation="up")
+
+    def move_down_item(self):
+        self.get_all_selected_items()
+        self.selected_list.reverse()
+        for selected_item in self.selected_list:
+            pos2 = selected_item
+            pos1 = pos2 + 1
+            if pos1 == len(self.all_images_list):
+                return False
+            self.all_images_list[pos1], self.all_images_list[pos2] = self.all_images_list[pos2], self.all_images_list[pos1]
+            self.image_dimension[pos1], self.image_dimension[pos2] = self.image_dimension[pos2], self.image_dimension[
+                pos1]
+            self.image_size[pos1], self.image_size[pos2] = self.image_size[pos2], self.image_size[pos1]
+            self.image_extension[pos1], self.image_extension[pos2] = self.image_extension[pos2], self.image_extension[
+                pos1]
+        self.process_images_into_table()
+        self.keep_selected_items(operation="down")
 
     def select_item_on_double_clicked(self, item):
         if item.column() == 0:
@@ -93,10 +127,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def select_all_button_function(self):
         for i in range(self.ui.tableWidget.rowCount()):
             item = self.ui.tableWidget.item(i, 0)
-            if self.ui.selectall.currentText() == "Select All":
-                item.setCheckState(QtCore.Qt.Checked)
-            elif self.ui.selectall.currentText() == "Deselect All":
-                item.setCheckState(QtCore.Qt.Unchecked)
+            if item:
+                if self.ui.selectall.currentText() == "Select All":
+                    item.setCheckState(QtCore.Qt.Checked)
+                elif self.ui.selectall.currentText() == "Deselect All":
+                    item.setCheckState(QtCore.Qt.Unchecked)
         self.ui.selectall.setCurrentIndex(0)
 
     def get_image_dimension(self):
@@ -157,7 +192,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.process_images_into_table()
 
     def next_button_clicked(self):
-        print(self.counter)
         if len(self.all_images_list) - 1 == self.counter:
             return True
         else:
@@ -167,6 +201,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.setPhoto(pixmap)
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
+                self.ui.tableWidget.selectRow(self.counter)
+                self.default_selected = self.counter-1
             else:
                 self.setPhoto(QPixmap())
 
@@ -180,12 +216,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.setPhoto(pixmap)
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
+                self.ui.tableWidget.selectRow(self.counter)
+                self.default_selected = self.counter-1
             else:
                 self.setPhoto(QPixmap())
 
     def reset_cache(self):
         self.counter = 0
         self.toggle = 0
+        self.default_selected = 0
         self.all_images_list = []
         self.image_dimension = []
         self.image_size = []
@@ -343,26 +382,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selected_list = []
         for i in range(self.ui.tableWidget.rowCount()):
             item = self.ui.tableWidget.item(i, 0)
-            if item.checkState() == QtCore.Qt.Checked:
-                if item.row() not in self.selected_list:
-                    self.selected_list.append(item.row())
+            if item:
+                if item.checkState() == QtCore.Qt.Checked:
+                    if item.row() not in self.selected_list:
+                        self.selected_list.append(item.row())
 
-        print(self.selected_list)
+    def keep_selected_items(self, operation=None):
+        if operation:
+            for i in self.selected_list:
+                if operation == "up":
+                    index = i - 1
+                elif operation == "down":
+                    index = i + 1
+                else:
+                    index = i
+                item = self.ui.tableWidget.item(index, 0)
+                if item:
+                    item.setCheckState(QtCore.Qt.Checked)
 
     def remove_selected(self):
         try:
             self.get_all_selected_items()
-            if len(self.selected_list) == len(self.all_images_list):
-                self.reset_cache()
+            if self.selected_list:
+                self.msg = QMessageBox()
+                self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+                self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+                self.msg.setIcon(QMessageBox.Information)
+                self.msg.setText("Are you sure want to remove selected images ?")
+                yes_button = self.msg.addButton(QMessageBox.Yes)
+                no_button = self.msg.addButton(QMessageBox.No)
+                self.msg.exec_()
+                if self.msg.clickedButton() == yes_button:
+                    if len(self.selected_list) == len(self.all_images_list):
+                        self.reset_cache()
+                    else:
+                        for row in self.selected_list:
+                            if self.all_images_list:
+                                self.all_images_list.pop(row)
+                                self.image_dimension.pop(row)
+                                self.image_size.pop(row)
+                                self.image_extension.pop(row)
+                    self.process_images_into_table()
+                if self.msg.clickedButton() == no_button:
+                    pass
             else:
-                for row in self.selected_list:
-                    if self.all_images_list:
-                        self.all_images_list.pop(row)
-                        self.image_dimension.pop(row)
-                        self.image_size.pop(row)
-                        self.image_extension.pop(row)
-            self.process_images_into_table()
-        except Exception:
+                self.popup_message(title="OOps!", message="Please select an image items checkbox", error=True)
+        except Exception as e:
+            self.popup_message(title="OOps", message="Error while removing the selected images!", error=True)
             pass
 
     def clear_all_table_data(self):

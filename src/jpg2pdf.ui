@@ -32,13 +32,13 @@
         <item>
          <widget class="QGroupBox" name="groupBox_4">
           <property name="title">
-           <string> Operations</string>
+           <string> Options</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
             <layout class="QGridLayout" name="gridLayout_25">
-             <item row="0" column="2">
-              <widget class="QToolButton" name="movedown">
+             <item row="3" column="4" colspan="2">
+              <widget class="QPushButton" name="start_convert">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -46,28 +46,31 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Move Down</string>
+                <string>Start Convert</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="2" colspan="2">
-              <widget class="QLineEdit" name="output_path">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
+             <item row="0" column="5">
               <widget class="QLabel" name="image_label">
                <property name="text">
                 <string>Image 0 of 0</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="4">
+             <item row="3" column="0" colspan="4">
+              <widget class="QProgressBar" name="progress_bar">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="value">
+                <number>24</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="5">
               <widget class="QPushButton" name="change">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -80,8 +83,8 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="3">
-              <widget class="QPushButton" name="remove_duplicate">
+             <item row="0" column="4">
+              <widget class="QToolButton" name="movedown">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -89,11 +92,37 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Remove duplicates</string>
+                <string>Move Down</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
+             <item row="0" column="3">
+              <widget class="QToolButton" name="moveup">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Move Up</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="show_full_path">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Show full path</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="2">
               <widget class="QComboBox" name="selectall">
                <item>
                 <property name="text">
@@ -112,46 +141,7 @@
                </item>
               </widget>
              </item>
-             <item row="3" column="3" colspan="2">
-              <widget class="QPushButton" name="start_convert">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Start Convert</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0" colspan="3">
-              <widget class="QProgressBar" name="progress_bar">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="value">
-                <number>24</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QToolButton" name="movedown_2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Move Down</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
+             <item row="2" column="0">
               <widget class="QLabel" name="label_49">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -164,16 +154,13 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
-              <widget class="QToolButton" name="show_full_path">
+             <item row="2" column="1" colspan="4">
+              <widget class="QLineEdit" name="output_path">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Show full path</string>
                </property>
               </widget>
              </item>
@@ -303,7 +290,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_5">
           <property name="title">
-           <string> PDF properties</string>
+           <string> Set PDF properties (Output)</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_12">
            <item>
