@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1076</width>
-    <height>585</height>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
            <bool>true</bool>
           </attribute>
           <attribute name="horizontalHeaderMinimumSectionSize">
-           <number>50</number>
+           <number>90</number>
           </attribute>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>100</number>
@@ -87,91 +87,6 @@
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
             <layout class="QGridLayout" name="gridLayout_25">
-             <item row="3" column="4" colspan="2">
-              <widget class="QPushButton" name="start_convert">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Start Convert</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QLabel" name="image_label">
-               <property name="text">
-                <string>Image 0 of 0</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0" colspan="4">
-              <widget class="QProgressBar" name="progress_bar">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="value">
-                <number>24</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="5">
-              <widget class="QPushButton" name="change">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Change</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
-              <widget class="QToolButton" name="movedown">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Move Down</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QToolButton" name="moveup">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Move Up</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QToolButton" name="show_full_path">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Show full path</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="0" colspan="2">
               <widget class="QComboBox" name="selectall">
                <item>
@@ -191,7 +106,102 @@
                </item>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item row="3" column="4" colspan="2">
+              <widget class="QPushButton" name="start_convert">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Start Convert</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="5">
+              <widget class="QPushButton" name="change">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Change</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="show_full_path">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Show full path</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="4">
+              <widget class="QProgressBar" name="progress_bar">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="value">
+                <number>24</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QToolButton" name="movedown">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Move Down</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="5">
+              <widget class="QLabel" name="image_label">
+               <property name="text">
+                <string>Image 0 of 0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QToolButton" name="moveup">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Move Up</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2" colspan="3">
+              <widget class="QLineEdit" name="output_path">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
               <widget class="QLabel" name="label_49">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -202,16 +212,28 @@
                <property name="text">
                 <string>Output path</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
               </widget>
              </item>
-             <item row="2" column="1" colspan="4">
-              <widget class="QLineEdit" name="output_path">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
+             <item row="2" column="0">
+              <widget class="QComboBox" name="sort">
+               <item>
+                <property name="text">
+                 <string>Sort item</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Asc</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Desc</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
@@ -224,19 +246,9 @@
       <widget class="QWidget" name="verticalLayoutWidget_4">
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
-         <widget class="QGraphicsView" name="graphicsView">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QLabel" name="image">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -246,6 +258,19 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGraphicsView" name="graphicsView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
          </widget>
         </item>
@@ -274,32 +299,6 @@
             </property>
             <property name="text">
              <string>Next</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="preview">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Preview</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="remove">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Remove</string>
             </property>
            </widget>
           </item>
@@ -345,52 +344,45 @@
          </layout>
         </item>
         <item>
+         <widget class="QToolButton" name="preview">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Preview</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="remove">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Remove</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="title">
-           <string> Set PDF properties (Output)</string>
+           <string> PDF properties</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_12">
            <item>
             <layout class="QGridLayout" name="gridLayout_24">
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_16">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Keywords</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLineEdit" name="keyword">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLineEdit" name="author">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="1">
               <widget class="QCheckBox" name="checkBox_author">
                <property name="sizePolicy">
@@ -410,6 +402,70 @@
                </property>
               </widget>
              </item>
+             <item row="3" column="1">
+              <widget class="QCheckBox" name="checkBox_protect_pdf">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Set Password to PDF</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLineEdit" name="subject">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>Subject</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_20">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Subject</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLineEdit" name="title">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>Enter Pdf Title</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label_17">
                <property name="sizePolicy">
@@ -423,21 +479,8 @@
                </property>
               </widget>
              </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_18">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Protect PDF</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QCheckBox" name="checkBox_protect_pdf">
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="checkBox_subject">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -445,7 +488,7 @@
                 </sizepolicy>
                </property>
                <property name="toolTip">
-                <string>Set Password to PDF</string>
+                <string>Fill subject</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
@@ -468,8 +511,8 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QLineEdit" name="title">
+             <item row="2" column="2">
+              <widget class="QLineEdit" name="author">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -479,29 +522,13 @@
                <property name="text">
                 <string/>
                </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QCheckBox" name="checkBox_keywords">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>Fill keywords</string>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
-               </property>
-               <property name="text">
-                <string/>
+               <property name="placeholderText">
+                <string>Author name</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
-              <widget class="QLineEdit" name="subject">
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_18">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -509,24 +536,11 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string/>
+                <string>Protect PDF</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_20">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Subject</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
+             <item row="3" column="2">
               <widget class="QLineEdit" name="protect_pdf">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -537,24 +551,128 @@
                <property name="text">
                 <string/>
                </property>
+               <property name="placeholderText">
+                <string>Set password</string>
+               </property>
               </widget>
              </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_6">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string> Advance Settings</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <layout class="QGridLayout" name="gridLayout_27">
              <item row="1" column="1">
-              <widget class="QCheckBox" name="checkBox_subject">
+              <widget class="QComboBox" name="page_format">
+               <item>
+                <property name="text">
+                 <string>Auto</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>A3</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>A4</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>A5</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Letter</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>A3 (Fit view)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>A4 (Fit view)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>A5 (Fit view)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Letter (Fit view)</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="orientation">
+               <item>
+                <property name="text">
+                 <string>Auto</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Portrait</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Landscape</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label28">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="toolTip">
-                <string>Fill subject</string>
+               <property name="text">
+                <string>Page format</string>
                </property>
-               <property name="styleSheet">
-                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_27">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
                <property name="text">
-                <string/>
+                <string>Orientation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="2">
+              <widget class="QPushButton" name="more_setting_button">
+               <property name="text">
+                <string>More settings</string>
                </property>
               </widget>
              </item>
@@ -585,6 +703,7 @@
    <addaction name="actionClear_all"/>
    <addaction name="actionAccount"/>
    <addaction name="actionAbout"/>
+   <addaction name="actionSettings"/>
   </widget>
   <action name="actionAdd_image">
    <property name="text">
@@ -614,6 +733,11 @@
   <action name="actionRemove_Selected">
    <property name="text">
     <string>Remove Selected</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>

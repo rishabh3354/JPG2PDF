@@ -1,5 +1,6 @@
 import glob
 import os
+from PyQt5.QtCore import QProcessEnvironment, QStandardPaths
 
 
 def load_images_from_folder(folder):
@@ -39,3 +40,21 @@ def humanbytes(byte_str):
         return '{0:.2f} GB'.format(B / GB)
     elif TB <= B:
         return '{0:.2f} TB'.format(B / TB)
+
+
+def get_download_path(location):
+    try:
+        if location:
+            location += '/JPG2PDF/'
+            os.makedirs(location, exist_ok=True)
+            return location
+        else:
+            HOME = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+            if HOME != '':
+                HOME += '/Downloads/JPG2PDF/'
+                os.makedirs(HOME, exist_ok=True)
+            else:
+                HOME = QStandardPaths.writableLocation(QStandardPaths.HomeLocation)
+            return HOME
+    except Exception as e:
+        return QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads/JPG2PDF/"
