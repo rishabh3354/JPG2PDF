@@ -58,3 +58,18 @@ def get_download_path(location):
             return HOME
     except Exception as e:
         return QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads/JPG2PDF/"
+
+
+def check_for_already_file_exists(download_path, pdf_settings):
+    title = pdf_settings.get("title")
+    output_path = None
+    try:
+        if title in [None, ""]:
+            title = "jpf2pdf_output"
+        output_path = f"{download_path}{title}.pdf"
+        if not os.path.isfile(output_path):
+            return False, title, output_path
+        else:
+            return True, title, output_path
+    except Exception as e:
+        return False, title, output_path

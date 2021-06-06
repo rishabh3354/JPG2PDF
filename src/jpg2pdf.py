@@ -3,27 +3,30 @@ import sys
 from PIL import Image
 from PyQt5 import QtCore
 from PyQt5.QtCore import QProcessEnvironment, QUrl
-from PyQt5.QtGui import QPixmap, QGuiApplication
+from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
-    QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView
+    QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
 from qtpy.QtGui import QDesktopServices
-from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path
+from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
+    check_for_already_file_exists
 from initial_init import initial_defines
 from convert_pdf_threads import ConvertToPdfThread
+from setting_module import SettingPage
 from theme_set import set_theme
 from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPG2PDF'
-THEME_PATH = 'theme/'
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
+        self.setting_ui = SettingPage()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF")
+        self.setWindowTitle("JPG2PDF PRO")
         set_theme(self)
+        set_theme(self.setting_ui)
         self.all_images_list = []
         self.image_dimension = []
         self.image_size = []
@@ -31,8 +34,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selected_list = []
         self.select_folder = None
         self.show_full_path_flag = False
-        self.ui.subject.setEnabled(False)
-        self.ui.author.setEnabled(False)
         self.ui.protect_pdf.setEnabled(False)
         self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
         self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
@@ -49,6 +50,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.default_selected = 0
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
+        self.ui.actionSettings.triggered.connect(self.show_more_setting)
         self.ui.actionAdd_folder.triggered.connect(self.load_folder)
         self.ui.actionClear_all.triggered.connect(self.clear_all_table_data)
         self.ui.actionRemove_Selected.triggered.connect(self.remove_selected)
@@ -63,17 +65,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.remove.clicked.connect(self.remove_item_from_table)
         self.ui.selectall.currentIndexChanged.connect(self.select_all_button_function)
 
-        self.ui.checkBox_subject.stateChanged.connect(self.enable_subject)
-        self.ui.checkBox_author.stateChanged.connect(self.enable_author)
         self.ui.checkBox_protect_pdf.stateChanged.connect(self.enable_pdf_password)
-
         self.ui.tableWidget.itemDoubleClicked.connect(self.select_item_on_double_clicked)
         self.ui.moveup.clicked.connect(self.move_up_item)
         self.ui.movedown.clicked.connect(self.move_down_item)
         self.ui.start_convert.clicked.connect(self.start_convert_process)
-
         self.ui.page_format.currentIndexChanged.connect(self.check_for_warning)
         self.ui.sort.currentIndexChanged.connect(self.sort_asc_desc)
+        self.ui.more_setting_button.clicked.connect(self.show_more_setting)
+        self.setting_ui.ui.clear_all_settings.clicked.connect(self.clear_setting_clicked)
+        self.setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
+        self.setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
+        self.setting_ui.ui.page_to.textChanged.connect(self.check_from_to_page_validation)
+        self.setting_ui.ui.select_angle.currentIndexChanged.connect(self.validation_for_angle)
+        self.ui.stop.clicked.connect(self.kill_process)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -85,49 +90,164 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
 
-        # self.all_images_list = ['/home/warlord/Pictures/Screenshot from 2021-06-03 21-29-58.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-44.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-20 22-11-21.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-24.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-39.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 13-46-41.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-17 23-16-08.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-47.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-23 12-52-41.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-12 12-41-54.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-06 02-02-47.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-03-10 23-26-13.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-35-10.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-15 18-12-35.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-03-11 01-43-54.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-01.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-27 15-28-23.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-07 15-26-08.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-56.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 13-31-48.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-31.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-23.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-46.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-27.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-03-10 22-25-28.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-22.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-06-02 00-35-43.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-30-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-07 15-05-09.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-09-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-27.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-32.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-23.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-31 21-57-10.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-38-38.png',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0003-15-May-2021-20_18_01.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0002-15-May-2021-20_18_01.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0000-15-May-2021-20_17_58222222222222222222222222222222222222222222222222222222222222222222222222.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
-        # self.process_images_into_table()
+        self.all_images_list = ['/home/warlord/Pictures/Screenshot from 2021-06-03 21-29-58.png',
+                                '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-44.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-20 22-11-21.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-53.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-24.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-39.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-21 13-46-41.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-17 23-16-08.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-47.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-23 12-52-41.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-12 12-41-54.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-02-06 02-02-47.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-03-10 23-26-13.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-02 14-35-10.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-15 18-12-35.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-03-11 01-43-54.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-01.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-02-27 15-28-23.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-02-07 15-26-08.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-56.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-21 13-31-48.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-31.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-23.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-46.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-27.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-53.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-03-10 22-25-28.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-22.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-06-02 00-35-43.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-02 14-30-53.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-02-07 15-05-09.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-21 11-09-53.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-27.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-32.png',
+                                '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-23.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-31 21-57-10.png',
+                                '/home/warlord/Pictures/Screenshot from 2021-05-02 14-38-38.png',
+                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0003-15-May-2021-20_18_01.jpg',
+                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0002-15-May-2021-20_18_01.jpg',
+                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0000-15-May-2021-20_17_58222222222222222222222222222222222222222222222222222222222222222222222222.jpg',
+                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
+                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
+        self.process_images_into_table()
+
+    def kill_process(self):
+        try:
+            is_running = self.convert_pdf_thread.isRunning()
+        except Exception as e:
+            is_running = False
+
+        if is_running:
+            self.msg = QMessageBox()
+            self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+            self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+            self.msg.setIcon(QMessageBox.Information)
+            self.msg.setText("Are you sure want to stop running process?")
+            yes_button = self.msg.addButton(QMessageBox.Yes)
+            no_button = self.msg.addButton(QMessageBox.No)
+            self.msg.exec_()
+            if self.msg.clickedButton() == yes_button:
+                try:
+                    self.convert_pdf_thread.is_killed = True
+                except Exception as e:
+                    pass
+            if self.msg.clickedButton() == no_button:
+                pass
+
+    def file_download_success_dialog(self, title, folder_path, play_path):
+        self.msg = QMessageBox()
+        self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setText(title)
+        self.msg.setInformativeText("")
+        close = self.msg.addButton(QMessageBox.Yes)
+        open_pdf = self.msg.addButton(QMessageBox.Yes)
+        open_folder = self.msg.addButton(QMessageBox.Yes)
+        open_folder.setText('Open folder')
+        open_pdf.setText('Open PDF File')
+        close.setText('Close')
+        open_pdf.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_MediaPlay)))
+        close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
+        open_folder.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
+        self.msg.exec_()
+        try:
+            if self.msg.clickedButton() == open_folder:
+                QDesktopServices.openUrl(QUrl(folder_path))
+            elif self.msg.clickedButton() == open_pdf:
+                QDesktopServices.openUrl(QUrl(play_path))
+            elif self.msg.clickedButton() == close:
+                pass
+        except Exception as e:
+            pass
+
+    def validation_for_angle(self):
+        page_to = self.setting_ui.ui.page_to.text()
+        page_from = self.setting_ui.ui.page_from.text()
+        rotation_angle = str(self.setting_ui.ui.select_angle.currentText())
+        if rotation_angle != "Select angle" and (page_to or page_from) in [None, ""]:
+            self.popup_message(title="All Page selection!",
+                               message="Operation will perform for all pages.")
+        try:
+            if (page_to and page_from) not in [None, ""]:
+                page_to = int(page_to)
+                page_from = int(page_from)
+                if page_from > page_to:
+                    self.popup_message(title="Invalid page selection", message="'Page To' must to greater or equal to 'Page From'.")
+                    self.setting_ui.ui.page_to.clear()
+                    self.setting_ui.ui.page_from.clear()
+                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+
+                if (page_to or page_from) == 0:
+                    self.popup_message(title="Invalid page selection",
+                                       message="'Page value must be greater than 0")
+                    self.setting_ui.ui.page_to.clear()
+                    self.setting_ui.ui.page_from.clear()
+                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+        except Exception as e:
+            self.popup_message(title="Invalid page selection",
+                               message="Page value must be integer")
+            self.setting_ui.ui.select_angle.setCurrentIndex(0)
+            self.setting_ui.ui.page_to.clear()
+            self.setting_ui.ui.page_from.clear()
+            pass
+
+    def check_from_to_page_validation(self):
+        page_to = self.setting_ui.ui.page_to.text()
+        page_from = self.setting_ui.ui.page_from.text()
+        try:
+            if (page_to and page_from) not in [None, ""]:
+                page_to = int(page_to)
+                page_from = int(page_from)
+                if page_from > page_to:
+                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+                if (page_to or page_from) == 0:
+                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+
+        except Exception as e:
+            self.setting_ui.ui.select_angle.setCurrentIndex(0)
+
+    def clear_setting_clicked(self):
+        self.setting_ui.ui.keywords.clear()
+        self.setting_ui.ui.producer.clear()
+        self.setting_ui.ui.creator.clear()
+        self.setting_ui.ui.created_on.clear()
+
+        self.setting_ui.ui.page_to.clear()
+        self.setting_ui.ui.page_from.clear()
+        self.setting_ui.ui.select_angle.setCurrentIndex(0)
+
+    def ok_setting_clicked(self):
+        self.setting_ui.hide()
+
+    def show_more_setting(self):
+        self.setting_ui.show()
+
+    def closeEvent(self, event):
+        self.setting_ui.hide()
 
     def sort_asc_desc(self):
         if self.all_images_list:
@@ -230,22 +350,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             img = Image.open(image_path)
             self.image_extension.append(f"{img.format}")
 
-    def enable_subject(self):
-        if self.ui.checkBox_subject.isChecked():
-            self.ui.subject.setEnabled(True)
-        else:
-            self.ui.subject.setEnabled(False)
-
-    def enable_author(self):
-        if self.ui.checkBox_author.isChecked():
-            self.ui.author.setEnabled(True)
-        else:
-            self.ui.author.setEnabled(False)
-
     def enable_pdf_password(self):
         if self.ui.checkBox_protect_pdf.isChecked():
             self.ui.protect_pdf.setEnabled(True)
         else:
+            self.ui.protect_pdf.clear()
             self.ui.protect_pdf.setEnabled(False)
 
     def table_view_default_setting(self):
@@ -253,7 +362,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.setRowCount(14)
         self.ui.tableWidget.setHorizontalHeaderLabels(['Source Image', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
-        self.ui.tableWidget.setColumnWidth(0, 420)
+        self.ui.tableWidget.setColumnWidth(0, 400)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setStyleSheet(
@@ -548,35 +657,136 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def progress_bar_disable(self):
         self.ui.progress_bar.setRange(0, 1)
 
+    def get_pdf_setting_all(self):
+        pdf_settings = dict()
+
+        pdf_settings["orientation"] = str(self.ui.orientation.currentText())
+        pdf_settings["page_format"] = str(self.ui.page_format.currentText())
+
+        if str(self.ui.title.text()) not in [None, ""]:
+            pdf_settings["title"] = str(self.ui.title.text())
+        pdf_settings["subject"] = str(self.ui.subject.text())
+        pdf_settings["author"] = str(self.ui.author.text())
+
+        if self.ui.checkBox_protect_pdf.isChecked():
+            if str(self.ui.protect_pdf.text()) not in [None, ""]:
+                pdf_settings["password"] = str(self.ui.protect_pdf.text())
+
+        if str(self.setting_ui.ui.keywords.text()) not in [None, ""]:
+            pdf_settings["keywords"] = str(self.setting_ui.ui.keywords.text())
+        if str(self.setting_ui.ui.producer.text()) not in [None, ""]:
+            pdf_settings["producer"] = str(self.setting_ui.ui.producer.text())
+        if str(self.setting_ui.ui.creator.text()) not in [None, ""]:
+            pdf_settings["creator"] = str(self.setting_ui.ui.creator.text())
+        if str(self.setting_ui.ui.created_on.text()) not in [None, ""]:
+            pdf_settings["created_on"] = str(self.setting_ui.ui.created_on.text())
+
+        page_to = self.setting_ui.ui.page_to.text()
+        page_from = self.setting_ui.ui.page_from.text()
+        rotation_angle = str(self.setting_ui.ui.select_angle.currentText())
+
+        if rotation_angle != "Select angle":
+            if page_from == "":
+                pdf_settings["page_from"] = "start"
+            else:
+                if int(page_from) <= 0:
+                    pdf_settings["page_from"] = 1
+                else:
+                    pdf_settings["page_from"] = page_from
+
+            if page_to == "":
+                pdf_settings["page_to"] = "end"
+            else:
+                if int(page_to) <= 0:
+                    pdf_settings["page_to"] = 1
+                else:
+                    pdf_settings["page_to"] = page_to
+
+            pdf_settings["rotation_angle"] = str(self.setting_ui.ui.select_angle.currentText()).split("Degree")[0].strip()
+
+        return pdf_settings
+
+    def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
+        self.convert_pdf_thread = ConvertToPdfThread(selected_list_items, download_path, pdf_settings)
+        self.convert_pdf_thread.finish.connect(self.setProgressVal)
+        self.convert_pdf_thread.progress.connect(self.setProgressVal_progress)
+        self.convert_pdf_thread.kill.connect(self.setProgressVal_kill)
+        self.convert_pdf_thread.start()
+
     def start_convert_process(self):
-        self.get_all_selected_items()
-        if self.selected_list:
-            selected_list_items = [self.all_images_list[i] for i in self.selected_list]
-            download_path = get_download_path(self.Default_loc)
-            pdf_settings = dict()
+        try:
+            is_running = self.convert_pdf_thread.isRunning()
+        except Exception as e:
+            is_running = False
 
-            pdf_settings["orientation"] = str(self.ui.orientation.currentText())
-            pdf_settings["page_format"] = str(self.ui.page_format.currentText())
-
-            self.progress_bar_enable()
-            self.convert_pdf_thread = ConvertToPdfThread(selected_list_items, download_path, pdf_settings)
-            self.convert_pdf_thread.finish.connect(self.setProgressVal)
-            self.convert_pdf_thread.start()
+        if is_running:
+            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
         else:
-            self.popup_message(title="No Images selected!",
-                               message="Please select the images by clicking on checkboxes.", error=True)
+            self.get_all_selected_items()
+            if self.selected_list:
+                selected_list_items = [self.all_images_list[i] for i in self.selected_list]
+                download_path = get_download_path(self.Default_loc)
+                pdf_settings = self.get_pdf_setting_all()
+                self.progress_bar_enable()
+                response, title, path = check_for_already_file_exists(download_path, pdf_settings)
+                if response:
+                    self.progress_bar_disable()
+                    self.msg = QMessageBox()
+                    self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+                    self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+                    self.msg.setIcon(QMessageBox.Information)
+                    self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
+                    self.msg.setInformativeText("TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")
+                    open_folder = self.msg.addButton(QMessageBox.Yes)
+                    close = self.msg.addButton(QMessageBox.Yes)
+                    yes_button = self.msg.addButton(QMessageBox.Yes)
+                    open_folder.setText('See PDF location')
+                    close.setText('No')
+                    close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
+                    open_folder.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
+                    yes_button.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton)))
+                    self.msg.exec_()
+                    try:
+                        if self.msg.clickedButton() == yes_button:
+                            self.progress_bar_enable()
+                            self.start_convert_thread(selected_list_items, download_path, pdf_settings)
+                        if self.msg.clickedButton() == open_folder:
+                            QDesktopServices.openUrl(QUrl(path))
+                        elif self.msg.clickedButton() == close:
+                            pass
+                    except Exception as e:
+                        pass
+                else:
+                    self.start_convert_thread(selected_list_items, download_path, pdf_settings)
+            else:
+                self.popup_message(title="No Images selected!",
+                                   message="Please select the images by clicking on checkboxes.", error=True)
 
-    def setProgressVal(self, response):
+    def setProgressVal(self, json_data):
         self.progress_bar_disable()
-        if response.get("status", False):
-            self.popup_message(title="Success!", message="")
+        if json_data.get("status", False):
+            title = json_data.get("title")
+            folder_path = json_data.get("file_path")
+            play_path = json_data.get("play_path")
+            message = f"PDF created Successfully!\n\nOutput file name:  {title}.pdf\n"
+            self.file_download_success_dialog(message, folder_path, play_path)
         else:
-            self.popup_message(title="OOps! Error occured!", message=response.get("message"))
+            self.popup_message(title="OOps! Error occurred!", message=json_data.get("message"))
+
+    def setProgressVal_progress(self, json_data):
+        total = json_data.get("total")
+        progress = json_data.get("progress")
+        display_status = "Converting image {0} of {1}".format(progress, total)
+        self.ui.progress_bar.setRange(0, total)
+        self.ui.progress_bar.setFormat(display_status)
+        self.ui.progress_bar.setValue(progress)
+
+    def setProgressVal_kill(self):
+        self.progress_bar_disable()
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
