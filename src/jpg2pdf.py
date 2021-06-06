@@ -11,8 +11,8 @@ from helper import load_images_from_folder, check_default_location, humanbytes, 
     check_for_already_file_exists
 from initial_init import initial_defines
 from convert_pdf_threads import ConvertToPdfThread
-from setting_module import SettingPage
-from theme_set import set_theme
+from setting_module import AdvanceSettingPage, AppSettingPage
+from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPG2PDF'
@@ -22,11 +22,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
-        self.setting_ui = SettingPage()
+        self.advance_setting_ui = AdvanceSettingPage()
+        self.general_setting_ui = AppSettingPage()
         self.ui.setupUi(self)
         self.setWindowTitle("JPG2PDF PRO")
         set_theme(self)
-        set_theme(self.setting_ui)
+        set_theme(self.advance_setting_ui)
+        set_theme(self.general_setting_ui)
+        self.theme = 'dark'
+        self.pop_up_stylesheet = popup_theme(self)
+
         self.all_images_list = []
         self.image_dimension = []
         self.image_size = []
@@ -50,7 +55,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.default_selected = 0
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
-        self.ui.actionSettings.triggered.connect(self.show_more_setting)
+        self.ui.actionSettings.triggered.connect(self.show_general_setting)
         self.ui.actionAdd_folder.triggered.connect(self.load_folder)
         self.ui.actionClear_all.triggered.connect(self.clear_all_table_data)
         self.ui.actionRemove_Selected.triggered.connect(self.remove_selected)
@@ -72,12 +77,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.start_convert.clicked.connect(self.start_convert_process)
         self.ui.page_format.currentIndexChanged.connect(self.check_for_warning)
         self.ui.sort.currentIndexChanged.connect(self.sort_asc_desc)
-        self.ui.more_setting_button.clicked.connect(self.show_more_setting)
-        self.setting_ui.ui.clear_all_settings.clicked.connect(self.clear_setting_clicked)
-        self.setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
-        self.setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
-        self.setting_ui.ui.page_to.textChanged.connect(self.check_from_to_page_validation)
-        self.setting_ui.ui.select_angle.currentIndexChanged.connect(self.validation_for_angle)
+        self.ui.more_setting_button.clicked.connect(self.show_advance_setting)
+        self.advance_setting_ui.ui.clear_all_settings.clicked.connect(self.clear_setting_clicked)
+        self.advance_setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
+        self.advance_setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
+        self.advance_setting_ui.ui.page_to.textChanged.connect(self.check_from_to_page_validation)
+        self.advance_setting_ui.ui.select_angle.currentIndexChanged.connect(self.validation_for_angle)
         self.ui.stop.clicked.connect(self.kill_process)
 
         # scroll zoom functionality:-
@@ -143,7 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if is_running:
             self.msg = QMessageBox()
             self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-            self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+            self.msg.setStyleSheet(self.pop_up_stylesheet)
             self.msg.setIcon(QMessageBox.Information)
             self.msg.setText("Are you sure want to stop running process?")
             yes_button = self.msg.addButton(QMessageBox.Yes)
@@ -160,7 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def file_download_success_dialog(self, title, folder_path, play_path):
         self.msg = QMessageBox()
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-        self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+        self.msg.setStyleSheet(self.pop_up_stylesheet)
         self.msg.setIcon(QMessageBox.Information)
         self.msg.setText(title)
         self.msg.setInformativeText("")
@@ -185,9 +190,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def validation_for_angle(self):
-        page_to = self.setting_ui.ui.page_to.text()
-        page_from = self.setting_ui.ui.page_from.text()
-        rotation_angle = str(self.setting_ui.ui.select_angle.currentText())
+        page_to = self.advance_setting_ui.ui.page_to.text()
+        page_from = self.advance_setting_ui.ui.page_from.text()
+        rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
         if rotation_angle != "Select angle" and (page_to or page_from) in [None, ""]:
             self.popup_message(title="All Page selection!",
                                message="Operation will perform for all pages.")
@@ -197,57 +202,61 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 page_from = int(page_from)
                 if page_from > page_to:
                     self.popup_message(title="Invalid page selection", message="'Page To' must to greater or equal to 'Page From'.")
-                    self.setting_ui.ui.page_to.clear()
-                    self.setting_ui.ui.page_from.clear()
-                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+                    self.advance_setting_ui.ui.page_to.clear()
+                    self.advance_setting_ui.ui.page_from.clear()
+                    self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
 
                 if (page_to or page_from) == 0:
                     self.popup_message(title="Invalid page selection",
                                        message="'Page value must be greater than 0")
-                    self.setting_ui.ui.page_to.clear()
-                    self.setting_ui.ui.page_from.clear()
-                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+                    self.advance_setting_ui.ui.page_to.clear()
+                    self.advance_setting_ui.ui.page_from.clear()
+                    self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
         except Exception as e:
             self.popup_message(title="Invalid page selection",
                                message="Page value must be integer")
-            self.setting_ui.ui.select_angle.setCurrentIndex(0)
-            self.setting_ui.ui.page_to.clear()
-            self.setting_ui.ui.page_from.clear()
+            self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
+            self.advance_setting_ui.ui.page_to.clear()
+            self.advance_setting_ui.ui.page_from.clear()
             pass
 
     def check_from_to_page_validation(self):
-        page_to = self.setting_ui.ui.page_to.text()
-        page_from = self.setting_ui.ui.page_from.text()
+        page_to = self.advance_setting_ui.ui.page_to.text()
+        page_from = self.advance_setting_ui.ui.page_from.text()
         try:
             if (page_to and page_from) not in [None, ""]:
                 page_to = int(page_to)
                 page_from = int(page_from)
                 if page_from > page_to:
-                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+                    self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
                 if (page_to or page_from) == 0:
-                    self.setting_ui.ui.select_angle.setCurrentIndex(0)
+                    self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
 
         except Exception as e:
-            self.setting_ui.ui.select_angle.setCurrentIndex(0)
+            self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
 
     def clear_setting_clicked(self):
-        self.setting_ui.ui.keywords.clear()
-        self.setting_ui.ui.producer.clear()
-        self.setting_ui.ui.creator.clear()
-        self.setting_ui.ui.created_on.clear()
+        self.advance_setting_ui.ui.keywords.clear()
+        self.advance_setting_ui.ui.producer.clear()
+        self.advance_setting_ui.ui.creator.clear()
+        self.advance_setting_ui.ui.created_on.clear()
 
-        self.setting_ui.ui.page_to.clear()
-        self.setting_ui.ui.page_from.clear()
-        self.setting_ui.ui.select_angle.setCurrentIndex(0)
+        self.advance_setting_ui.ui.page_to.clear()
+        self.advance_setting_ui.ui.page_from.clear()
+        self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
 
     def ok_setting_clicked(self):
-        self.setting_ui.hide()
+        self.advance_setting_ui.hide()
 
-    def show_more_setting(self):
-        self.setting_ui.show()
+    def show_advance_setting(self):
+        self.advance_setting_ui.show()
+
+    def show_general_setting(self):
+        self.general_setting_ui.show()
 
     def closeEvent(self, event):
-        self.setting_ui.hide()
+        self.advance_setting_ui.hide()
+        self.general_setting_ui.hide()
 
     def sort_asc_desc(self):
         if self.all_images_list:
@@ -544,7 +553,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def popup_message(self, title, message, error=False):
         self.msg = QMessageBox()
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-        self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+        self.msg.setStyleSheet(self.pop_up_stylesheet)
         if error:
             self.msg.setIcon(QMessageBox.Warning)
         else:
@@ -599,7 +608,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.selected_list:
                 self.msg = QMessageBox()
                 self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-                self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+                self.msg.setStyleSheet(self.pop_up_stylesheet)
                 self.msg.setIcon(QMessageBox.Information)
                 self.msg.setText("Are you sure want to remove selected images ?")
                 yes_button = self.msg.addButton(QMessageBox.Yes)
@@ -629,7 +638,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             try:
                 self.msg = QMessageBox()
                 self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-                self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+                self.msg.setStyleSheet(self.pop_up_stylesheet)
                 self.msg.setIcon(QMessageBox.Information)
                 self.msg.setText("Are you sure want to clear all images ?")
                 yes_button = self.msg.addButton(QMessageBox.Yes)
@@ -672,18 +681,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if str(self.ui.protect_pdf.text()) not in [None, ""]:
                 pdf_settings["password"] = str(self.ui.protect_pdf.text())
 
-        if str(self.setting_ui.ui.keywords.text()) not in [None, ""]:
-            pdf_settings["keywords"] = str(self.setting_ui.ui.keywords.text())
-        if str(self.setting_ui.ui.producer.text()) not in [None, ""]:
-            pdf_settings["producer"] = str(self.setting_ui.ui.producer.text())
-        if str(self.setting_ui.ui.creator.text()) not in [None, ""]:
-            pdf_settings["creator"] = str(self.setting_ui.ui.creator.text())
-        if str(self.setting_ui.ui.created_on.text()) not in [None, ""]:
-            pdf_settings["created_on"] = str(self.setting_ui.ui.created_on.text())
+        if str(self.advance_setting_ui.ui.keywords.text()) not in [None, ""]:
+            pdf_settings["keywords"] = str(self.advance_setting_ui.ui.keywords.text())
+        if str(self.advance_setting_ui.ui.producer.text()) not in [None, ""]:
+            pdf_settings["producer"] = str(self.advance_setting_ui.ui.producer.text())
+        if str(self.advance_setting_ui.ui.creator.text()) not in [None, ""]:
+            pdf_settings["creator"] = str(self.advance_setting_ui.ui.creator.text())
+        if str(self.advance_setting_ui.ui.created_on.text()) not in [None, ""]:
+            pdf_settings["created_on"] = str(self.advance_setting_ui.ui.created_on.text())
 
-        page_to = self.setting_ui.ui.page_to.text()
-        page_from = self.setting_ui.ui.page_from.text()
-        rotation_angle = str(self.setting_ui.ui.select_angle.currentText())
+        page_to = self.advance_setting_ui.ui.page_to.text()
+        page_from = self.advance_setting_ui.ui.page_from.text()
+        rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
 
         if rotation_angle != "Select angle":
             if page_from == "":
@@ -702,7 +711,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     pdf_settings["page_to"] = page_to
 
-            pdf_settings["rotation_angle"] = str(self.setting_ui.ui.select_angle.currentText()).split("Degree")[0].strip()
+            pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[0].strip()
 
         return pdf_settings
 
@@ -733,7 +742,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.progress_bar_disable()
                     self.msg = QMessageBox()
                     self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-                    self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+                    self.msg.setStyleSheet(self.pop_up_stylesheet)
                     self.msg.setIcon(QMessageBox.Information)
                     self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
                     self.msg.setInformativeText("TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")

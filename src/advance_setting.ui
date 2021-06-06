@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>AdvanceSettings</class>
+ <widget class="QWidget" name="AdvanceSettings">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>503</width>
-    <height>541</height>
+    <height>479</height>
    </rect>
   </property>
   <property name="windowTitle">

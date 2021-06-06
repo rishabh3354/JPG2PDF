@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'setting.ui'
+# Form implementation generated from reading ui file 'advance_setting.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -11,15 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(503, 541)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
+class Ui_AdvanceSettings(object):
+    def setupUi(self, AdvanceSettings):
+        AdvanceSettings.setObjectName("AdvanceSettings")
+        AdvanceSettings.resize(503, 479)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(AdvanceSettings)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(Form)
+        self.label = QtWidgets.QLabel(AdvanceSettings)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -35,7 +35,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.label)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem)
-        self.groupBox_5 = QtWidgets.QGroupBox(Form)
+        self.groupBox_5 = QtWidgets.QGroupBox(AdvanceSettings)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -116,7 +116,7 @@ class Ui_Form(object):
         self.gridLayout_24.addWidget(self.label_17, 0, 0, 1, 1)
         self.verticalLayout_12.addLayout(self.gridLayout_24)
         self.verticalLayout.addWidget(self.groupBox_5)
-        self.groupBox_7 = QtWidgets.QGroupBox(Form)
+        self.groupBox_7 = QtWidgets.QGroupBox(AdvanceSettings)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -178,7 +178,7 @@ class Ui_Form(object):
         self.gridLayout_25.addWidget(self.label_24, 0, 0, 1, 1)
         self.verticalLayout_13.addLayout(self.gridLayout_25)
         self.verticalLayout.addWidget(self.groupBox_7)
-        self.groupBox_6 = QtWidgets.QGroupBox(Form)
+        self.groupBox_6 = QtWidgets.QGroupBox(AdvanceSettings)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -199,35 +199,35 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.groupBox_6)
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(AdvanceSettings)
+        QtCore.QMetaObject.connectSlotsByName(AdvanceSettings)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, AdvanceSettings):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Advance Settings"))
-        self.groupBox_5.setTitle(_translate("Form", "Add PDF Meta Data"))
-        self.created_on.setPlaceholderText(_translate("Form", "Created on (eg. yyyy/mm/dd)"))
-        self.label_19.setText(_translate("Form", "Creator name"))
-        self.label_20.setText(_translate("Form", "Producer"))
-        self.keywords.setPlaceholderText(_translate("Form", "eg. keyword1 keyword2"))
-        self.label_18.setText(_translate("Form", "Creation date"))
-        self.producer.setPlaceholderText(_translate("Form", "Producer name"))
-        self.creator.setPlaceholderText(_translate("Form", "Creator name"))
-        self.label_17.setText(_translate("Form", "Keywords"))
-        self.groupBox_7.setTitle(_translate("Form", "Rotate PDF Pages"))
-        self.page_from.setToolTip(_translate("Form", "If From page is blank, operation will perform from starting page"))
-        self.page_from.setPlaceholderText(_translate("Form", "eg. 5"))
-        self.page_to.setToolTip(_translate("Form", "If From page is blank, operation will perform to ending page"))
-        self.page_to.setPlaceholderText(_translate("Form", "eg. 12"))
-        self.select_angle.setToolTip(_translate("Form", "If Angle is blank, No operation will perform"))
-        self.select_angle.setItemText(0, _translate("Form", "Select angle"))
-        self.select_angle.setItemText(1, _translate("Form", "90 Degree"))
-        self.select_angle.setItemText(2, _translate("Form", "180 Degree"))
-        self.select_angle.setItemText(3, _translate("Form", "270 Degree"))
-        self.label_21.setText(_translate("Form", "Rotate Angle"))
-        self.label_22.setText(_translate("Form", "Page to"))
-        self.label_24.setText(_translate("Form", "Page from"))
-        self.groupBox_6.setTitle(_translate("Form", "Action"))
-        self.okay.setText(_translate("Form", "Okay"))
-        self.clear_all_settings.setText(_translate("Form", "Clear all"))
+        AdvanceSettings.setWindowTitle(_translate("AdvanceSettings", "Form"))
+        self.label.setText(_translate("AdvanceSettings", "Advance Settings"))
+        self.groupBox_5.setTitle(_translate("AdvanceSettings", "Add PDF Meta Data"))
+        self.created_on.setPlaceholderText(_translate("AdvanceSettings", "Created on (eg. yyyy/mm/dd)"))
+        self.label_19.setText(_translate("AdvanceSettings", "Creator name"))
+        self.label_20.setText(_translate("AdvanceSettings", "Producer"))
+        self.keywords.setPlaceholderText(_translate("AdvanceSettings", "eg. keyword1 keyword2"))
+        self.label_18.setText(_translate("AdvanceSettings", "Creation date"))
+        self.producer.setPlaceholderText(_translate("AdvanceSettings", "Producer name"))
+        self.creator.setPlaceholderText(_translate("AdvanceSettings", "Creator name"))
+        self.label_17.setText(_translate("AdvanceSettings", "Keywords"))
+        self.groupBox_7.setTitle(_translate("AdvanceSettings", "Rotate PDF Pages"))
+        self.page_from.setToolTip(_translate("AdvanceSettings", "If From page is blank, operation will perform from starting page"))
+        self.page_from.setPlaceholderText(_translate("AdvanceSettings", "eg. 5"))
+        self.page_to.setToolTip(_translate("AdvanceSettings", "If From page is blank, operation will perform to ending page"))
+        self.page_to.setPlaceholderText(_translate("AdvanceSettings", "eg. 12"))
+        self.select_angle.setToolTip(_translate("AdvanceSettings", "If Angle is blank, No operation will perform"))
+        self.select_angle.setItemText(0, _translate("AdvanceSettings", "Select angle"))
+        self.select_angle.setItemText(1, _translate("AdvanceSettings", "90 Degree"))
+        self.select_angle.setItemText(2, _translate("AdvanceSettings", "180 Degree"))
+        self.select_angle.setItemText(3, _translate("AdvanceSettings", "270 Degree"))
+        self.label_21.setText(_translate("AdvanceSettings", "Rotate Angle"))
+        self.label_22.setText(_translate("AdvanceSettings", "Page to"))
+        self.label_24.setText(_translate("AdvanceSettings", "Page from"))
+        self.groupBox_6.setTitle(_translate("AdvanceSettings", "Action"))
+        self.okay.setText(_translate("AdvanceSettings", "Okay"))
+        self.clear_all_settings.setText(_translate("AdvanceSettings", "Clear all"))

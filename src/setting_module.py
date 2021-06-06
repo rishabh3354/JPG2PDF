@@ -1,15 +1,16 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QDesktopWidget
 
-from setting import Ui_Form
+from advance_setting import Ui_AdvanceSettings
+from app_setting import Ui_AppSettings
 
 
-class SettingPage(QWidget):
+class AdvanceSettingPage(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.ui = Ui_Form()
+        self.ui = Ui_AdvanceSettings()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | Settings")
+        self.setWindowTitle("JPG2PDF PRO | Advance Settings")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()
@@ -18,4 +19,15 @@ class SettingPage(QWidget):
         self.move(qtRectangle.topLeft())
 
 
+class AppSettingPage(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+        self.ui = Ui_AppSettings()
+        self.ui.setupUi(self)
+        self.setWindowTitle("JPG2PDF PRO | General Settings")
 
+        self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
