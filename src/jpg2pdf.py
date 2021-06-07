@@ -85,6 +85,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.select_angle.currentIndexChanged.connect(self.validation_for_angle)
         self.ui.stop.clicked.connect(self.kill_process)
 
+        self.advance_setting_ui.ui.mm.clicked.connect(self.change_default_unit)
+        self.advance_setting_ui.ui.cm.clicked.connect(self.change_default_unit)
+        self.advance_setting_ui.ui.pt.clicked.connect(self.change_default_unit)
+        self.advance_setting_ui.ui.inch.clicked.connect(self.change_default_unit)
+
+
         # scroll zoom functionality:-
         self._zoom = 0
         self._empty = False
@@ -138,6 +144,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                 '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
                                 '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
         self.process_images_into_table()
+
+    def change_default_unit(self):
+        if self.advance_setting_ui.ui.mm.isChecked():
+            unit = 'mm'
+        elif self.advance_setting_ui.ui.cm.isChecked():
+            unit = 'cm'
+        elif self.advance_setting_ui.ui.pt.isChecked():
+            unit = 'pt'
+        elif self.advance_setting_ui.ui.inch.isChecked():
+            unit = 'inch'
+        else:
+            unit = 'mm'
+
+        self.advance_setting_ui.ui.h_unit.setText(f"Unit in ({unit})")
+        self.advance_setting_ui.ui.v_unit.setText(f"Unit in ({unit})")
 
     def kill_process(self):
         try:
@@ -240,10 +261,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.producer.clear()
         self.advance_setting_ui.ui.creator.clear()
         self.advance_setting_ui.ui.created_on.clear()
-
         self.advance_setting_ui.ui.page_to.clear()
         self.advance_setting_ui.ui.page_from.clear()
         self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
+        self.advance_setting_ui.ui.h_unit.setText("Unit in (mm)")
+        self.advance_setting_ui.ui.v_unit.setText("Unit in (mm)")
+        self.advance_setting_ui.ui.v_value.setValue(0.00)
+        self.advance_setting_ui.ui.h_value.setValue(0.00)
+        self.advance_setting_ui.ui.mm.setChecked(True)
 
     def ok_setting_clicked(self):
         self.advance_setting_ui.hide()
@@ -713,6 +738,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[0].strip()
 
+        if self.advance_setting_ui.ui.mm.isChecked():
+            pdf_settings["unit"] = 'mm'
+        elif self.advance_setting_ui.ui.cm.isChecked():
+            pdf_settings["unit"] = 'cm'
+        elif self.advance_setting_ui.ui.pt.isChecked():
+            pdf_settings["unit"] = 'pt'
+        elif self.advance_setting_ui.ui.inch.isChecked():
+            pdf_settings["unit"] = 'in'
+        else:
+            pdf_settings["unit"] = 'mm'
+
+        if self.advance_setting_ui.ui.h_value.value() > 0:
+            pdf_settings["h_value"] = self.advance_setting_ui.ui.h_value.value()
+        if self.advance_setting_ui.ui.v_value.value() > 0:
+            pdf_settings["v_value"] = self.advance_setting_ui.ui.v_value.value()
+
         return pdf_settings
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
@@ -784,11 +825,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def setProgressVal_progress(self, json_data):
         total = json_data.get("total")
-        progress = json_data.get("progress")
-        display_status = "Converting image {0} of {1}".format(progress, total)
-        self.ui.progress_bar.setRange(0, total)
-        self.ui.progress_bar.setFormat(display_status)
-        self.ui.progress_bar.setValue(progress)
+        if total != 1:
+            progress = json_data.get("progress")
+            display_status = "Converting image {0} of {1}".format(progress, total)
+            self.ui.progress_bar.setRange(0, total)
+            self.ui.progress_bar.setFormat(display_status)
+            self.ui.progress_bar.setValue(progress)
 
     def setProgressVal_kill(self):
         self.progress_bar_disable()

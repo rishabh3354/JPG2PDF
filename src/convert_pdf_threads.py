@@ -7,8 +7,8 @@ from fpdf import FPDF
 
 A3 = {'P': {'w': 297, 'h': 420}, 'L': {'w': 420, 'h': 297}}
 A4 = {'P': {'w': 210, 'h': 297}, 'L': {'w': 297, 'h': 210}}
-A5 = {'P': {'w': 148, 'h': 210}, 'L': {'w': 210, 'h': 148}}
-Letter = {'P': {'w': 216, 'h': 279}, 'L': {'w': 279, 'h': 216}}
+A5 = {'P': {'w': 149, 'h': 210}, 'L': {'w': 210, 'h': 149}}
+Letter = {'P': {'w': 216, 'h': 280}, 'L': {'w': 280, 'h': 216}}
 Auto_size = {"A3": A3, "A4": A4, "A5": A5, "Letter": Letter}
 orientation_dict = {"Landscape": "L", "Portrait": "P"}
 
@@ -40,7 +40,7 @@ class ConvertToPdfThread(QtCore.QThread):
         self.author = self.pdf_settings.get("author", "")
         self.password = self.pdf_settings.get("password")
 
-        #  Advance settings:-
+        #  Advance meta-data settings:-
         self.keywords = self.pdf_settings.get("keywords", "")
         self.producer = self.pdf_settings.get("producer", "")
         self.creator = self.pdf_settings.get("creator", "")
@@ -50,6 +50,20 @@ class ConvertToPdfThread(QtCore.QThread):
         self.page_from = self.pdf_settings.get("page_from", "")
         self.page_to = self.pdf_settings.get("page_to", "")
         self.rotation_angle = self.pdf_settings.get("rotation_angle", "")
+
+        #  margin settings:-
+        self.h_value = self.pdf_settings.get("h_value", 0)
+        self.v_value = self.pdf_settings.get("v_value", 0)
+
+        if self.unit == "cm":
+            self.h_value = self.pdf_settings.get("h_value", 0) * 10
+            self.v_value = self.pdf_settings.get("v_value", 0) * 10
+        elif self.unit == "in":
+            self.h_value = self.pdf_settings.get("h_value", 0) * 25.4
+            self.v_value = self.pdf_settings.get("v_value", 0) * 25.4
+        elif self.unit == "pt":
+            self.h_value = self.pdf_settings.get("h_value", 0) * 0.352778
+            self.v_value = self.pdf_settings.get("v_value", 0) * 0.352778
 
     def run(self):
         response = self.convert_to_pdf()
@@ -146,7 +160,7 @@ class ConvertToPdfThread(QtCore.QThread):
         return message
 
     def auto_orientation_auto_page_size(self):
-        pdf = FPDF(unit=self.unit)
+        pdf = FPDF(unit="mm")
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):
@@ -155,7 +169,9 @@ class ConvertToPdfThread(QtCore.QThread):
             width, height = cover.size
             width, height = float(width * 0.264583), float(height * 0.264583)
             pdf.add_page(format=(width, height))
-            pdf.image(imageFile, 0, 0, width, height)
+            width = width - self.h_value
+            height = height - self.v_value
+            pdf.image(imageFile, self.h_value, self.h_value, width, height)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -165,7 +181,7 @@ class ConvertToPdfThread(QtCore.QThread):
         return pdf
 
     def auto_orientation_fixed_page_format(self):
-        pdf = FPDF(unit=self.unit)
+        pdf = FPDF(unit="mm")
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):
@@ -178,7 +194,9 @@ class ConvertToPdfThread(QtCore.QThread):
             width = width if width < pdf_size[orientation]['w'] else pdf_size[orientation]['w']
             height = height if height < pdf_size[orientation]['h'] else pdf_size[orientation]['h']
             pdf.add_page(orientation=orientation)
-            pdf.image(imageFile, 0, 0, width, height)
+            width = width - self.h_value
+            height = height - self.v_value
+            pdf.image(imageFile, self.h_value, self.v_value, width, height)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -189,7 +207,7 @@ class ConvertToPdfThread(QtCore.QThread):
 
     def auto_orientation_fit_page_view(self):
         page_format = (str(self.page_format).split("(Fit view)")[0]).strip()
-        pdf = FPDF(unit=self.unit, format=page_format)
+        pdf = FPDF(unit="mm", format=page_format)
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):
@@ -201,7 +219,8 @@ class ConvertToPdfThread(QtCore.QThread):
             orientation = 'P' if width < height else 'L'
             pdf.add_page(orientation=orientation)
             print(width, height)
-            pdf.image(imageFile, 0, 0, pdf_size.get(orientation).get("w"), pdf_size.get(orientation).get("h"))
+            pdf.image(imageFile, self.h_value, self.v_value, pdf_size.get(orientation).get("w")
+                      - self.h_value, pdf_size.get(orientation).get("h") - self.v_value)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -211,7 +230,7 @@ class ConvertToPdfThread(QtCore.QThread):
         return pdf
 
     def fix_orientation_fix_page_view(self):
-        pdf = FPDF(unit=self.unit, orientation=self.orientation, format=self.page_format)
+        pdf = FPDF(unit="mm", orientation=self.orientation, format=self.page_format)
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):
@@ -220,7 +239,9 @@ class ConvertToPdfThread(QtCore.QThread):
             width, height = cover.size
             width, height = float(width * 0.264583), float(height * 0.264583)
             pdf.add_page()
-            pdf.image(imageFile, 0, 0, width, height)
+            width = width - self.h_value
+            height = height - self.v_value
+            pdf.image(imageFile, self.h_value, self.v_value, width, height)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -231,14 +252,15 @@ class ConvertToPdfThread(QtCore.QThread):
 
     def fix_orientation_fit_page_view(self):
         page_format = (str(self.page_format).split("(Fit view)")[0]).strip()
-        pdf = FPDF(unit=self.unit, orientation=self.orientation, format=page_format)
+        pdf = FPDF(unit="mm", orientation=self.orientation, format=page_format)
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
             pdf_size = Auto_size.get(page_format, "A4")
             pdf.add_page()
-            pdf.image(imageFile, 0, 0, pdf_size.get(self.orientation).get("w"), pdf_size.get(self.orientation).get("h"))
+            pdf.image(imageFile, self.h_value, self.v_value, pdf_size.get(self.orientation).get("w") -
+                      self.h_value, pdf_size.get(self.orientation).get("h") - self.v_value)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -249,14 +271,15 @@ class ConvertToPdfThread(QtCore.QThread):
 
     def fix_orientation_auto_page_size(self):
         page_format = "A4"
-        pdf = FPDF(unit=self.unit, orientation=self.orientation, format=page_format)
+        pdf = FPDF(unit="mm", orientation=self.orientation, format=page_format)
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
             pdf_size = Auto_size.get(page_format, "A4")
             pdf.add_page()
-            pdf.image(imageFile, 0, 0, pdf_size.get(self.orientation).get("w"), pdf_size.get(self.orientation).get("h"))
+            pdf.image(imageFile, self.h_value, self.v_value, pdf_size.get(self.orientation).get("w")
+                      - self.h_value, pdf_size.get(self.orientation).get("h") - self.v_value)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
