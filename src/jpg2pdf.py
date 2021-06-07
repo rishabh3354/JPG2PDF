@@ -26,12 +26,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui = AppSettingPage()
         self.ui.setupUi(self)
         self.setWindowTitle("JPG2PDF PRO")
-        set_theme(self)
-        set_theme(self.advance_setting_ui)
-        set_theme(self.general_setting_ui)
         self.theme = 'dark'
-        self.pop_up_stylesheet = popup_theme(self)
-
+        self.file_dialog = 'native'
+        self.set_theme()
+        self.pop_up_stylesheet = 'background-color:rgb(48,48,48);color:white;'
         self.all_images_list = []
         self.image_dimension = []
         self.image_size = []
@@ -90,6 +88,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.pt.clicked.connect(self.change_default_unit)
         self.advance_setting_ui.ui.inch.clicked.connect(self.change_default_unit)
 
+        self.general_setting_ui.ui.dark.clicked.connect(self.set_theme)
+        self.general_setting_ui.ui.light.clicked.connect(self.set_theme)
+
+        self.general_setting_ui.ui.native_dialog.clicked.connect(self.set_file_dialog)
+        self.general_setting_ui.ui.qt_dialog.clicked.connect(self.set_file_dialog)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -144,6 +147,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                 '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
                                 '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
         self.process_images_into_table()
+
+    def set_theme(self):
+        if self.general_setting_ui.ui.dark.isChecked():
+            self.theme = 'dark'
+            self.general_setting_ui.ui.dark.setChecked(True)
+        elif self.general_setting_ui.ui.light.isChecked():
+            self.theme = 'light'
+            self.general_setting_ui.ui.light.setChecked(True)
+        else:
+            self.theme = 'dark'
+        set_theme(self, self.theme)
+        set_theme(self.advance_setting_ui, self.theme)
+        set_theme(self.general_setting_ui, self.theme)
+        self.pop_up_stylesheet = popup_theme(self)
+
+    def set_file_dialog(self):
+        if self.general_setting_ui.ui.native_dialog.isChecked():
+            self.file_dialog = 'native'
+            self.general_setting_ui.ui.native_dialog.setChecked(True)
+        elif self.general_setting_ui.ui.qt_dialog.isChecked():
+            self.file_dialog = 'qt'
+            self.general_setting_ui.ui.qt_dialog.setChecked(True)
+        else:
+            self.file_dialog = 'native'
 
     def change_default_unit(self):
         if self.advance_setting_ui.ui.mm.isChecked():
@@ -222,7 +249,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 page_to = int(page_to)
                 page_from = int(page_from)
                 if page_from > page_to:
-                    self.popup_message(title="Invalid page selection", message="'Page To' must to greater or equal to 'Page From'.")
+                    self.popup_message(title="Invalid page selection",
+                                       message="'Page To' must to greater or equal to 'Page From'.")
                     self.advance_setting_ui.ui.page_to.clear()
                     self.advance_setting_ui.ui.page_from.clear()
                     self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
@@ -455,12 +483,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_images(self):
         self.reset_cache()
-        # options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
-        # self.all_images_list, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
-        #                                            options=options)
-        self.all_images_list, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
-                                                               "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
+        if self.file_dialog == "native":
+            self.all_images_list, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
+                                                                   "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
+        else:
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            self.all_images_list, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/",
+                                                                   "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
+                                                                   options=options)
         if len(self.all_images_list) == 0:
             return False
         self.process_images_into_table()
@@ -653,9 +684,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.msg.clickedButton() == no_button:
                     pass
             else:
-                self.popup_message(title="OOps!", message="Please select an image items checkbox to remove")
+                self.popup_message(title="OOps! No image selected", message="Please select an image items checkbox to remove")
         except Exception as e:
-            self.popup_message(title="OOps", message="Error while removing the selected images!", error=True)
+            self.popup_message(title="OOps! Something went wrong", message="Error while removing the selected images!", error=True)
             pass
 
     def clear_all_table_data(self):
@@ -680,10 +711,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pass
 
             except Exception as e:
-                self.popup_message(title="Error", message="Error while deleting the file!", error=True)
+                self.popup_message(title="OOps! Something went wrong", message="Error while deleting the file!", error=True)
                 pass
         else:
-            self.popup_message(title="OOps!", message="No Images/files to clear")
+            self.popup_message(title="OOps! No image found", message="No Images/files to clear")
 
     def progress_bar_enable(self):
         self.ui.progress_bar.setRange(0, 0)
@@ -736,7 +767,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     pdf_settings["page_to"] = page_to
 
-            pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[0].strip()
+            pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
+                0].strip()
 
         if self.advance_setting_ui.ui.mm.isChecked():
             pdf_settings["unit"] = 'mm'
@@ -786,7 +818,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.msg.setStyleSheet(self.pop_up_stylesheet)
                     self.msg.setIcon(QMessageBox.Information)
                     self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
-                    self.msg.setInformativeText("TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")
+                    self.msg.setInformativeText(
+                        "TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")
                     open_folder = self.msg.addButton(QMessageBox.Yes)
                     close = self.msg.addButton(QMessageBox.Yes)
                     yes_button = self.msg.addButton(QMessageBox.Yes)
@@ -821,7 +854,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             message = f"PDF created Successfully!\n\nOutput file name:  {title}.pdf\n"
             self.file_download_success_dialog(message, folder_path, play_path)
         else:
-            self.popup_message(title="OOps! Error occurred!", message=json_data.get("message"))
+            self.popup_message(title="OOps! Something went wrong", message=json_data.get("message"))
 
     def setProgressVal_progress(self, json_data):
         total = json_data.get("total")

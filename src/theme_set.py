@@ -1,8 +1,10 @@
 from PyQt5.QtCore import QFile, QTextStream
 
+THEME_DICT = {"dark": "theme/dark.qss", "light": "theme/light.qss"}
 
-def set_theme(self):
-    file = QFile("theme/dark.qss")
+
+def set_theme(self, theme):
+    file = QFile(THEME_DICT.get(theme, "dark"))
     file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(file)
     self.setStyleSheet(stream.readAll())
