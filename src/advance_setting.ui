@@ -692,6 +692,13 @@
         <item>
          <layout class="QGridLayout" name="gridLayout_26">
           <item row="0" column="1">
+           <widget class="QPushButton" name="clear_all_settings">
+            <property name="text">
+             <string>Clear all</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
            <widget class="QPushButton" name="okay">
             <property name="text">
              <string>Okay</string>
@@ -699,9 +706,9 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QPushButton" name="clear_all_settings">
+           <widget class="QPushButton" name="reset_defaults">
             <property name="text">
-             <string>Clear all</string>
+             <string>Reset Defaults</string>
             </property>
            </widget>
           </item>
