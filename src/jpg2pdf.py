@@ -415,9 +415,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def enable_pdf_password(self):
         if self.ui.checkBox_protect_pdf.isChecked():
             self.ui.protect_pdf.setEnabled(True)
+            self.ui.pdf_protect_indicator.setText("Protect PDF (ON)")
         else:
             self.ui.protect_pdf.clear()
             self.ui.protect_pdf.setEnabled(False)
+            self.ui.pdf_protect_indicator.setText("Protect PDF (OFF)")
 
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(4)
