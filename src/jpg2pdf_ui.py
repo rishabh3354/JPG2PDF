@@ -102,6 +102,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.output_path.sizePolicy().hasHeightForWidth())
         self.output_path.setSizePolicy(sizePolicy)
+        self.output_path.setReadOnly(True)
         self.output_path.setObjectName("output_path")
         self.gridLayout_25.addWidget(self.output_path, 2, 3, 1, 3)
         self.stop = QtWidgets.QPushButton(self.groupBox_4)
