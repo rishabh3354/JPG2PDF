@@ -43,6 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.table_view_default_setting()
+        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.progress_bar_disable()
         largeWidth = QGuiApplication.primaryScreen().size().width()
         self.ui.splitter_2.setSizes([largeWidth / 2, 120])
@@ -52,6 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.counter = 0
         self.toggle = 0
         self.default_selected = 0
+        self.image_hide = False
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
@@ -77,6 +79,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.page_format.currentIndexChanged.connect(self.check_for_warning)
         self.ui.sort.currentIndexChanged.connect(self.sort_asc_desc)
         self.ui.more_setting_button.clicked.connect(self.show_advance_setting)
+        self.ui.hide_image.clicked.connect(self.hide_image_thumbnail)
+        self.ui.duplicate.clicked.connect(self.remove_duplicate)
+
         self.advance_setting_ui.ui.clear_all_settings.clicked.connect(self.clear_setting_clicked)
         self.advance_setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
         self.advance_setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
@@ -104,7 +109,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
-
 
         # self.all_images_list = ['/home/warlord/Pictures/Screenshot from 2021-06-03 21-29-58.png',
         #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-44.png',
@@ -149,6 +153,55 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
         #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
         # self.process_images_into_table()
+
+    def remove_duplicate(self):
+        self.msg = QMessageBox()
+        self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.msg.setStyleSheet(self.pop_up_stylesheet)
+        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setText("Are you sure want to remove duplicate images?")
+        yes_button = self.msg.addButton(QMessageBox.Yes)
+        no_button = self.msg.addButton(QMessageBox.No)
+        self.msg.exec_()
+        if self.msg.clickedButton() == yes_button:
+            temp = []
+            for item in self.all_images_list:
+                if item not in temp:
+                    temp.append(item)
+            self.all_images_list = temp
+            self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
+            self.process_images_into_table()
+        if self.msg.clickedButton() == no_button:
+            pass
+
+    def hide_image_thumbnail(self):
+        if self.all_images_list:
+            if self.toggle % 2 == 0:
+                self.image_hide = True
+                self.no_image_q_table_setting()
+            else:
+                self.image_hide = False
+                self.table_view_default_setting()
+            self.toggle += 1
+
+            self.process_images_into_table()
+
+    def no_image_q_table_setting(self):
+        self.ui.tableWidget.setColumnCount(6)
+        self.ui.tableWidget.setRowCount(14)
+        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
+        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'Format', "File size"])
+        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
+        self.ui.tableWidget.setColumnWidth(0, 30)
+        self.ui.tableWidget.setColumnWidth(1, 25)
+        self.ui.tableWidget.setColumnWidth(2, 350)
+        self.ui.tableWidget.setColumnWidth(3, 90)
+        self.ui.tableWidget.setColumnWidth(4, 80)
+        self.ui.tableWidget.setColumnWidth(5, 80)
+        self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableWidget.setStyleSheet(
+            "QAbstractItemView::indicator { width: 22px;height:22px;/*size of checkbox change here */} QTableWidget::item{width: 200px;height: 100px;} ")
 
     def set_theme(self):
         if self.general_setting_ui.ui.dark.isChecked():
@@ -433,11 +486,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
         self.ui.tableWidget.setRowCount(14)
+        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Image', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
+        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 30)
-        self.ui.tableWidget.setColumnWidth(1, 30)
-        self.ui.tableWidget.setColumnWidth(2, 100)
+        self.ui.tableWidget.setColumnWidth(1, 25)
+        self.ui.tableWidget.setColumnWidth(2, 75)
         self.ui.tableWidget.setColumnWidth(3, 350)
         self.ui.tableWidget.setColumnWidth(4, 90)
         self.ui.tableWidget.setColumnWidth(5, 80)
@@ -507,28 +562,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.sort.setCurrentIndex(0)
 
     def load_images(self):
-        self.reset_cache()
         if self.file_dialog == "native":
-            self.all_images_list, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
-                                                                   "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
+            load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
+                                                          "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
         else:
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            self.all_images_list, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/",
-                                                                   "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
-                                                                   options=options)
-        if len(self.all_images_list) == 0:
+            load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/",
+                                                          "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
+                                                          options=options)
+        if len(load_images) == 0:
             return False
+
+        self.all_images_list += load_images
         self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
         self.process_images_into_table()
 
     def load_folder(self):
-        self.reset_cache()
         self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", '/home', QFileDialog.ShowDirsOnly
                                                               | QFileDialog.DontResolveSymlinks)
         if not self.select_folder:
             return False
-        self.all_images_list = load_images_from_folder(self.select_folder)
+        self.all_images_list += load_images_from_folder(self.select_folder)
         self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
 
         self.process_images_into_table()
@@ -561,7 +616,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         size.setWidth(100)
 
         for row in range(len(self.image_dimension)):
-            item = QTableWidgetItem(f"{row+1}")
+            item = QTableWidgetItem(f"{row + 1}")
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
             self.ui.tableWidget.setItem(row, 1, item)
 
         for row, string in enumerate(input_images, 0):
@@ -572,24 +628,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
             self.ui.tableWidget.setItem(row, 0, chkBoxItem)
 
-        for row, string in enumerate(input_images, 0):
-            icon = QtGui.QIcon()
-            icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            chkBoxItem = QTableWidgetItem(icon, string)
-            chkBoxItem.setSizeHint(size)
-            chkBoxItem.setText("")
-            self.ui.tableWidget.setItem(row, 2, chkBoxItem)
+        if self.image_hide:
+            col_num = 1
+        else:
+            col_num = 0
+            for row, string in enumerate(input_images, 0):
+                icon = QtGui.QIcon()
+                icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                chkBoxItem = QTableWidgetItem(icon, string)
+                chkBoxItem.setSizeHint(size)
+                chkBoxItem.setText("")
+                self.ui.tableWidget.setItem(row, 2 - col_num, chkBoxItem)
 
         for row, string in enumerate(input_images, 0):
             item = QTableWidgetItem(string)
-            self.ui.tableWidget.setItem(row, 3, item)
+            self.ui.tableWidget.setItem(row, 3-col_num, item)
 
-        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4):
+        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4-col_num):
             for row, value in enumerate(data, 0):
                 item = QTableWidgetItem(value)
                 self.ui.tableWidget.setItem(row, col, item)
 
-        self.ui.tableWidget.setIconSize(QtCore.QSize(150, 150))
+        self.ui.tableWidget.setIconSize(QtCore.QSize(70, 70))
 
     def setPhoto(self, pixmap=None):
         self._zoom = 0
@@ -738,9 +798,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.msg.clickedButton() == no_button:
                     pass
             else:
-                self.popup_message(title="OOps! No image selected", message="Please select an image items checkbox to remove")
+                self.popup_message(title="OOps! No image selected",
+                                   message="Please select an image items checkbox to remove")
         except Exception as e:
-            self.popup_message(title="OOps! Something went wrong", message="Error while removing the selected images!", error=True)
+            self.popup_message(title="OOps! Something went wrong", message="Error while removing the selected images!",
+                               error=True)
             pass
 
     def clear_all_table_data(self):
@@ -766,7 +828,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pass
 
             except Exception as e:
-                self.popup_message(title="OOps! Something went wrong", message="Error while deleting the file!", error=True)
+                self.popup_message(title="OOps! Something went wrong", message="Error while deleting the file!",
+                                   error=True)
                 pass
         else:
             self.popup_message(title="OOps! No image found", message="No Images/files to clear")
