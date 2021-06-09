@@ -1,7 +1,7 @@
 import os
 import sys
 from PIL import Image
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QProcessEnvironment, QUrl
 from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
@@ -34,6 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image_dimension = []
         self.image_size = []
         self.image_extension = []
+        self.all_pixmap_data = []
         self.selected_list = []
         self.select_folder = None
         self.show_full_path_flag = False
@@ -104,49 +105,50 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
 
-        self.all_images_list = ['/home/warlord/Pictures/Screenshot from 2021-06-03 21-29-58.png',
-                                '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-44.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-20 22-11-21.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-53.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-24.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-39.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-21 13-46-41.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-17 23-16-08.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-47.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-23 12-52-41.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-12 12-41-54.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-02-06 02-02-47.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-03-10 23-26-13.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-02 14-35-10.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-15 18-12-35.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-03-11 01-43-54.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-01.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-02-27 15-28-23.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-02-07 15-26-08.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-56.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-21 13-31-48.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-31.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-23.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-46.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-27.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-53.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-03-10 22-25-28.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-22.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-06-02 00-35-43.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-02 14-30-53.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-02-07 15-05-09.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-21 11-09-53.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-27.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-32.png',
-                                '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-23.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-31 21-57-10.png',
-                                '/home/warlord/Pictures/Screenshot from 2021-05-02 14-38-38.png',
-                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0003-15-May-2021-20_18_01.jpg',
-                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0002-15-May-2021-20_18_01.jpg',
-                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0000-15-May-2021-20_17_58222222222222222222222222222222222222222222222222222222222222222222222222.jpg',
-                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
-                                '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
-        self.process_images_into_table()
+
+        # self.all_images_list = ['/home/warlord/Pictures/Screenshot from 2021-06-03 21-29-58.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-44.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-20 22-11-21.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-53.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-24.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-39.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 13-46-41.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-17 23-16-08.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-47.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-23 12-52-41.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-12 12-41-54.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-02-06 02-02-47.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-03-10 23-26-13.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-35-10.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-15 18-12-35.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-03-11 01-43-54.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-01.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-02-27 15-28-23.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-02-07 15-26-08.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-56.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 13-31-48.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-31.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-23.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-46.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-27.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-53.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-03-10 22-25-28.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-22.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-06-02 00-35-43.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-30-53.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-02-07 15-05-09.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-09-53.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-27.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-32.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-23.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-31 21-57-10.png',
+        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-38-38.png',
+        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0003-15-May-2021-20_18_01.jpg',
+        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0002-15-May-2021-20_18_01.jpg',
+        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0000-15-May-2021-20_17_58222222222222222222222222222222222222222222222222222222222222222222222222.jpg',
+        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
+        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
+        # self.process_images_into_table()
 
     def set_theme(self):
         if self.general_setting_ui.ui.dark.isChecked():
@@ -319,6 +321,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.image_dimension.reverse()
                 self.image_size.reverse()
                 self.image_extension.reverse()
+                self.all_pixmap_data.reverse()
                 self.process_images_into_table()
 
     def check_for_warning(self):
@@ -347,6 +350,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.image_size[pos1], self.image_size[pos2] = self.image_size[pos2], self.image_size[pos1]
                 self.image_extension[pos1], self.image_extension[pos2] = self.image_extension[pos2], \
                                                                          self.image_extension[pos1]
+                self.all_pixmap_data[pos1], self.all_pixmap_data[pos2] = self.all_pixmap_data[pos2], \
+                                                                         self.all_pixmap_data[pos1]
+
             self.process_images_into_table()
             self.keep_selected_items(operation="up")
 
@@ -370,6 +376,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.image_size[pos1], self.image_size[pos2] = self.image_size[pos2], self.image_size[pos1]
                 self.image_extension[pos1], self.image_extension[pos2] = self.image_extension[pos2], \
                                                                          self.image_extension[
+                                                                             pos1]
+                self.all_pixmap_data[pos1], self.all_pixmap_data[pos2] = self.all_pixmap_data[pos2], \
+                                                                         self.all_pixmap_data[
                                                                              pos1]
             self.process_images_into_table()
             self.keep_selected_items(operation="down")
@@ -422,11 +431,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.pdf_protect_indicator.setText("Protect PDF (OFF)")
 
     def table_view_default_setting(self):
-        self.ui.tableWidget.setColumnCount(4)
+        self.ui.tableWidget.setColumnCount(7)
         self.ui.tableWidget.setRowCount(14)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['Source Image', 'Dimension', 'Format', "File size"])
-        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
-        self.ui.tableWidget.setColumnWidth(0, 400)
+        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Image', 'Name', 'Dimension', 'Format', "File size"])
+        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
+        self.ui.tableWidget.setColumnWidth(0, 30)
+        self.ui.tableWidget.setColumnWidth(1, 30)
+        self.ui.tableWidget.setColumnWidth(2, 100)
+        self.ui.tableWidget.setColumnWidth(3, 350)
+        self.ui.tableWidget.setColumnWidth(4, 90)
+        self.ui.tableWidget.setColumnWidth(5, 80)
+        self.ui.tableWidget.setColumnWidth(6, 80)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setStyleSheet(
@@ -438,9 +453,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.image_dimension.pop(self.counter)
             self.image_size.pop(self.counter)
             self.image_extension.pop(self.counter)
+            self.all_pixmap_data.pop(self.counter)
             if self.counter >= 1:
                 self.counter -= 1
             self.process_images_into_table()
+            self.ui.tableWidget.selectRow(self.counter)
+            if len(self.all_images_list) == 0:
+                self.ui.image.clear()
+                self.ui.image.setVisible(False)
+        else:
+            self.ui.image.clear()
 
     def next_button_clicked(self):
         if len(self.all_images_list) - 1 == self.counter:
@@ -448,7 +470,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             if self.all_images_list:
                 self.counter += 1
-                pixmap = QPixmap(self.all_images_list[self.counter])
+                pixmap = self.all_pixmap_data[self.counter]
                 self.setPhoto(pixmap)
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
@@ -463,7 +485,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             if self.all_images_list:
                 self.counter -= 1
-                pixmap = QPixmap(self.all_images_list[self.counter])
+                pixmap = self.all_pixmap_data[self.counter]
                 self.setPhoto(pixmap)
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
@@ -481,6 +503,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image_size = []
         self.image_extension = []
         self.selected_list = []
+        self.all_pixmap_data = []
         self.ui.sort.setCurrentIndex(0)
 
     def load_images(self):
@@ -496,6 +519,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                                    options=options)
         if len(self.all_images_list) == 0:
             return False
+        self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
         self.process_images_into_table()
 
     def load_folder(self):
@@ -505,6 +529,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.select_folder:
             return False
         self.all_images_list = load_images_from_folder(self.select_folder)
+        self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
+
         self.process_images_into_table()
 
     def process_images_into_table(self):
@@ -530,17 +556,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.get_image_size()
         self.get_image_extension()
 
+        size = QtCore.QSize()
+        size.setHeight(100)
+        size.setWidth(100)
+
+        for row in range(len(self.image_dimension)):
+            item = QTableWidgetItem(f"{row+1}")
+            self.ui.tableWidget.setItem(row, 1, item)
+
         for row, string in enumerate(input_images, 0):
             chkBoxItem = QTableWidgetItem(string)
-            chkBoxItem.setText(string)
+            chkBoxItem.setSizeHint(size)
+            chkBoxItem.setText("")
             chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
             chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
             self.ui.tableWidget.setItem(row, 0, chkBoxItem)
 
-        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 1):
+        for row, string in enumerate(input_images, 0):
+            icon = QtGui.QIcon()
+            icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            chkBoxItem = QTableWidgetItem(icon, string)
+            chkBoxItem.setSizeHint(size)
+            chkBoxItem.setText("")
+            self.ui.tableWidget.setItem(row, 2, chkBoxItem)
+
+        for row, string in enumerate(input_images, 0):
+            item = QTableWidgetItem(string)
+            self.ui.tableWidget.setItem(row, 3, item)
+
+        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4):
             for row, value in enumerate(data, 0):
                 item = QTableWidgetItem(value)
                 self.ui.tableWidget.setItem(row, col, item)
+
+        self.ui.tableWidget.setIconSize(QtCore.QSize(150, 150))
 
     def setPhoto(self, pixmap=None):
         self._zoom = 0
@@ -659,6 +708,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item = self.ui.tableWidget.item(index, 0)
                 if item:
                     item.setCheckState(QtCore.Qt.Checked)
+                self.ui.tableWidget.verticalScrollBar().setValue(index)
+                self.ui.tableWidget.currentIndex().row()
 
     def remove_selected(self):
         try:
@@ -682,6 +733,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                 self.image_dimension.pop(row)
                                 self.image_size.pop(row)
                                 self.image_extension.pop(row)
+                                self.all_pixmap_data.pop(row)
                     self.process_images_into_table()
                 if self.msg.clickedButton() == no_button:
                     pass
@@ -708,6 +760,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.toggle_full_half_path()
                     self.table_view_default_setting()
                     self.process_images_into_table()
+                    self.table_view_default_setting()
                     self.ui.image.setVisible(False)
                 if self.msg.clickedButton() == no_button:
                     pass

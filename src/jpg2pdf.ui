@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1076</width>
+    <width>1134</width>
     <height>644</height>
    </rect>
   </property>
@@ -69,7 +69,7 @@
            <bool>true</bool>
           </attribute>
           <attribute name="horizontalHeaderMinimumSectionSize">
-           <number>90</number>
+           <number>30</number>
           </attribute>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>100</number>
@@ -278,6 +278,12 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </item>

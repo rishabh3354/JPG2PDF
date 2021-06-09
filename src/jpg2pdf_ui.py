@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1076, 644)
+        MainWindow.resize(1134, 644)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -51,7 +51,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setRowCount(0)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(True)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(100)
-        self.tableWidget.horizontalHeader().setMinimumSectionSize(90)
+        self.tableWidget.horizontalHeader().setMinimumSectionSize(30)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout_10.addWidget(self.tableWidget)
         self.groupBox_4 = QtWidgets.QGroupBox(self.verticalLayoutWidget_3)
@@ -168,6 +168,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.graphicsView.sizePolicy().hasHeightForWidth())
         self.graphicsView.setSizePolicy(sizePolicy)
+        self.graphicsView.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.graphicsView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.graphicsView.setObjectName("graphicsView")
         self.verticalLayout_11.addWidget(self.graphicsView)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
