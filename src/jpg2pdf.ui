@@ -596,7 +596,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>   Advance Settings</string>
+           <string>   PDF Settings</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_15">
            <item>
@@ -672,7 +672,7 @@
              <item row="3" column="0" colspan="2">
               <widget class="QPushButton" name="more_setting_button">
                <property name="text">
-                <string>More settings</string>
+                <string>Advance PDF settings</string>
                </property>
               </widget>
              </item>
@@ -713,6 +713,9 @@
               <widget class="QLineEdit" name="pdf_name">
                <property name="text">
                 <string/>
+               </property>
+               <property name="placeholderText">
+                <string>PDF export name</string>
                </property>
               </widget>
              </item>

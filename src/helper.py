@@ -3,12 +3,27 @@ import os
 from PyQt5.QtCore import QProcessEnvironment, QStandardPaths
 
 
-def load_images_from_folder(folder):
-    supported_format = ["*.png", "*.jpeg", "*.jpg", "*.bmp", "*.tif", "*.tiff"]
+def load_images_from_folder(folder, supported_format):
     files_grabbed = []
-    for files in supported_format:
-        files_grabbed.extend(glob.glob(os.path.join(folder, files)))
+    if supported_format:
+        for files in supported_format:
+            files_grabbed.extend(glob.glob(os.path.join(folder, files)))
+    else:
+        files_grabbed.extend(glob.glob(os.path.join(folder, "*")))
+
     return files_grabbed
+
+
+def get_valid_images(image_list):
+    valid_list = []
+    in_valid_list = []
+    for item in image_list:
+        if str(item).lower().endswith((".png", ".jpeg", ".jpg", ".bmp", ".tif", ".tiff")):
+            valid_list.append(item)
+        else:
+            in_valid_list.append(item)
+
+    return valid_list, in_valid_list
 
 
 def check_default_location(path):

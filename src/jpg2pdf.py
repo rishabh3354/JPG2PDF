@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeader
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
 from qtpy.QtGui import QDesktopServices
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
-    check_for_already_file_exists
+    check_for_already_file_exists, get_valid_images
 from initial_init import initial_defines
 from convert_pdf_threads import ConvertToPdfThread
 from setting_module import AdvanceSettingPage, AppSettingPage
@@ -42,9 +42,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show_full_path_flag = False
         self.overwrite_warning = True
         self.ask_for_export = True
+        self.filter = "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)"
+        self.filter_array = ["*.png", "*.jpeg", "*.jpg", "*.bmp", "*.tif", "*.tiff"]
         self.ui.protect_pdf.setEnabled(False)
         self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
+        self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
         self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+        self.general_setting_ui.ui.import_path.setText(self.Default_loc_import)
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.table_view_default_setting()
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
@@ -68,6 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.zoomout.clicked.connect(self.zoom_out_functionality)
         self.ui.rotate.clicked.connect(self.rotate_functionality)
         self.ui.change.clicked.connect(self.open_download_path)
+        self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
         self.ui.preview.clicked.connect(self.preview_image)
         self.ui.show_full_path.clicked.connect(self.toggle_full_half_path)
         self.ui.next.clicked.connect(self.next_button_clicked)
@@ -87,7 +92,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.duplicate.clicked.connect(self.remove_duplicate)
         self.ui.select_item.clicked.connect(self.select_item_one)
 
-        self.advance_setting_ui.ui.clear_all_settings.clicked.connect(self.clear_setting_clicked)
         self.advance_setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
         self.advance_setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
         self.advance_setting_ui.ui.page_to.textChanged.connect(self.check_from_to_page_validation)
@@ -109,11 +113,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.auto_generate_pdf_name.clicked.connect(self.pdf_name_set)
 
         # self.general_setting_ui.ui.icon_size.clicked.connect(self.set_file_dialog)
-        # self.general_setting_ui.ui.jpg.clicked.connect(self.set_file_dialog)
-        # self.general_setting_ui.ui.jpeg.clicked.connect(self.set_file_dialog)
-        # self.general_setting_ui.ui.png.clicked.connect(self.set_file_dialog)
-        # self.general_setting_ui.ui.tif.clicked.connect(self.set_file_dialog)
-        # self.general_setting_ui.ui.tiff.clicked.connect(self.set_file_dialog)
+
+        self.general_setting_ui.ui.jpg.clicked.connect(self.set_image_filter)
+        self.general_setting_ui.ui.jpeg.clicked.connect(self.set_image_filter)
+        self.general_setting_ui.ui.png.clicked.connect(self.set_image_filter)
+        self.general_setting_ui.ui.tif.clicked.connect(self.set_image_filter)
+        self.general_setting_ui.ui.tiff.clicked.connect(self.set_image_filter)
+        self.general_setting_ui.ui.bmp.clicked.connect(self.set_image_filter)
+
+        self.general_setting_ui.ui.all_files.clicked.connect(self.set_filter_disable)
+        self.general_setting_ui.ui.close.clicked.connect(self.hide_general_settings)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -124,6 +133,57 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
+
+    def set_image_filter(self):
+        self.filter_array = []
+        if self.general_setting_ui.ui.jpg.isChecked():
+            self.filter_array.append("*.jpg")
+        if self.general_setting_ui.ui.jpeg.isChecked():
+            self.filter_array.append("*.jpeg")
+        if self.general_setting_ui.ui.png.isChecked():
+            self.filter_array.append("*.png")
+        if self.general_setting_ui.ui.bmp.isChecked():
+            self.filter_array.append("*.bmp")
+        if self.general_setting_ui.ui.tif.isChecked():
+            self.filter_array.append("*.tif")
+        if self.general_setting_ui.ui.tiff.isChecked():
+            self.filter_array.append("*.tiff")
+        if not any([self.general_setting_ui.ui.jpg.isChecked(),
+                    self.general_setting_ui.ui.jpeg.isChecked(),
+                    self.general_setting_ui.ui.png.isChecked(),
+                    self.general_setting_ui.ui.tif.isChecked(),
+                    self.general_setting_ui.ui.tiff.isChecked(),
+                    self.general_setting_ui.ui.bmp.isChecked()]):
+            self.general_setting_ui.ui.all_files.setChecked(True)
+        if any([self.general_setting_ui.ui.jpg.isChecked(),
+                self.general_setting_ui.ui.jpeg.isChecked(),
+                self.general_setting_ui.ui.png.isChecked(),
+                self.general_setting_ui.ui.tif.isChecked(),
+                self.general_setting_ui.ui.tiff.isChecked(),
+                self.general_setting_ui.ui.bmp.isChecked()]):
+            self.general_setting_ui.ui.all_files.setChecked(False)
+
+        if self.filter_array:
+            self.filter = "Images (" + "".join(self.filter_array) + ")"
+        else:
+            self.filter = "*"
+
+    def set_filter_disable(self):
+        if not any([self.general_setting_ui.ui.jpg.isChecked(),
+                    self.general_setting_ui.ui.jpeg.isChecked(),
+                    self.general_setting_ui.ui.png.isChecked(),
+                    self.general_setting_ui.ui.tif.isChecked(),
+                    self.general_setting_ui.ui.tiff.isChecked(),
+                    self.general_setting_ui.ui.bmp.isChecked()]):
+            self.general_setting_ui.ui.all_files.setChecked(True)
+        self.general_setting_ui.ui.jpg.setChecked(False)
+        self.general_setting_ui.ui.jpeg.setChecked(False)
+        self.general_setting_ui.ui.png.setChecked(False)
+        self.general_setting_ui.ui.tif.setChecked(False)
+        self.general_setting_ui.ui.tiff.setChecked(False)
+        self.general_setting_ui.ui.bmp.setChecked(False)
+        self.filter = "*"
+        self.filter_array = []
 
     def pdf_name_set(self):
         if self.general_setting_ui.ui.auto_generate_pdf_name.isChecked():
@@ -347,22 +407,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
 
-    def clear_setting_clicked(self):
-        self.advance_setting_ui.ui.keywords.clear()
-        self.advance_setting_ui.ui.producer.clear()
-        self.advance_setting_ui.ui.creator.clear()
-        self.advance_setting_ui.ui.created_on.clear()
-        self.advance_setting_ui.ui.page_to.clear()
-        self.advance_setting_ui.ui.page_from.clear()
-        self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
-        self.advance_setting_ui.ui.h_unit.setText("Unit in (mm)")
-        self.advance_setting_ui.ui.v_unit.setText("Unit in (mm)")
-        self.advance_setting_ui.ui.v_value.setValue(0.00)
-        self.advance_setting_ui.ui.h_value.setValue(0.00)
-        self.advance_setting_ui.ui.mm.setChecked(True)
-
     def ok_setting_clicked(self):
         self.advance_setting_ui.hide()
+
+    def hide_general_settings(self):
+        self.general_setting_ui.hide()
 
     def show_advance_setting(self):
         self.advance_setting_ui.show()
@@ -572,17 +621,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def load_images(self):
         self.ui.stop.setEnabled(False)
         if self.file_dialog == "native":
-            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
-                                                               "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
+            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import, self.filter)
         else:
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/",
-                                                               "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
+            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import, self.filter,
                                                                options=options)
         if len(self.load_images) == 0:
             return False
 
+        self.load_images, invalid_list = get_valid_images(self.load_images)
+        if invalid_list:
+            message = "\n".join(invalid_list)
+            self.popup_message(title="Invalid image file(s)! Please import valid image file",
+                               message=message)
         self.all_images_list += self.load_images
         self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
         self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
@@ -591,15 +643,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_folder(self):
         self.ui.stop.setEnabled(False)
-        self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", '/home', QFileDialog.ShowDirsOnly
+        self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.Default_loc_import, QFileDialog.ShowDirsOnly
                                                               | QFileDialog.DontResolveSymlinks)
         if not self.select_folder:
+            return False
+
+        self.load_images = load_images_from_folder(self.select_folder, self.filter_array)
+
+        if len(self.load_images) == 0:
             self.popup_message(title="Images not found!",
                                message="Selected folder might be empty or image extension does not match.\n\n"
                                        "TIP: Go to settings and enable specific image extension")
             return False
 
-        self.load_images = load_images_from_folder(self.select_folder)
+        self.load_images, invalid_list = get_valid_images(self.load_images)
+        if invalid_list:
+            message = "\n".join(invalid_list)
+            self.popup_message(title="Invalid image file(s)! Please import valid image file",
+                               message=message)
         self.all_images_list += self.load_images
         self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
         self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
@@ -625,72 +686,76 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.stop.setEnabled(True)
 
     def process_images_into_table(self):
-        self.ui.image.setVisible(True)
-        if self.image_hide:
-            self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
-        else:
-            self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
-
-        if not self.show_full_path_flag:
-            input_images = [str(x).split("/")[-1] for x in self.all_images_list]
-        else:
-            input_images = self.all_images_list
-
-        if self.all_images_list:
-            if self.counter == len(self.all_images_list) - 1:
-                pixmap = QPixmap(self.all_images_list[0])
+        try:
+            self.ui.image.setVisible(True)
+            if self.image_hide:
+                self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
             else:
-                pixmap = QPixmap(self.all_images_list[self.counter])
-            self.setPhoto(pixmap)
-            self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
-            self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
-        else:
-            self.setPhoto(QPixmap())
+                self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
 
-        self.ui.tableWidget.setRowCount(len(self.all_images_list))
-        self.get_image_dimension()
-        self.get_image_size()
-        self.get_image_extension()
+            if not self.show_full_path_flag:
+                input_images = [str(x).split("/")[-1] for x in self.all_images_list]
+            else:
+                input_images = self.all_images_list
 
-        size = QtCore.QSize()
-        size.setHeight(100)
-        size.setWidth(100)
+            if self.all_images_list:
+                if self.counter == len(self.all_images_list) - 1:
+                    pixmap = QPixmap(self.all_images_list[0])
+                else:
+                    pixmap = QPixmap(self.all_images_list[self.counter])
+                self.setPhoto(pixmap)
+                self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
+                self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
+            else:
+                self.setPhoto(QPixmap())
 
-        for row in range(len(self.image_dimension)):
-            item = QTableWidgetItem(f"{row + 1}")
-            item.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.ui.tableWidget.setItem(row, 1, item)
+            self.ui.tableWidget.setRowCount(len(self.all_images_list))
+            self.get_image_dimension()
+            self.get_image_size()
+            self.get_image_extension()
 
-        for row, string in enumerate(input_images, 0):
-            chkBoxItem = QTableWidgetItem(string)
-            chkBoxItem.setSizeHint(size)
-            chkBoxItem.setText("")
-            chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-            chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
-            self.ui.tableWidget.setItem(row, 0, chkBoxItem)
+            size = QtCore.QSize()
+            size.setHeight(100)
+            size.setWidth(100)
 
-        if self.image_hide:
-            col_num = 1
-        else:
-            col_num = 0
+            for row in range(len(self.image_dimension)):
+                item = QTableWidgetItem(f"{row + 1}")
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.ui.tableWidget.setItem(row, 1, item)
+
             for row, string in enumerate(input_images, 0):
-                icon = QtGui.QIcon()
-                icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                chkBoxItem = QTableWidgetItem(icon, string)
+                chkBoxItem = QTableWidgetItem(string)
                 chkBoxItem.setSizeHint(size)
                 chkBoxItem.setText("")
-                self.ui.tableWidget.setItem(row, 2 - col_num, chkBoxItem)
+                chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+                chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
+                self.ui.tableWidget.setItem(row, 0, chkBoxItem)
 
-        for row, string in enumerate(input_images, 0):
-            item = QTableWidgetItem(string)
-            self.ui.tableWidget.setItem(row, 3 - col_num, item)
+            if self.image_hide:
+                col_num = 1
+            else:
+                col_num = 0
+                for row, string in enumerate(input_images, 0):
+                    icon = QtGui.QIcon()
+                    icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    chkBoxItem = QTableWidgetItem(icon, string)
+                    chkBoxItem.setSizeHint(size)
+                    chkBoxItem.setText("")
+                    self.ui.tableWidget.setItem(row, 2 - col_num, chkBoxItem)
 
-        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4 - col_num):
-            for row, value in enumerate(data, 0):
-                item = QTableWidgetItem(value)
-                self.ui.tableWidget.setItem(row, col, item)
+            for row, string in enumerate(input_images, 0):
+                item = QTableWidgetItem(string)
+                self.ui.tableWidget.setItem(row, 3 - col_num, item)
 
-        self.ui.tableWidget.setIconSize(QtCore.QSize(70, 70))
+            for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4 - col_num):
+                for row, value in enumerate(data, 0):
+                    item = QTableWidgetItem(value)
+                    self.ui.tableWidget.setItem(row, col, item)
+
+            self.ui.tableWidget.setIconSize(QtCore.QSize(70, 70))
+        except Exception as e:
+            self.table_view_default_setting()
+            self.popup_message(title="Could not load images!", message="Please select valid image file", error=True)
 
     def setPhoto(self, pixmap=None):
         self._zoom = 0
@@ -755,7 +820,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ui.output_path.setText(folder_loc + "/JPG2PDF")
                 self.Default_loc = folder_loc
             else:
-                self.popup_message(title="Download Path Invalid", message="Download Path Must Inside Home Directory")
+                self.popup_message(title="Export Path Invalid", message="Export Path Must Inside Home Directory")
+                return False
+
+    def change_import_path(self):
+        folder_loc = QFileDialog.getExistingDirectory(self, "Select Import Directory",
+                                                      self.Default_loc_import,
+                                                      QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
+        if folder_loc:
+            if check_default_location(folder_loc):
+                self.general_setting_ui.ui.import_path.setText(folder_loc)
+                self.Default_loc_import = folder_loc
+            else:
+                self.popup_message(title="Import Path Invalid", message="Import Path Must Inside Home Directory or Home")
                 return False
 
     def popup_message(self, title, message, error=False):
