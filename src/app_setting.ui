@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
-    <height>433</height>
+    <width>515</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,48 @@
       </spacer>
      </item>
      <item>
+      <widget class="QGroupBox" name="groupBox_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Destination path</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_16">
+        <item>
+         <layout class="QGridLayout" name="gridLayout_28">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="overwrite_warning">
+            <property name="styleSheet">
+             <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+            </property>
+            <property name="text">
+             <string>Alert for overwrite existing files</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="auto_generate_pdf_name">
+            <property name="styleSheet">
+             <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+            </property>
+            <property name="text">
+             <string>Auto generate pdf export name</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <widget class="QGroupBox" name="groupBox_8">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -64,18 +106,28 @@
         </sizepolicy>
        </property>
        <property name="title">
-        <string>File Explorer</string>
+        <string>Image icon</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_14">
         <item>
          <layout class="QGridLayout" name="gridLayout_26">
           <item row="0" column="1">
-           <widget class="QSpinBox" name="text_size"/>
+           <widget class="QSpinBox" name="icon_size">
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
+            <property name="minimum">
+             <number>30</number>
+            </property>
+            <property name="maximum">
+             <number>200</number>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Text size</string>
+             <string>icon size</string>
             </property>
            </widget>
           </item>
@@ -87,7 +139,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox_5">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -123,9 +175,93 @@
     </layout>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox_10">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Import image folder filter</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_17">
+      <item>
+       <layout class="QGridLayout" name="gridLayout_29">
+        <item row="0" column="3">
+         <widget class="QCheckBox" name="tif">
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+          </property>
+          <property name="text">
+           <string>tif</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="jpeg">
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+          </property>
+          <property name="text">
+           <string>jpeg</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="jpg">
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+          </property>
+          <property name="text">
+           <string>jpg</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QCheckBox" name="tiff">
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+          </property>
+          <property name="text">
+           <string>tiff</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="png">
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+          </property>
+          <property name="text">
+           <string>png</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox_7">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

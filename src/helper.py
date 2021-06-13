@@ -61,7 +61,7 @@ def get_download_path(location):
 
 
 def check_for_already_file_exists(download_path, pdf_settings):
-    title = pdf_settings.get("title")
+    title = pdf_settings.get("export_file_name")
     output_path = None
     try:
         if title in [None, ""]:

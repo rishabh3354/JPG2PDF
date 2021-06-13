@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1098</width>
-    <height>644</height>
+    <width>1162</width>
+    <height>702</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,26 +90,6 @@
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
             <layout class="QGridLayout" name="gridLayout_25">
-             <item row="0" column="6">
-              <widget class="QLabel" name="image_label">
-               <property name="text">
-                <string>Image 0 of 0</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="6">
-              <widget class="QPushButton" name="change">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Change</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="4">
               <widget class="QToolButton" name="moveup">
                <property name="sizePolicy">
@@ -123,16 +103,10 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="5" colspan="2">
-              <widget class="QPushButton" name="start_convert">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
+             <item row="0" column="6">
+              <widget class="QLabel" name="image_label">
                <property name="text">
-                <string>Start Convert</string>
+                <string>Image 0 of 0</string>
                </property>
               </widget>
              </item>
@@ -149,16 +123,71 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="3" colspan="3">
-              <widget class="QLineEdit" name="output_path">
+             <item row="0" column="3">
+              <widget class="QToolButton" name="duplicate">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="readOnly">
-                <bool>true</bool>
+               <property name="text">
+                <string>Duplicate</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="6">
+              <widget class="QPushButton" name="change">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Change</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="5" colspan="2">
+              <widget class="QPushButton" name="start_convert">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Start Convert</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="label_49">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Export path</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="show_full_path">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Show full path</string>
                </property>
               </widget>
              </item>
@@ -166,19 +195,6 @@
               <widget class="QPushButton" name="stop">
                <property name="text">
                 <string>Stop</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0" colspan="4">
-              <widget class="QProgressBar" name="progress_bar">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="value">
-                <number>24</number>
                </property>
               </widget>
              </item>
@@ -201,22 +217,6 @@
                </item>
               </widget>
              </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_49">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Output path</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="0" colspan="2">
               <widget class="QComboBox" name="selectall">
                <item>
@@ -236,32 +236,6 @@
                </item>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QToolButton" name="show_full_path">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Show full path</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QToolButton" name="duplicate">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Duplicate</string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="1">
               <widget class="QToolButton" name="hide_image">
                <property name="sizePolicy">
@@ -271,7 +245,33 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Hide image</string>
+                <string>Hide icons</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3" colspan="3">
+              <widget class="QLineEdit" name="output_path">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="4">
+              <widget class="QProgressBar" name="progress_bar">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="value">
+                <number>24</number>
                </property>
               </widget>
              </item>
@@ -344,6 +344,19 @@
             </property>
             <property name="text">
              <string>Next</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="select_item">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Select</string>
             </property>
            </widget>
           </item>
@@ -589,6 +602,25 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_27">
              <item row="1" column="1">
+              <widget class="QComboBox" name="orientation">
+               <item>
+                <property name="text">
+                 <string>Auto</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Portrait</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Landscape</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="1">
               <widget class="QComboBox" name="page_format">
                <item>
                 <property name="text">
@@ -637,26 +669,14 @@
                </item>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="orientation">
-               <item>
-                <property name="text">
-                 <string>Auto</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Portrait</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Landscape</string>
-                </property>
-               </item>
+             <item row="3" column="0" colspan="2">
+              <widget class="QPushButton" name="more_setting_button">
+               <property name="text">
+                <string>More settings</string>
+               </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item row="2" column="0">
               <widget class="QLabel" name="label28">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -669,7 +689,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
+             <item row="1" column="0">
               <widget class="QLabel" name="label_27">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -682,10 +702,17 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0" colspan="2">
-              <widget class="QPushButton" name="more_setting_button">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
                <property name="text">
-                <string>More settings</string>
+                <string>PDF Export name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="pdf_name">
+               <property name="text">
+                <string/>
                </property>
               </widget>
              </item>

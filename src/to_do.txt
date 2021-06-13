@@ -1,0 +1,3 @@
+1. fit to view issue, add image size.
+2. page no. in footer
+etc

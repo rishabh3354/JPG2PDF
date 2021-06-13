@@ -65,6 +65,9 @@ class ConvertToPdfThread(QtCore.QThread):
             self.h_value = self.pdf_settings.get("h_value", 0) * 0.352778
             self.v_value = self.pdf_settings.get("v_value", 0) * 0.352778
 
+        self.ask_for_export = self.pdf_settings.get("ask_for_export", False)
+        self.export_file_name = self.pdf_settings.get("export_file_name", f"jpf2pdf_export_on_{str(datetime.datetime.now())}")
+
     def run(self):
         response = self.convert_to_pdf()
         if not self.is_killed:
@@ -133,9 +136,13 @@ class ConvertToPdfThread(QtCore.QThread):
             if message:
                 status = {"status": False, "message": message}
             else:
-                self.output_path = f"{self.download_path}{self.title}.pdf"
+                if self.ask_for_export:
+                    export_pdf_title = f"{self.export_file_name}"
+                else:
+                    export_pdf_title = f"jpf2pdf_export_on_{str(datetime.datetime.now())}"
+                self.output_path = f"{self.download_path}{export_pdf_title}.pdf"
                 pdf.output(self.output_path)
-                status = {"status": True, "title": self.title, "file_path": self.download_path,
+                status = {"status": True, "title": export_pdf_title, "file_path": self.download_path,
                           "play_path": self.output_path, "message": ""}
             return status
         except Exception as e:

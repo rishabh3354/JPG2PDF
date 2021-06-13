@@ -1,3 +1,4 @@
+import datetime
 import os
 import sys
 from PIL import Image
@@ -12,6 +13,7 @@ from helper import load_images_from_folder, check_default_location, humanbytes, 
 from initial_init import initial_defines
 from convert_pdf_threads import ConvertToPdfThread
 from setting_module import AdvanceSettingPage, AppSettingPage
+from pixmap_loading_thread import PixMapLoadingThread
 from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
@@ -38,6 +40,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selected_list = []
         self.select_folder = None
         self.show_full_path_flag = False
+        self.overwrite_warning = True
+        self.ask_for_export = True
         self.ui.protect_pdf.setEnabled(False)
         self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
         self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
@@ -81,6 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.more_setting_button.clicked.connect(self.show_advance_setting)
         self.ui.hide_image.clicked.connect(self.hide_image_thumbnail)
         self.ui.duplicate.clicked.connect(self.remove_duplicate)
+        self.ui.select_item.clicked.connect(self.select_item_one)
 
         self.advance_setting_ui.ui.clear_all_settings.clicked.connect(self.clear_setting_clicked)
         self.advance_setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
@@ -100,6 +105,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.native_dialog.clicked.connect(self.set_file_dialog)
         self.general_setting_ui.ui.qt_dialog.clicked.connect(self.set_file_dialog)
 
+        self.general_setting_ui.ui.overwrite_warning.clicked.connect(self.set_overwrite_warning)
+        self.general_setting_ui.ui.auto_generate_pdf_name.clicked.connect(self.pdf_name_set)
+
+        # self.general_setting_ui.ui.icon_size.clicked.connect(self.set_file_dialog)
+        # self.general_setting_ui.ui.jpg.clicked.connect(self.set_file_dialog)
+        # self.general_setting_ui.ui.jpeg.clicked.connect(self.set_file_dialog)
+        # self.general_setting_ui.ui.png.clicked.connect(self.set_file_dialog)
+        # self.general_setting_ui.ui.tif.clicked.connect(self.set_file_dialog)
+        # self.general_setting_ui.ui.tiff.clicked.connect(self.set_file_dialog)
+
         # scroll zoom functionality:-
         self._zoom = 0
         self._empty = False
@@ -110,49 +125,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
 
-        # self.all_images_list = ['/home/warlord/Pictures/Screenshot from 2021-06-03 21-29-58.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-44.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-20 22-11-21.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-24.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-39.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 13-46-41.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-17 23-16-08.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-47.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-23 12-52-41.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-12 12-41-54.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-06 02-02-47.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-03-10 23-26-13.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-35-10.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-15 18-12-35.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-03-11 01-43-54.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-01.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-27 15-28-23.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-07 15-26-08.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-08-56.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 13-31-48.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-31.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-23.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-46.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-43-27.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-03-10 22-25-28.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-21 19-12-22.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-06-02 00-35-43.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-30-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-02-07 15-05-09.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-21 11-09-53.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-11 01-17-27.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-04-06 14-42-32.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2020-12-21 12-02-23.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-31 21-57-10.png',
-        #                         '/home/warlord/Pictures/Screenshot from 2021-05-02 14-38-38.png',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0003-15-May-2021-20_18_01.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0002-15-May-2021-20_18_01.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0000-15-May-2021-20_17_58222222222222222222222222222222222222222222222222222222222222222222222222.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0004-15-May-2021-20_18_01.jpg',
-        #                         '/home/warlord/Pictures/Integrated Camera: Integrated C-0001-15-May-2021-20_17_59.jpg']
-        # self.process_images_into_table()
+    def pdf_name_set(self):
+        if self.general_setting_ui.ui.auto_generate_pdf_name.isChecked():
+            self.ui.pdf_name.setVisible(False)
+            self.ui.label.setVisible(False)
+            self.ui.pdf_name.clear()
+            self.ask_for_export = False
+        else:
+            self.ui.pdf_name.setVisible(True)
+            self.ui.label.setVisible(True)
+            self.ask_for_export = True
+
+    def set_overwrite_warning(self):
+        if self.general_setting_ui.ui.overwrite_warning.isChecked():
+            self.overwrite_warning = True
+        else:
+            self.overwrite_warning = False
+
+    def select_item_one(self):
+        # self.ui.tableWidget.selectRow(self.counter)
+        item = self.ui.tableWidget.item(self.counter, 0)
+
+        if item.column() == 0:
+            if item.checkState() == QtCore.Qt.Checked:
+                item.setCheckState(QtCore.Qt.Unchecked)
+            else:
+                item.setCheckState(QtCore.Qt.Checked)
+        elif item.column() != 0:
+            row = item.row()
+            if self.ui.tableWidget.item(row, 0).checkState() == QtCore.Qt.Checked:
+                self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Unchecked)
+            else:
+                self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Checked)
 
     def remove_duplicate(self):
         self.msg = QMessageBox()
@@ -164,13 +168,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         no_button = self.msg.addButton(QMessageBox.No)
         self.msg.exec_()
         if self.msg.clickedButton() == yes_button:
-            temp = []
-            for item in self.all_images_list:
-                if item not in temp:
-                    temp.append(item)
-            self.all_images_list = temp
-            self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
-            self.process_images_into_table()
+            if self.all_images_list:
+                temp = []
+                for item in self.all_images_list:
+                    if item not in temp:
+                        temp.append(item)
+                self.all_images_list = temp
+                self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
+                self.process_images_into_table()
+                self.popup_message("Duplicate images have been successfully removed!", "")
         if self.msg.clickedButton() == no_button:
             pass
 
@@ -178,9 +184,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             if self.toggle % 2 == 0:
                 self.image_hide = True
+                self.ui.hide_image.setText("Show icons")
                 self.no_image_q_table_setting()
             else:
                 self.image_hide = False
+                self.ui.hide_image.setText("Hide icons")
                 self.table_view_default_setting()
             self.toggle += 1
 
@@ -485,9 +493,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
-        self.ui.tableWidget.setRowCount(14)
+        self.ui.tableWidget.setRowCount(16)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Image', 'Name', 'Dimension', 'Format', "File size"])
+        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 30)
@@ -562,34 +570,67 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.sort.setCurrentIndex(0)
 
     def load_images(self):
+        self.ui.stop.setEnabled(False)
         if self.file_dialog == "native":
-            load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
-                                                          "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
+            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home",
+                                                               "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)")
         else:
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/",
-                                                          "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
-                                                          options=options)
-        if len(load_images) == 0:
+            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/",
+                                                               "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)",
+                                                               options=options)
+        if len(self.load_images) == 0:
             return False
 
-        self.all_images_list += load_images
-        self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
-        self.process_images_into_table()
+        self.all_images_list += self.load_images
+        self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
+        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+        self.pixmap_load_thread.start()
 
     def load_folder(self):
+        self.ui.stop.setEnabled(False)
         self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", '/home', QFileDialog.ShowDirsOnly
                                                               | QFileDialog.DontResolveSymlinks)
         if not self.select_folder:
+            self.popup_message(title="Images not found!",
+                               message="Selected folder might be empty or image extension does not match.\n\n"
+                                       "TIP: Go to settings and enable specific image extension")
             return False
-        self.all_images_list += load_images_from_folder(self.select_folder)
-        self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
 
-        self.process_images_into_table()
+        self.load_images = load_images_from_folder(self.select_folder)
+        self.all_images_list += self.load_images
+        self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
+        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+        self.pixmap_load_thread.start()
+
+    def setProgressVal_pixmap(self, pixmap_dict):
+        progress = pixmap_dict.get("progress")
+        pixmap = pixmap_dict.get("pixmap")
+        display_status = "Loading image {0} of {1}".format(progress, len(self.load_images))
+        if len(self.load_images) != 1:
+            self.ui.progress_bar.setRange(0, len(self.load_images))
+            self.ui.progress_bar.setFormat(display_status)
+            self.ui.progress_bar.setValue(progress)
+        self.all_pixmap_data.append(pixmap)
+
+    def setProgressVal_pixmap_finish(self, response):
+        if response["status"] is False:
+            self.popup_message(title="Could not load images!", message=response["message"], error=True)
+        else:
+            self.process_images_into_table()
+        self.progress_bar_disable()
+        self.ui.stop.setEnabled(True)
 
     def process_images_into_table(self):
         self.ui.image.setVisible(True)
+        if self.image_hide:
+            self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
+        else:
+            self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
+
         if not self.show_full_path_flag:
             input_images = [str(x).split("/")[-1] for x in self.all_images_list]
         else:
@@ -642,9 +683,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for row, string in enumerate(input_images, 0):
             item = QTableWidgetItem(string)
-            self.ui.tableWidget.setItem(row, 3-col_num, item)
+            self.ui.tableWidget.setItem(row, 3 - col_num, item)
 
-        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4-col_num):
+        for col, data in enumerate([self.image_dimension, self.image_size, self.image_extension], 4 - col_num):
             for row, value in enumerate(data, 0):
                 item = QTableWidgetItem(value)
                 self.ui.tableWidget.setItem(row, col, item)
@@ -738,8 +779,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             if self.toggle % 2 == 0:
                 self.show_full_path_flag = True
+                self.ui.show_full_path.setText("Hide full path")
             else:
                 self.show_full_path_flag = False
+                self.ui.show_full_path.setText("Show full path")
             self.toggle += 1
             self.get_all_selected_items()
             self.process_images_into_table()
@@ -904,6 +947,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.advance_setting_ui.ui.v_value.value() > 0:
             pdf_settings["v_value"] = self.advance_setting_ui.ui.v_value.value()
 
+        pdf_settings["ask_for_export"] = self.ask_for_export
+
+        if str(self.ui.pdf_name.text()) in [None, ""]:
+            pdf_settings["export_file_name"] = f"jpf2pdf_export_on_{str(datetime.datetime.now())}"
+        else:
+            pdf_settings["export_file_name"] = str(self.ui.pdf_name.text())
+
         return pdf_settings
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
@@ -928,7 +978,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 download_path = get_download_path(self.Default_loc)
                 pdf_settings = self.get_pdf_setting_all()
                 self.progress_bar_enable()
-                response, title, path = check_for_already_file_exists(download_path, pdf_settings)
+                if self.overwrite_warning:
+                    response, title, path = check_for_already_file_exists(download_path, pdf_settings)
+                else:
+                    response = False
                 if response:
                     self.progress_bar_disable()
                     self.msg = QMessageBox()
@@ -969,7 +1022,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             title = json_data.get("title")
             folder_path = json_data.get("file_path")
             play_path = json_data.get("play_path")
-            message = f"PDF created Successfully!\n\nOutput file name:  {title}.pdf\n"
+            message = f"PDF created Successfully!\n\nExport file name:  {title}.pdf\n"
             self.file_download_success_dialog(message, folder_path, play_path)
         else:
             self.popup_message(title="OOps! Something went wrong", message=json_data.get("message"))
