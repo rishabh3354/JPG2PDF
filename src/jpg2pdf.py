@@ -415,9 +415,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def show_advance_setting(self):
         self.advance_setting_ui.show()
+        self.advance_setting_ui.raise_()
+        self.advance_setting_ui.activateWindow()
 
     def show_general_setting(self):
         self.general_setting_ui.show()
+        self.general_setting_ui.raise_()
+        self.general_setting_ui.activateWindow()
 
     def closeEvent(self, event):
         self.advance_setting_ui.hide()
@@ -834,6 +838,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 self.popup_message(title="Import Path Invalid", message="Import Path Must Inside Home Directory or Home")
                 return False
+
+        self.general_setting_ui.setWindowState(self.general_setting_ui.windowState() & ~QtCore.Qt.WindowMinimized | QtCore.Qt.WindowActive)
 
     def popup_message(self, title, message, error=False):
         self.msg = QMessageBox()
