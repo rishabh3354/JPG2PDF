@@ -65,6 +65,12 @@
           <property name="sortingEnabled">
            <bool>false</bool>
           </property>
+          <property name="rowCount">
+           <number>16</number>
+          </property>
+          <property name="columnCount">
+           <number>7</number>
+          </property>
           <attribute name="horizontalHeaderCascadingSectionResizes">
            <bool>true</bool>
           </attribute>
@@ -80,6 +86,29 @@
           <attribute name="verticalHeaderDefaultSectionSize">
            <number>45</number>
           </attribute>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
          </widget>
         </item>
         <item>

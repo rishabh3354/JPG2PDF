@@ -42,6 +42,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show_full_path_flag = False
         self.overwrite_warning = True
         self.ask_for_export = True
+        self.image_hide = False
+        self.main_table_pointer = 70  # this has to save only
+        self.t_width, self.t_height = self.main_table_pointer, self.main_table_pointer
+        self.default_table_width = self.main_table_pointer - 32
+        self.set_default_table_size()
         self.filter = "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)"
         self.filter_array = ["*.png", "*.jpeg", "*.jpg", "*.bmp", "*.tif", "*.tiff"]
         self.ui.protect_pdf.setEnabled(False)
@@ -61,7 +66,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.counter = 0
         self.toggle = 0
         self.default_selected = 0
-        self.image_hide = False
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
@@ -112,8 +116,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.overwrite_warning.clicked.connect(self.set_overwrite_warning)
         self.general_setting_ui.ui.auto_generate_pdf_name.clicked.connect(self.pdf_name_set)
 
-        # self.general_setting_ui.ui.icon_size.clicked.connect(self.set_file_dialog)
-
         self.general_setting_ui.ui.jpg.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.jpeg.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.png.clicked.connect(self.set_image_filter)
@@ -123,6 +125,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.general_setting_ui.ui.all_files.clicked.connect(self.set_filter_disable)
         self.general_setting_ui.ui.close.clicked.connect(self.hide_general_settings)
+        self.general_setting_ui.ui.icon_size.textChanged.connect(self.adjust_thumbnail_size)
+        self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -133,6 +137,76 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
+
+    def reset_app_settings(self):
+        def reset_defaults():
+            #  table icon setting defaults
+            self.main_table_pointer = 70
+            self.set_default_table_size()
+            self.general_setting_ui.ui.icon_size.setValue(self.main_table_pointer)
+            if self.all_images_list:
+                self.process_images_into_table()
+
+            #  theme defaults
+            self.theme = 'dark'
+            self.general_setting_ui.ui.dark.setChecked(True)
+            self.set_theme()
+
+            #  file dialog defaults
+            self.file_dialog = 'native'
+            self.general_setting_ui.ui.native_dialog.setChecked(True)
+
+            #  Import defaults
+            self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+            self.general_setting_ui.ui.import_path.setText(self.Default_loc_import)
+
+            #  overwrite defaults
+            self.general_setting_ui.ui.overwrite_warning.setChecked(True)
+            self.overwrite_warning = True
+
+            #  ask for export pdf name defaults
+            self.general_setting_ui.ui.auto_generate_pdf_name.setChecked(False)
+            self.ui.pdf_name.setVisible(True)
+            self.ui.label.setVisible(True)
+            self.ask_for_export = True
+
+            # filter images defaults
+            self.general_setting_ui.ui.jpg.setChecked(True)
+            self.general_setting_ui.ui.jpeg.setChecked(True)
+            self.general_setting_ui.ui.png.setChecked(True)
+            self.general_setting_ui.ui.tif.setChecked(True)
+            self.general_setting_ui.ui.tiff.setChecked(True)
+            self.general_setting_ui.ui.bmp.setChecked(True)
+            self.general_setting_ui.ui.all_files.setChecked(False)
+
+        self.msg = QMessageBox()
+        self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.msg.setStyleSheet(self.pop_up_stylesheet)
+        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setText("Are you sure want to reset default settings?")
+        yes_button = self.msg.addButton(QMessageBox.Yes)
+        no_button = self.msg.addButton(QMessageBox.No)
+        self.msg.exec_()
+        if self.msg.clickedButton() == yes_button:
+            reset_defaults()
+        if self.msg.clickedButton() == no_button:
+            pass
+
+    def set_default_table_size(self):
+        self.t_width, self.t_height = self.main_table_pointer, self.main_table_pointer
+        self.default_table_width = self.main_table_pointer - 32
+        if not self.image_hide:
+            self.ui.tableWidget.setColumnWidth(2, self.main_table_pointer + 7)
+
+    def adjust_thumbnail_size(self):
+        if self.all_images_list:
+            if self.image_hide:
+                self.hide_image_thumbnail()
+            self.main_table_pointer = self.general_setting_ui.ui.icon_size.value()
+            self.t_width, self.t_height = self.main_table_pointer, self.main_table_pointer
+            self.default_table_width = self.main_table_pointer - 32
+            self.ui.tableWidget.setColumnWidth(2, self.main_table_pointer + 7)
+            self.process_images_into_table()
 
     def set_image_filter(self):
         self.filter_array = []
@@ -547,13 +621,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
         self.ui.tableWidget.setRowCount(16)
-        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
+        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 30)
         self.ui.tableWidget.setColumnWidth(1, 25)
-        self.ui.tableWidget.setColumnWidth(2, 75)
+        self.ui.tableWidget.setColumnWidth(2, self.main_table_pointer + 7)
         self.ui.tableWidget.setColumnWidth(3, 350)
         self.ui.tableWidget.setColumnWidth(4, 90)
         self.ui.tableWidget.setColumnWidth(5, 80)
@@ -625,11 +699,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def load_images(self):
         self.ui.stop.setEnabled(False)
         if self.file_dialog == "native":
-            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import, self.filter)
+            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
+                                                               self.filter)
         else:
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import, self.filter,
+            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
+                                                               self.filter,
                                                                options=options)
         if len(self.load_images) == 0:
             return False
@@ -647,7 +723,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_folder(self):
         self.ui.stop.setEnabled(False)
-        self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.Default_loc_import, QFileDialog.ShowDirsOnly
+        self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.Default_loc_import,
+                                                              QFileDialog.ShowDirsOnly
                                                               | QFileDialog.DontResolveSymlinks)
         if not self.select_folder:
             return False
@@ -695,7 +772,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.image_hide:
                 self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
             else:
-                self.ui.tableWidget.verticalHeader().setDefaultSectionSize(45)
+                self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
 
             if not self.show_full_path_flag:
                 input_images = [str(x).split("/")[-1] for x in self.all_images_list]
@@ -718,10 +795,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.get_image_size()
             self.get_image_extension()
 
-            size = QtCore.QSize()
-            size.setHeight(100)
-            size.setWidth(100)
-
             for row in range(len(self.image_dimension)):
                 item = QTableWidgetItem(f"{row + 1}")
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
@@ -729,7 +802,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             for row, string in enumerate(input_images, 0):
                 chkBoxItem = QTableWidgetItem(string)
-                chkBoxItem.setSizeHint(size)
+                chkBoxItem.setSizeHint(QtCore.QSize())
                 chkBoxItem.setText("")
                 chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
                 chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
@@ -743,7 +816,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     icon = QtGui.QIcon()
                     icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
                     chkBoxItem = QTableWidgetItem(icon, string)
-                    chkBoxItem.setSizeHint(size)
+                    chkBoxItem.setSizeHint(QtCore.QSize())
                     chkBoxItem.setText("")
                     self.ui.tableWidget.setItem(row, 2 - col_num, chkBoxItem)
 
@@ -756,7 +829,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     item = QTableWidgetItem(value)
                     self.ui.tableWidget.setItem(row, col, item)
 
-            self.ui.tableWidget.setIconSize(QtCore.QSize(70, 70))
+            self.ui.tableWidget.setIconSize(QtCore.QSize(self.t_width, self.t_height))
         except Exception as e:
             self.table_view_default_setting()
             self.popup_message(title="Could not load images!", message="Please select valid image file", error=True)
@@ -774,18 +847,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.fitInView()
 
     def fitInView(self, scale=True):
-        rect = QtCore.QRectF(self._photo.pixmap().rect())
-        if not rect.isNull():
-            self.ui.graphicsView.setSceneRect(rect)
-            if self.hasPhoto():
-                unity = self.ui.graphicsView.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
-                self.ui.graphicsView.scale(1 / unity.width(), 1 / unity.height())
-                viewrect = self.ui.graphicsView.viewport().rect()
-                scenerect = self.ui.graphicsView.transform().mapRect(rect)
-                factor = min(viewrect.width() / scenerect.width(),
-                             viewrect.height() / scenerect.height())
-                self.ui.graphicsView.scale(factor, factor)
-            self._zoom = 0
+        try:
+            rect = QtCore.QRectF(self._photo.pixmap().rect())
+            if not rect.isNull():
+                self.ui.graphicsView.setSceneRect(rect)
+                if self.hasPhoto():
+                    unity = self.ui.graphicsView.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
+                    self.ui.graphicsView.scale(1 / unity.width(), 1 / unity.height())
+                    viewrect = self.ui.graphicsView.viewport().rect()
+                    scenerect = self.ui.graphicsView.transform().mapRect(rect)
+                    factor = min(viewrect.width() / scenerect.width(),
+                                 viewrect.height() / scenerect.height())
+                    self.ui.graphicsView.scale(factor, factor)
+                self._zoom = 0
+        except Exception as e:
+            pass
 
     def hasPhoto(self):
         return not self._empty
@@ -836,10 +912,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.general_setting_ui.ui.import_path.setText(folder_loc)
                 self.Default_loc_import = folder_loc
             else:
-                self.popup_message(title="Import Path Invalid", message="Import Path Must Inside Home Directory or Home")
+                self.popup_message(title="Import Path Invalid",
+                                   message="Import Path Must Inside Home Directory or Home")
                 return False
 
-        self.general_setting_ui.setWindowState(self.general_setting_ui.windowState() & ~QtCore.Qt.WindowMinimized | QtCore.Qt.WindowActive)
+        self.general_setting_ui.setWindowState(
+            self.general_setting_ui.windowState() & ~QtCore.Qt.WindowMinimized | QtCore.Qt.WindowActive)
 
     def popup_message(self, title, message, error=False):
         self.msg = QMessageBox()
