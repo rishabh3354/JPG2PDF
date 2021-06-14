@@ -64,7 +64,7 @@
         </sizepolicy>
        </property>
        <property name="title">
-        <string>Destination path</string>
+        <string>General preferences</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_16">
         <item>
@@ -106,7 +106,7 @@
         </sizepolicy>
        </property>
        <property name="title">
-        <string>Default import directory</string>
+        <string>Default import path</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_18">
         <item>
@@ -114,7 +114,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Import path</string>
+             <string>Current Directory</string>
             </property>
            </widget>
           </item>
@@ -190,7 +190,7 @@
         </sizepolicy>
        </property>
        <property name="title">
-        <string>File Dialog setting</string>
+        <string>File Dialog (Add images)</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
@@ -228,7 +228,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Import image filter</string>
+      <string>Import filter (Add Images/ folder)</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_17">
       <item>
