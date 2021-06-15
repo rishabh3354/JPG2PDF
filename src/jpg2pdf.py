@@ -66,6 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.counter = 0
         self.toggle = 0
         self.default_selected = 0
+        self.show_page_no = False
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
@@ -127,6 +128,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.close.clicked.connect(self.hide_general_settings)
         self.general_setting_ui.ui.icon_size.textChanged.connect(self.adjust_thumbnail_size)
         self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
+        self.advance_setting_ui.ui.show_page_no.clicked.connect(self.on_page_no)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -137,6 +139,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
+
+    def on_page_no(self):
+        if self.advance_setting_ui.ui.show_page_no.isChecked():
+            self.advance_setting_ui.ui.show_page_no.setText("(ON)")
+            self.show_page_no = True
+        else:
+            self.advance_setting_ui.ui.show_page_no.setText("(OFF)")
+            self.show_page_no = False
 
     def reset_app_settings(self):
         def reset_defaults():
@@ -1045,77 +1055,98 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.progress_bar.setRange(0, 1)
 
     def get_pdf_setting_all(self):
+        status = True
         pdf_settings = dict()
+        try:
+            pdf_settings["orientation"] = str(self.ui.orientation.currentText())
+            pdf_settings["page_format"] = str(self.ui.page_format.currentText())
 
-        pdf_settings["orientation"] = str(self.ui.orientation.currentText())
-        pdf_settings["page_format"] = str(self.ui.page_format.currentText())
+            if str(self.ui.title.text()) not in [None, ""]:
+                pdf_settings["title"] = str(self.ui.title.text())
+            pdf_settings["subject"] = str(self.ui.subject.text())
+            pdf_settings["author"] = str(self.ui.author.text())
 
-        if str(self.ui.title.text()) not in [None, ""]:
-            pdf_settings["title"] = str(self.ui.title.text())
-        pdf_settings["subject"] = str(self.ui.subject.text())
-        pdf_settings["author"] = str(self.ui.author.text())
+            if self.ui.checkBox_protect_pdf.isChecked():
+                if str(self.ui.protect_pdf.text()) not in [None, ""]:
+                    pdf_settings["password"] = str(self.ui.protect_pdf.text())
 
-        if self.ui.checkBox_protect_pdf.isChecked():
-            if str(self.ui.protect_pdf.text()) not in [None, ""]:
-                pdf_settings["password"] = str(self.ui.protect_pdf.text())
+            if str(self.advance_setting_ui.ui.keywords.text()) not in [None, ""]:
+                pdf_settings["keywords"] = str(self.advance_setting_ui.ui.keywords.text())
+            if str(self.advance_setting_ui.ui.producer.text()) not in [None, ""]:
+                pdf_settings["producer"] = str(self.advance_setting_ui.ui.producer.text())
+            if str(self.advance_setting_ui.ui.creator.text()) not in [None, ""]:
+                pdf_settings["creator"] = str(self.advance_setting_ui.ui.creator.text())
+            if str(self.advance_setting_ui.ui.created_on.text()) not in [None, ""]:
+                pdf_settings["created_on"] = str(self.advance_setting_ui.ui.created_on.text())
 
-        if str(self.advance_setting_ui.ui.keywords.text()) not in [None, ""]:
-            pdf_settings["keywords"] = str(self.advance_setting_ui.ui.keywords.text())
-        if str(self.advance_setting_ui.ui.producer.text()) not in [None, ""]:
-            pdf_settings["producer"] = str(self.advance_setting_ui.ui.producer.text())
-        if str(self.advance_setting_ui.ui.creator.text()) not in [None, ""]:
-            pdf_settings["creator"] = str(self.advance_setting_ui.ui.creator.text())
-        if str(self.advance_setting_ui.ui.created_on.text()) not in [None, ""]:
-            pdf_settings["created_on"] = str(self.advance_setting_ui.ui.created_on.text())
+            page_to = self.advance_setting_ui.ui.page_to.text()
+            page_from = self.advance_setting_ui.ui.page_from.text()
+            rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
 
-        page_to = self.advance_setting_ui.ui.page_to.text()
-        page_from = self.advance_setting_ui.ui.page_from.text()
-        rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
-
-        if rotation_angle != "Select angle":
-            if page_from == "":
-                pdf_settings["page_from"] = "start"
-            else:
-                if int(page_from) <= 0:
-                    pdf_settings["page_from"] = 1
+            if rotation_angle != "Select angle":
+                if page_from == "":
+                    pdf_settings["page_from"] = "start"
                 else:
-                    pdf_settings["page_from"] = page_from
+                    if int(page_from) <= 0:
+                        pdf_settings["page_from"] = 1
+                    else:
+                        pdf_settings["page_from"] = page_from
 
-            if page_to == "":
-                pdf_settings["page_to"] = "end"
-            else:
-                if int(page_to) <= 0:
-                    pdf_settings["page_to"] = 1
+                if page_to == "":
+                    pdf_settings["page_to"] = "end"
                 else:
-                    pdf_settings["page_to"] = page_to
+                    if int(page_to) <= 0:
+                        pdf_settings["page_to"] = 1
+                    else:
+                        pdf_settings["page_to"] = page_to
 
-            pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
-                0].strip()
+                pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
+                    0].strip()
 
-        if self.advance_setting_ui.ui.mm.isChecked():
-            pdf_settings["unit"] = 'mm'
-        elif self.advance_setting_ui.ui.cm.isChecked():
-            pdf_settings["unit"] = 'cm'
-        elif self.advance_setting_ui.ui.pt.isChecked():
-            pdf_settings["unit"] = 'pt'
-        elif self.advance_setting_ui.ui.inch.isChecked():
-            pdf_settings["unit"] = 'in'
-        else:
-            pdf_settings["unit"] = 'mm'
+            if self.advance_setting_ui.ui.mm.isChecked():
+                pdf_settings["unit"] = 'mm'
+            elif self.advance_setting_ui.ui.cm.isChecked():
+                pdf_settings["unit"] = 'cm'
+            elif self.advance_setting_ui.ui.pt.isChecked():
+                pdf_settings["unit"] = 'pt'
+            elif self.advance_setting_ui.ui.inch.isChecked():
+                pdf_settings["unit"] = 'in'
+            else:
+                pdf_settings["unit"] = 'mm'
 
-        if self.advance_setting_ui.ui.h_value.value() > 0:
-            pdf_settings["h_value"] = self.advance_setting_ui.ui.h_value.value()
-        if self.advance_setting_ui.ui.v_value.value() > 0:
-            pdf_settings["v_value"] = self.advance_setting_ui.ui.v_value.value()
+            if self.advance_setting_ui.ui.h_value.value() > 0:
+                pdf_settings["h_value"] = self.advance_setting_ui.ui.h_value.value()
+            if self.advance_setting_ui.ui.v_value.value() > 0:
+                pdf_settings["v_value"] = self.advance_setting_ui.ui.v_value.value()
 
-        pdf_settings["ask_for_export"] = self.ask_for_export
+            pdf_settings["ask_for_export"] = self.ask_for_export
 
-        if str(self.ui.pdf_name.text()) in [None, ""]:
-            pdf_settings["export_file_name"] = f"jpf2pdf_export_on_{str(datetime.datetime.now())}"
-        else:
-            pdf_settings["export_file_name"] = str(self.ui.pdf_name.text())
+            if str(self.ui.pdf_name.text()) in [None, ""]:
+                pdf_settings["export_file_name"] = f"jpf2pdf_export_on_{str(datetime.datetime.now())}"
+            else:
+                pdf_settings["export_file_name"] = str(self.ui.pdf_name.text())
 
-        return pdf_settings
+            # page no setting:
+            if self.show_page_no:
+                pdf_settings["show_page_no"] = True
+                pdf_settings["page_starts"] = self.advance_setting_ui.ui.page_starts.value()
+                pdf_settings["font_align"] = str(self.advance_setting_ui.ui.font_align.currentText())[0].upper()
+                pdf_settings["font_color"] = [self.advance_setting_ui.ui.r.value(), self.advance_setting_ui.ui.g.value(),
+                                              self.advance_setting_ui.ui.b.value()]
+                pdf_settings["font_position"] = self.advance_setting_ui.ui.font_position.value()
+                pdf_settings["font_style"] = self.advance_setting_ui.ui.comboBox.currentText()
+                pdf_settings["font_size"] = self.advance_setting_ui.ui.font_size.value()
+
+                if self.advance_setting_ui.ui.bold.isChecked():
+                    pdf_settings["bold"] = "B"
+                if self.advance_setting_ui.ui.italic.isChecked():
+                    pdf_settings["italic"] = "I"
+                if self.advance_setting_ui.ui.underline.isChecked():
+                    pdf_settings["underline"] = "U"
+        except Exception as e:
+            status = False
+
+        return pdf_settings, status
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
         self.convert_pdf_thread = ConvertToPdfThread(selected_list_items, download_path, pdf_settings)
@@ -1137,42 +1168,46 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.selected_list:
                 selected_list_items = [self.all_images_list[i] for i in self.selected_list]
                 download_path = get_download_path(self.Default_loc)
-                pdf_settings = self.get_pdf_setting_all()
-                self.progress_bar_enable()
-                if self.overwrite_warning:
-                    response, title, path = check_for_already_file_exists(download_path, pdf_settings)
-                else:
-                    response = False
-                if response:
-                    self.progress_bar_disable()
-                    self.msg = QMessageBox()
-                    self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-                    self.msg.setStyleSheet(self.pop_up_stylesheet)
-                    self.msg.setIcon(QMessageBox.Information)
-                    self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
-                    self.msg.setInformativeText(
-                        "TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")
-                    open_folder = self.msg.addButton(QMessageBox.Yes)
-                    close = self.msg.addButton(QMessageBox.Yes)
-                    yes_button = self.msg.addButton(QMessageBox.Yes)
-                    open_folder.setText('See PDF location')
-                    close.setText('No')
-                    close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
-                    open_folder.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
-                    yes_button.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton)))
-                    self.msg.exec_()
-                    try:
-                        if self.msg.clickedButton() == yes_button:
-                            self.progress_bar_enable()
-                            self.start_convert_thread(selected_list_items, download_path, pdf_settings)
-                        if self.msg.clickedButton() == open_folder:
-                            QDesktopServices.openUrl(QUrl(path))
-                        elif self.msg.clickedButton() == close:
+                pdf_settings, status = self.get_pdf_setting_all()
+                if status:
+                    self.progress_bar_enable()
+                    if self.overwrite_warning:
+                        response, title, path = check_for_already_file_exists(download_path, pdf_settings)
+                    else:
+                        response = False
+                    if response:
+                        self.progress_bar_disable()
+                        self.msg = QMessageBox()
+                        self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+                        self.msg.setStyleSheet(self.pop_up_stylesheet)
+                        self.msg.setIcon(QMessageBox.Information)
+                        self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
+                        self.msg.setInformativeText(
+                            "TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")
+                        open_folder = self.msg.addButton(QMessageBox.Yes)
+                        close = self.msg.addButton(QMessageBox.Yes)
+                        yes_button = self.msg.addButton(QMessageBox.Yes)
+                        open_folder.setText('See PDF location')
+                        close.setText('No')
+                        close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
+                        open_folder.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
+                        yes_button.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton)))
+                        self.msg.exec_()
+                        try:
+                            if self.msg.clickedButton() == yes_button:
+                                self.progress_bar_enable()
+                                self.start_convert_thread(selected_list_items, download_path, pdf_settings)
+                            if self.msg.clickedButton() == open_folder:
+                                QDesktopServices.openUrl(QUrl(path))
+                            elif self.msg.clickedButton() == close:
+                                pass
+                        except Exception as e:
                             pass
-                    except Exception as e:
-                        pass
+                    else:
+                        self.start_convert_thread(selected_list_items, download_path, pdf_settings)
                 else:
-                    self.start_convert_thread(selected_list_items, download_path, pdf_settings)
+                    self.popup_message(title="Invalid advance settings detected!",
+                                       message="Please check your advance settings once.", error=True)
             else:
                 self.popup_message(title="No Images selected!",
                                    message="Please select the images by clicking on checkboxes.", error=True)

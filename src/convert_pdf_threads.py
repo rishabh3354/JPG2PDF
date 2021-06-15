@@ -13,6 +13,25 @@ Auto_size = {"A3": A3, "A4": A4, "A5": A5, "Letter": Letter}
 orientation_dict = {"Landscape": "L", "Portrait": "P"}
 
 
+class PDF(FPDF):
+    def __init__(self, **kwargs):
+        self.page_starts_custom = kwargs.get("page_starts", 1)
+        self.font_color_custom = kwargs.get("font_color", [0, 0, 0])
+        self.font_align_custom = kwargs.get("font_align", 'C')
+        self.font_position_custom = kwargs.get("font_position", 15)
+        self.font_style_custom = kwargs.get("font_style", "Times")
+        self.font_size_custom = int(kwargs.get("font_size", 8))
+        self.font_b_i_u = kwargs.get("font_b_i_u", '')
+
+        super().__init__()
+
+    def footer(self):
+        self.set_y(-self.font_position_custom)
+        self.set_text_color(self.font_color_custom[0], self.font_color_custom[1], self.font_color_custom[2])
+        self.set_font(self.font_style_custom, self.font_b_i_u, self.font_size_custom)
+        self.cell(0, 10, 'Page ' + str(self.page_starts_custom + self.page_no() - 1), 0, 0, self.font_align_custom)
+
+
 class ConvertToPdfThread(QtCore.QThread):
     finish = pyqtSignal(dict)
     progress = pyqtSignal(dict)
@@ -52,21 +71,35 @@ class ConvertToPdfThread(QtCore.QThread):
         self.rotation_angle = self.pdf_settings.get("rotation_angle", "")
 
         #  margin settings:-
-        self.h_value = self.pdf_settings.get("h_value", 0)
-        self.v_value = self.pdf_settings.get("v_value", 0)
-
-        if self.unit == "cm":
-            self.h_value = self.pdf_settings.get("h_value", 0) * 10
-            self.v_value = self.pdf_settings.get("v_value", 0) * 10
-        elif self.unit == "in":
-            self.h_value = self.pdf_settings.get("h_value", 0) * 25.4
-            self.v_value = self.pdf_settings.get("v_value", 0) * 25.4
-        elif self.unit == "pt":
-            self.h_value = self.pdf_settings.get("h_value", 0) * 0.352778
-            self.v_value = self.pdf_settings.get("v_value", 0) * 0.352778
+        self.h_value = self.convert_in_unit(self.pdf_settings.get("h_value", 0))
+        self.v_value = self.convert_in_unit(self.pdf_settings.get("v_value", 0))
 
         self.ask_for_export = self.pdf_settings.get("ask_for_export", False)
         self.export_file_name = self.pdf_settings.get("export_file_name", f"jpf2pdf_export_on_{str(datetime.datetime.now())}")
+
+        #  page number settings:
+        self.show_page_no = self.pdf_settings.get("show_page_no", False)
+        self.page_starts = self.pdf_settings.get("page_starts", 1)
+        self.font_color = self.pdf_settings.get("font_color", [0, 0, 0])
+        self.font_align = self.pdf_settings.get("font_align", "C")
+        self.font_position = self.convert_in_unit(self.pdf_settings.get("font_position", 15))
+        self.font_style = self.pdf_settings.get("font_style", 'Times')
+        self.font_size = self.pdf_settings.get("font_size", 8)
+        self.font_b_i_u = f'{self.pdf_settings.get("bold", "")}{self.pdf_settings.get("italic", "")}' \
+                          f'{self.pdf_settings.get("underline", "")}'
+
+    def convert_in_unit(self, input_value):
+        converted_value = 0
+        if self.unit == "mm":
+            converted_value = input_value
+        elif self.unit == "cm":
+            converted_value = input_value * 10
+        elif self.unit == "in":
+            converted_value = input_value * 25.4
+        elif self.unit == "pt":
+            converted_value = input_value * 0.352778
+
+        return converted_value
 
     def run(self):
         response = self.convert_to_pdf()
@@ -162,12 +195,27 @@ class ConvertToPdfThread(QtCore.QThread):
                 date_obj = datetime.datetime.now().replace(day=date_obj.day, month=date_obj.month, year=date_obj.year)
                 pdf.set_creation_date(date_obj)
         except Exception as e:
-            message = "Creation date format is Invalid, Please enter valid date format. for eg.(2021-01-25)"
+            message = "Creation date format is Invalid, Please enter valid date format. for eg. 2021-01-25"
 
         return message
 
     def auto_orientation_auto_page_size(self):
-        pdf = FPDF(unit="mm")
+        if self.show_page_no:
+            context = dict()
+            context["page_starts"] = self.page_starts
+            context["font_color"] = self.font_color
+            context["font_position"] = self.font_position
+            context["font_style"] = self.font_style
+            context["font_align"] = self.font_align
+            context["font_size"] = self.font_size
+            context["font_b_i_u"] = self.font_b_i_u
+
+            pdf = PDF(**context)
+            pdf.alias_nb_pages()
+            pdf.set_font('Times', '', 12)
+
+        else:
+            pdf = FPDF(unit="mm")
         progress_dict = {"total": len(self.selected_list), "progress": 1}
 
         for index, imageFile in enumerate(self.selected_list, 1):

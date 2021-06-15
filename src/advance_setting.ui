@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>616</height>
+    <width>608</width>
+    <height>610</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,9 +64,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-490</y>
-          <width>550</width>
-          <height>928</height>
+          <y>-491</y>
+          <width>572</width>
+          <height>961</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -575,31 +575,36 @@
              <layout class="QVBoxLayout" name="verticalLayout_18">
               <item>
                <layout class="QGridLayout" name="gridLayout_30">
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_35">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
+                <item row="5" column="2">
+                 <widget class="QSpinBox" name="g">
+                  <property name="prefix">
+                   <string>G: </string>
                   </property>
-                  <property name="text">
-                   <string>Font style</string>
+                  <property name="maximum">
+                   <number>255</number>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="2">
-                 <widget class="QCheckBox" name="italic">
-                  <property name="text">
-                   <string>Italic</string>
+                <item row="3" column="1">
+                 <widget class="QComboBox" name="comboBox">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
                   </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QCheckBox" name="bold">
-                  <property name="text">
-                   <string>Bold</string>
-                  </property>
+                  <item>
+                   <property name="text">
+                    <string>courier</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>helvetica</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>times</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
                 <item row="0" column="0">
@@ -615,61 +620,29 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_34">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Page no. starts from</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3" colspan="2">
-                 <widget class="QSpinBox" name="font_position">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>Image size</string>
-                  </property>
-                  <property name="value">
-                   <number>15</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QComboBox" name="comboBox">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QCheckBox" name="show_page_no">
-                  <property name="font">
-                   <font>
-                    <pointsize>11</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
-                  </property>
-                  <property name="text">
-                   <string>OFF</string>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>16</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
                 <item row="1" column="1">
+                 <widget class="QComboBox" name="font_align">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Center</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Left</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Right</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="3">
                  <widget class="QSpinBox" name="page_starts">
                   <property name="focusPolicy">
                    <enum>Qt::ClickFocus</enum>
@@ -685,29 +658,17 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
-                 <widget class="QLabel" name="label_31">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_3">
                   <property name="text">
-                   <string>Position from bottom</string>
+                   <string>Font align</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_30">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_2">
                   <property name="text">
-                   <string>Font</string>
+                   <string>Font color (RGB)</string>
                   </property>
                  </widget>
                 </item>
@@ -724,13 +685,36 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="3" colspan="2">
+                <item row="4" column="1">
+                 <widget class="QCheckBox" name="bold">
+                  <property name="text">
+                   <string>Bold</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="label_34">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Page no. starts from</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
                  <widget class="QSpinBox" name="font_size">
                   <property name="focusPolicy">
                    <enum>Qt::ClickFocus</enum>
                   </property>
                   <property name="toolTip">
                    <string>Image size</string>
+                  </property>
+                  <property name="suffix">
+                   <string>px</string>
                   </property>
                   <property name="minimum">
                    <number>1</number>
@@ -743,27 +727,40 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="3" colspan="2">
-                 <widget class="QLineEdit" name="font_color">
+                <item row="1" column="2">
+                 <widget class="QLabel" name="label_31">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Position from bottom</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QSpinBox" name="font_position">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
                   </property>
                   <property name="toolTip">
-                   <string>If From page is blank, operation will perform to ending page</string>
+                   <string>Image size</string>
                   </property>
-                  <property name="text">
-                   <string>128</string>
+                  <property name="minimum">
+                   <number>7</number>
                   </property>
-                  <property name="placeholderText">
-                   <string>eg. 128</string>
+                  <property name="maximum">
+                   <number>30</number>
+                  </property>
+                  <property name="value">
+                   <number>15</number>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="label_36">
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_35">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -771,14 +768,75 @@
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Font color (rgb)</string>
+                   <string>Font style</string>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="3" colspan="2">
+                <item row="5" column="3">
+                 <widget class="QSpinBox" name="b">
+                  <property name="prefix">
+                   <string>B: </string>
+                  </property>
+                  <property name="maximum">
+                   <number>255</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QCheckBox" name="show_page_no">
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
+                  </property>
+                  <property name="text">
+                   <string>(OFF)</string>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>16</width>
+                    <height>16</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="3">
                  <widget class="QCheckBox" name="underline">
                   <property name="text">
                    <string>Underline</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_30">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Font</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QCheckBox" name="italic">
+                  <property name="text">
+                   <string>Italic</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QSpinBox" name="r">
+                  <property name="prefix">
+                   <string>R: </string>
+                  </property>
+                  <property name="maximum">
+                   <number>255</number>
                   </property>
                  </widget>
                 </item>
