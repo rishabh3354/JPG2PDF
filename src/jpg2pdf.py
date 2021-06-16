@@ -43,6 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.overwrite_warning = True
         self.ask_for_export = True
         self.image_hide = False
+        self.auto_resolution_button = True
         self.main_table_pointer = 70  # this has to save only
         self.t_width, self.t_height = self.main_table_pointer, self.main_table_pointer
         self.default_table_width = self.main_table_pointer - 32
@@ -90,7 +91,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.moveup.clicked.connect(self.move_up_item)
         self.ui.movedown.clicked.connect(self.move_down_item)
         self.ui.start_convert.clicked.connect(self.start_convert_process)
-        self.ui.page_format.currentIndexChanged.connect(self.check_for_warning)
         self.ui.sort.currentIndexChanged.connect(self.sort_asc_desc)
         self.ui.more_setting_button.clicked.connect(self.show_advance_setting)
         self.ui.hide_image.clicked.connect(self.hide_image_thumbnail)
@@ -129,6 +129,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.icon_size.textChanged.connect(self.adjust_thumbnail_size)
         self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
         self.advance_setting_ui.ui.show_page_no.clicked.connect(self.on_page_no)
+        self.advance_setting_ui.ui.auto_resolution.clicked.connect(self.enable_auto_manual_resolution)
+
+        self.advance_setting_ui.ui.info_dpi.clicked.connect(self.dpi_info)
+        self.advance_setting_ui.ui.info_image_pos.clicked.connect(self.image_pos_info)
+        self.advance_setting_ui.ui.info_margin.clicked.connect(self.margin_info_details)
+
+        self.ui.info_main.clicked.connect(self.main_info)
+        self.advance_setting_ui.ui.reset_defaults.clicked.connect(self.reset_advanced_settings)
+
+
+        # self.all_images_list = ['/home/warlord/Pictures/htop.png']
+        # self.load_images = self.all_images_list
+        # self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
+        # self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+        # self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+        # self.pixmap_load_thread.start()
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -139,6 +155,49 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
+
+    def main_info(self):
+        title = "Image Orientation and page format detail info!"
+        message = "Tip1: Orientation = 'Auto' | Page format = 'Auto'\nAutomatically adjust page orientation and page format (Best fit).\n\n"\
+                  "Tip2: Orientation = 'Auto' | Page format = Fixed (for eg. A4)\nAutomatically adjust page orientation with specified page format.\n\n"\
+                  "Tip3: Orientation = 'Auto' | Page format = Fixed (Fit view) (for eg. A4)\nAutomatically adjust page orientation with image streched in specified page format.\n\n"\
+                  "Tip4: Orientation = Fixed (for eg. Portrait) | Page format = Fixed\nSpecified page orientation with specified page format.\n\n"\
+                  "Tip5: For custom options, use Advanced settings."
+        self.popup_message(title, message)
+
+    def margin_info_details(self):
+        title = "Page Margin detail info!"
+        message = "A margin is the area between the main content of a page and the page edges.\n\n" \
+                  "Note: Bottom margin is restricted in following pdf settings.\n\n" \
+                  "1: Orientation = Auto  | Page format = Fixed\n"\
+                  "2: Orientation = Fixed | Page format = Fixed\n"\
+                  "3: Orientation = Fixed | Page format = Auto\n"
+        self.popup_message(title, message)
+
+    def dpi_info(self):
+        title = "Image resolution DPI info!"
+        message = "DPI is a measure of the resolution of the given image.\n\n" \
+                  "Note: DPI option will be force set to 'Auto image size' in following pdf settings.\n\n" \
+                  "1: Orientation = Auto  | Page format = Auto\n" \
+                  "2: Orientation = Auto  | Page format = Fixed (Fit view)\n" \
+                  "3: Orientation = Fixed | Page format = Fixed (Fit view)\n\n" \
+                  "Tip: Use 'Auto image size' option for best fit images in pdf."
+        self.popup_message(title, message)
+
+    def image_pos_info(self):
+        title = "Image position on page info!"
+        message = "Horizontal position and vertical position is the position of image on the page.\n" \
+                  "Position will start from Top-left side of the page\n\n" \
+                  "Note: If page margin were given, then position of image will be consider according to the margins."
+        self.popup_message(title, message)
+
+    def enable_auto_manual_resolution(self):
+        if self.advance_setting_ui.ui.auto_resolution.isChecked():
+            self.auto_resolution_button = True
+            self.advance_setting_ui.ui.dpi.setEnabled(False)
+        else:
+            self.auto_resolution_button = False
+            self.advance_setting_ui.ui.dpi.setEnabled(True)
 
     def on_page_no(self):
         if self.advance_setting_ui.ui.show_page_no.isChecked():
@@ -193,12 +252,79 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.msg.setStyleSheet(self.pop_up_stylesheet)
         self.msg.setIcon(QMessageBox.Information)
-        self.msg.setText("Are you sure want to reset default settings?")
+        self.msg.setText("Are you sure want to reset to default settings?")
         yes_button = self.msg.addButton(QMessageBox.Yes)
         no_button = self.msg.addButton(QMessageBox.No)
         self.msg.exec_()
         if self.msg.clickedButton() == yes_button:
             reset_defaults()
+        if self.msg.clickedButton() == no_button:
+            pass
+
+    def reset_advanced_settings(self):
+        def reset_ad_defaults():
+            #  unit measure
+            self.advance_setting_ui.ui.mm.setChecked(True)
+            self.advance_setting_ui.ui.h_value.setSuffix(f" mm")
+            self.advance_setting_ui.ui.v_value.setSuffix(f" mm")
+            self.advance_setting_ui.ui.l_margin.setSuffix(f" mm")
+            self.advance_setting_ui.ui.r_margin.setSuffix(f" mm")
+            self.advance_setting_ui.ui.t_margin.setSuffix(f" mm")
+            self.advance_setting_ui.ui.b_margin.setSuffix(f" mm")
+            self.advance_setting_ui.ui.font_position.setSuffix(f" mm")
+
+            # page margin:
+            self.advance_setting_ui.ui.l_margin.setValue(0.00)
+            self.advance_setting_ui.ui.r_margin.setValue(0.00)
+            self.advance_setting_ui.ui.t_margin.setValue(0.00)
+            self.advance_setting_ui.ui.b_margin.setValue(0.00)
+
+            # pdf page view
+            self.advance_setting_ui.ui.zoom.setCurrentIndex(0)
+            self.advance_setting_ui.ui.layout.setCurrentIndex(0)
+
+            # image position on page
+            self.advance_setting_ui.ui.h_value.setValue(0.00)
+            self.advance_setting_ui.ui.v_value.setValue(0.00)
+            self.advance_setting_ui.ui.auto_resolution.setChecked(True)
+            self.advance_setting_ui.ui.dpi.setValue(150)
+            self.advance_setting_ui.ui.dpi.setEnabled(False)
+
+            #  rotate pages
+            self.advance_setting_ui.ui.page_from.clear()
+            self.advance_setting_ui.ui.page_to.clear()
+            self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
+
+            # page number
+            self.advance_setting_ui.ui.show_page_no.setChecked(False)
+            self.advance_setting_ui.ui.page_starts.setValue(1)
+            self.advance_setting_ui.ui.font_position.setValue(15)
+            self.advance_setting_ui.ui.font_size.setValue(8)
+            self.advance_setting_ui.ui.font_align.setCurrentIndex(0)
+            self.advance_setting_ui.ui.comboBox.setCurrentIndex(0)
+            self.advance_setting_ui.ui.bold.setChecked(False)
+            self.advance_setting_ui.ui.italic.setChecked(False)
+            self.advance_setting_ui.ui.underline.setChecked(False)
+            self.advance_setting_ui.ui.r.setValue(0)
+            self.advance_setting_ui.ui.g.setValue(0)
+            self.advance_setting_ui.ui.b.setValue(0)
+
+            # meta data
+            self.advance_setting_ui.ui.keywords.clear()
+            self.advance_setting_ui.ui.producer.clear()
+            self.advance_setting_ui.ui.creator.clear()
+            self.advance_setting_ui.ui.created_on.clear()
+
+        self.msg = QMessageBox()
+        self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.msg.setStyleSheet(self.pop_up_stylesheet)
+        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setText("Are you sure want to reset to default settings?")
+        yes_button = self.msg.addButton(QMessageBox.Yes)
+        no_button = self.msg.addButton(QMessageBox.No)
+        self.msg.exec_()
+        if self.msg.clickedButton() == yes_button:
+            reset_ad_defaults()
         if self.msg.clickedButton() == no_button:
             pass
 
@@ -390,9 +516,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             unit = 'inch'
         else:
             unit = 'mm'
-
-        self.advance_setting_ui.ui.h_unit.setText(f"Unit in ({unit})")
-        self.advance_setting_ui.ui.v_unit.setText(f"Unit in ({unit})")
+        self.advance_setting_ui.ui.h_value.setSuffix(f" {unit}")
+        self.advance_setting_ui.ui.v_value.setSuffix(f" {unit}")
+        self.advance_setting_ui.ui.l_margin.setSuffix(f" {unit}")
+        self.advance_setting_ui.ui.r_margin.setSuffix(f" {unit}")
+        self.advance_setting_ui.ui.t_margin.setSuffix(f" {unit}")
+        self.advance_setting_ui.ui.b_margin.setSuffix(f" {unit}")
+        self.advance_setting_ui.ui.font_position.setSuffix(f" {unit}")
 
     def kill_process(self):
         try:
@@ -521,14 +651,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.image_extension.reverse()
                 self.all_pixmap_data.reverse()
                 self.process_images_into_table()
-
-    def check_for_warning(self):
-        page_format = self.ui.page_format.currentText()
-        if page_format in ["A3", "A4", "A5", "Letter"]:
-            self.popup_message(title="Warning! Fixed page size selected",
-                               message="This option may leads to auto cropping the image inorder to fit-in the page size. \n\n"
-                                       "Tip1: Use (Fit View) page size option to maintain the original image aspect ratio\n\n"
-                                       "Tip2: For best results always use Auto setting for Orientations/page format")
 
     def move_up_item(self):
         if self.all_images_list:
@@ -1143,6 +1265,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pdf_settings["italic"] = "I"
                 if self.advance_setting_ui.ui.underline.isChecked():
                     pdf_settings["underline"] = "U"
+
+            #  page display mode:-
+            pdf_settings["magnification"] = self.advance_setting_ui.ui.zoom.currentText()
+            pdf_settings["layout"] = self.advance_setting_ui.ui.layout.currentText()
+
+            # page margins:-
+            pdf_settings["l_margin"] = self.advance_setting_ui.ui.l_margin.value()
+            pdf_settings["r_margin"] = self.advance_setting_ui.ui.r_margin.value()
+            pdf_settings["t_margin"] = self.advance_setting_ui.ui.t_margin.value()
+            pdf_settings["b_margin"] = self.advance_setting_ui.ui.b_margin.value()
+
+            # DPI
+            pdf_settings["dpi"] = self.advance_setting_ui.ui.dpi.value()
+            if self.advance_setting_ui.ui.auto_resolution.isChecked():
+                pdf_settings["auto_resolution"] = True
+            else:
+                pdf_settings["auto_resolution"] = False
+
         except Exception as e:
             status = False
 
