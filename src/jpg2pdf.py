@@ -100,7 +100,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
         self.advance_setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
         self.advance_setting_ui.ui.page_to.textChanged.connect(self.check_from_to_page_validation)
+        self.advance_setting_ui.ui.page_to_grayscale.textChanged.connect(self.check_grayscale_validation)
+        self.advance_setting_ui.ui.page_from_grayscale.textChanged.connect(self.check_grayscale_validation)
         self.advance_setting_ui.ui.select_angle.currentIndexChanged.connect(self.validation_for_angle)
+        self.advance_setting_ui.ui.select_scale.currentIndexChanged.connect(self.validation_for_scale)
         self.ui.stop.clicked.connect(self.kill_process)
 
         self.advance_setting_ui.ui.mm.clicked.connect(self.change_default_unit)
@@ -138,7 +141,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.info_main.clicked.connect(self.main_info)
         self.advance_setting_ui.ui.reset_defaults.clicked.connect(self.reset_advanced_settings)
 
-
         # self.all_images_list = ['/home/warlord/Pictures/htop.png']
         # self.load_images = self.all_images_list
         # self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
@@ -158,10 +160,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def main_info(self):
         title = "Image Orientation and page format detail info!"
-        message = "Tip1: Orientation = 'Auto' | Page format = 'Auto'\nAutomatically adjust page orientation and page format (Best fit).\n\n"\
-                  "Tip2: Orientation = 'Auto' | Page format = Fixed (for eg. A4)\nAutomatically adjust page orientation with specified page format.\n\n"\
-                  "Tip3: Orientation = 'Auto' | Page format = Fixed (Fit view) (for eg. A4)\nAutomatically adjust page orientation with image streched in specified page format.\n\n"\
-                  "Tip4: Orientation = Fixed (for eg. Portrait) | Page format = Fixed\nSpecified page orientation with specified page format.\n\n"\
+        message = "Tip1: Orientation = 'Auto' | Page format = 'Auto'\nAutomatically adjust page orientation and page format (Best fit).\n\n" \
+                  "Tip2: Orientation = 'Auto' | Page format = Fixed (for eg. A4)\nAutomatically adjust page orientation with specified page format.\n\n" \
+                  "Tip3: Orientation = 'Auto' | Page format = Fixed (Fit view) (for eg. A4)\nAutomatically adjust page orientation with image streched in specified page format.\n\n" \
+                  "Tip4: Orientation = Fixed (for eg. Portrait) | Page format = Fixed\nSpecified page orientation with specified page format.\n\n" \
                   "Tip5: For custom options, use Advanced settings."
         self.popup_message(title, message)
 
@@ -169,8 +171,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         title = "Page Margin detail info!"
         message = "A margin is the area between the main content of a page and the page edges.\n\n" \
                   "Note: Bottom margin is restricted in following pdf settings.\n\n" \
-                  "1: Orientation = Auto  | Page format = Fixed\n"\
-                  "2: Orientation = Fixed | Page format = Fixed\n"\
+                  "1: Orientation = Auto  | Page format = Fixed\n" \
+                  "2: Orientation = Fixed | Page format = Fixed\n" \
                   "3: Orientation = Fixed | Page format = Auto\n"
         self.popup_message(title, message)
 
@@ -294,6 +296,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.advance_setting_ui.ui.page_from.clear()
             self.advance_setting_ui.ui.page_to.clear()
             self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
+
+            #  grayscale pages
+            self.advance_setting_ui.ui.page_from_grayscale.clear()
+            self.advance_setting_ui.ui.page_to_grayscale.clear()
+            self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
 
             # page number
             self.advance_setting_ui.ui.show_page_no.setChecked(False)
@@ -606,6 +613,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.advance_setting_ui.ui.page_from.clear()
             pass
 
+    def validation_for_scale(self):
+        page_to = self.advance_setting_ui.ui.page_to_grayscale.text()
+        page_from = self.advance_setting_ui.ui.page_from_grayscale.text()
+        rotation_angle = str(self.advance_setting_ui.ui.select_scale.currentText())
+        if rotation_angle != "Select scale" and (page_to or page_from) in [None, ""]:
+            self.popup_message(title="All Page selection!",
+                               message="Operation will perform for all pages.")
+        try:
+            if (page_to and page_from) not in [None, ""]:
+                page_to = int(page_to)
+                page_from = int(page_from)
+                if page_from > page_to:
+                    self.popup_message(title="Invalid page selection",
+                                       message="'Page To' must to greater or equal to 'Page From'.")
+                    self.advance_setting_ui.ui.page_to_grayscale.clear()
+                    self.advance_setting_ui.ui.page_from_grayscale.clear()
+                    self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
+
+                if (page_to or page_from) == 0:
+                    self.popup_message(title="Invalid page selection",
+                                       message="'Page value must be greater than 0")
+                    self.advance_setting_ui.ui.page_to_grayscale.clear()
+                    self.advance_setting_ui.ui.page_from_grayscale.clear()
+                    self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
+        except Exception as e:
+            self.popup_message(title="Invalid page selection",
+                               message="Page value must be integer")
+            self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
+            self.advance_setting_ui.ui.page_to_grayscale.clear()
+            self.advance_setting_ui.ui.page_from_grayscale.clear()
+            pass
+
     def check_from_to_page_validation(self):
         page_to = self.advance_setting_ui.ui.page_to.text()
         page_from = self.advance_setting_ui.ui.page_from.text()
@@ -620,6 +659,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         except Exception as e:
             self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
+
+    def check_grayscale_validation(self):
+        page_to = self.advance_setting_ui.ui.page_to_grayscale.text()
+        page_from = self.advance_setting_ui.ui.page_from_grayscale.text()
+        try:
+            if (page_to and page_from) not in [None, ""]:
+                page_to = int(page_to)
+                page_from = int(page_from)
+                if page_from > page_to:
+                    self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
+                if (page_to or page_from) == 0:
+                    self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
+
+        except Exception as e:
+            self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
 
     def ok_setting_clicked(self):
         self.advance_setting_ui.hide()
@@ -1201,6 +1255,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if str(self.advance_setting_ui.ui.created_on.text()) not in [None, ""]:
                 pdf_settings["created_on"] = str(self.advance_setting_ui.ui.created_on.text())
 
+            # rotate page
             page_to = self.advance_setting_ui.ui.page_to.text()
             page_from = self.advance_setting_ui.ui.page_from.text()
             rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
@@ -1222,8 +1277,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     else:
                         pdf_settings["page_to"] = page_to
 
-                pdf_settings["rotation_angle"] = str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
+                pdf_settings["rotation_angle"] = \
+                str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
                     0].strip()
+
+            #  grayscale page
+            page_to = self.advance_setting_ui.ui.page_to_grayscale.text()
+            page_from = self.advance_setting_ui.ui.page_from_grayscale.text()
+            rotation_angle = str(self.advance_setting_ui.ui.select_scale.currentText())
+
+            if rotation_angle != "Select scale":
+                if page_from == "":
+                    pdf_settings["page_from_grayscale"] = "start"
+                else:
+                    if int(page_from) <= 0:
+                        pdf_settings["page_from_grayscale"] = 1
+                    else:
+                        pdf_settings["page_from_grayscale"] = page_from
+
+                if page_to == "":
+                    pdf_settings["page_to_grayscale"] = "end"
+                else:
+                    if int(page_to) <= 0:
+                        pdf_settings["page_to_grayscale"] = 1
+                    else:
+                        pdf_settings["page_to_grayscale"] = page_to
+
+                scale_dict = {"Grayscale": "L", "Black and white": "1"}
+                pdf_settings["scale_type"] = scale_dict[str(self.advance_setting_ui.ui.select_scale.currentText())]
 
             if self.advance_setting_ui.ui.mm.isChecked():
                 pdf_settings["unit"] = 'mm'
@@ -1253,7 +1334,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 pdf_settings["show_page_no"] = True
                 pdf_settings["page_starts"] = self.advance_setting_ui.ui.page_starts.value()
                 pdf_settings["font_align"] = str(self.advance_setting_ui.ui.font_align.currentText())[0].upper()
-                pdf_settings["font_color"] = [self.advance_setting_ui.ui.r.value(), self.advance_setting_ui.ui.g.value(),
+                pdf_settings["font_color"] = [self.advance_setting_ui.ui.r.value(),
+                                              self.advance_setting_ui.ui.g.value(),
                                               self.advance_setting_ui.ui.b.value()]
                 pdf_settings["font_position"] = self.advance_setting_ui.ui.font_position.value()
                 pdf_settings["font_style"] = self.advance_setting_ui.ui.comboBox.currentText()

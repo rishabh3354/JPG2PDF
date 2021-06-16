@@ -70,6 +70,15 @@ class ConvertToPdfThread(QtCore.QThread):
         self.page_to = self.pdf_settings.get("page_to", "")
         self.rotation_angle = self.pdf_settings.get("rotation_angle", "")
 
+        #  grayscale settings:-
+        self.page_from_grayscale = self.pdf_settings.get("page_from_grayscale", "")
+        self.page_to_grayscale = self.pdf_settings.get("page_to_grayscale", "")
+        self.scale_type = self.pdf_settings.get("scale_type", "")
+        if self.scale_type not in ["", None]:
+            self.range_list = self.scale_pages_start_end()
+        else:
+            self.range_list = []
+
         #  margin settings:-
         self.h_value = self.convert_in_unit(self.pdf_settings.get("h_value", 0))
         self.v_value = self.convert_in_unit(self.pdf_settings.get("v_value", 0))
@@ -217,6 +226,31 @@ class ConvertToPdfThread(QtCore.QThread):
 
         return message
 
+    def scale_pages_start_end(self):
+        total_length = len(self.selected_list)
+        if self.page_from_grayscale == "start" and self.page_to_grayscale == "end":
+            start = 1
+            end = total_length
+        elif self.page_from_grayscale == "start" and self.page_to_grayscale != "end":
+            start = 1
+            end = int(self.page_to_grayscale)
+        elif self.page_from_grayscale != "start" and self.page_to_grayscale == "end":
+            start = int(self.page_from_grayscale)
+            end = total_length
+        else:
+            start = int(self.page_from_grayscale)
+            end = int(self.page_to_grayscale)
+
+        range_list = list(range(start, end+1))
+        return range_list
+
+    def scale_pages(self, cover, index):
+        pil_obj = cover
+        if self.range_list:
+            if index in self.range_list:
+                pil_obj = cover.convert(self.scale_type)
+        return pil_obj
+
     def auto_orientation_auto_page_size(self):
         if self.show_page_no:
             context = dict()
@@ -237,12 +271,13 @@ class ConvertToPdfThread(QtCore.QThread):
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
             cover = Image.open(imageFile)
+            cover = self.scale_pages(cover, index)
             width, height = cover.size
             width, height = float(width * 0.264583), float(height * 0.264583)
-            pdf.add_page(format=(width + self.self.margin_r, height + self.self.margin_b))
+            pdf.add_page(format=(width + self.margin_r, height + self.margin_b))
             width = width - self.h_value
             height = height - self.v_value
-            pdf.image(imageFile, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_l, height-self.margin_t)
+            pdf.image(cover, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_l, height-self.margin_t)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -260,6 +295,7 @@ class ConvertToPdfThread(QtCore.QThread):
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
             cover = Image.open(imageFile)
+            cover = self.scale_pages(cover, index)
             width, height = cover.size
             width, height = float(width * 0.264583), float(height * 0.264583)
             pdf_size = Auto_size.get(self.page_format, "A4")
@@ -270,7 +306,7 @@ class ConvertToPdfThread(QtCore.QThread):
                 width = self.dpi
             else:
                 width = width - self.h_value
-            pdf.image(imageFile, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2)
+            pdf.image(cover, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -289,6 +325,7 @@ class ConvertToPdfThread(QtCore.QThread):
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
             cover = Image.open(imageFile)
+            cover = self.scale_pages(cover, index)
             width, height = cover.size
             width, height = float(width * 0.264583), float(height * 0.264583)
             pdf_size = Auto_size.get(page_format, "A4")
@@ -298,7 +335,7 @@ class ConvertToPdfThread(QtCore.QThread):
             width = pdf_size.get(orientation).get("w") - self.h_value
             height = pdf_size.get(orientation).get("h") - self.v_value
 
-            pdf.image(imageFile, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2, height - self.margin_b*2)
+            pdf.image(cover, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2, height - self.margin_b*2)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -316,13 +353,15 @@ class ConvertToPdfThread(QtCore.QThread):
 
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
+            cover = Image.open(imageFile)
+            cover = self.scale_pages(cover, index)
             pdf.add_page(format=self.page_format, orientation=self.orientation)
             pdf_size = Auto_size.get(self.page_format, "A4")
             if not self.auto_resolution:
                 width = self.dpi - self.h_value
             else:
                 width = pdf_size.get(self.orientation).get("w") - self.h_value
-            pdf.image(imageFile, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2)
+            pdf.image(cover, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -341,13 +380,15 @@ class ConvertToPdfThread(QtCore.QThread):
 
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
+            cover = Image.open(imageFile)
+            cover = self.scale_pages(cover, index)
             pdf_size = Auto_size.get(page_format, "A4")
             pdf.add_page(orientation=self.orientation, format=page_format)
 
             width = pdf_size.get(self.orientation).get("w") - self.h_value
             height = pdf_size.get(self.orientation).get("h") - self.v_value
 
-            pdf.image(imageFile, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2, height - self.margin_b*2)
+            pdf.image(cover, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r*2, height - self.margin_b*2)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
@@ -365,13 +406,15 @@ class ConvertToPdfThread(QtCore.QThread):
 
         for index, imageFile in enumerate(self.selected_list, 1):
             progress_dict["progress"] = index
+            cover = Image.open(imageFile)
+            cover = self.scale_pages(cover, index)
             pdf.add_page(format=page_format, orientation=self.orientation)
             pdf_size = Auto_size.get(page_format, "A4")
             if not self.auto_resolution:
                 width = self.dpi - self.h_value
             else:
                 width = pdf_size.get(self.orientation).get("w") - self.h_value
-            pdf.image(imageFile, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r * 2)
+            pdf.image(cover, self.h_value + self.margin_l, self.v_value + self.margin_t, width - self.margin_r * 2)
             self.progress.emit(progress_dict)
             index += 1
             if self.is_killed:
