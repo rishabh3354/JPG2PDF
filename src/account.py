@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AccountUI(object):
     def setupUi(self, AccountUI):
         AccountUI.setObjectName("AccountUI")
-        AccountUI.resize(657, 739)
+        AccountUI.resize(666, 691)
         self.verticalLayout = QtWidgets.QVBoxLayout(AccountUI)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(AccountUI)
@@ -64,7 +64,7 @@ class Ui_AccountUI(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 637, 639))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 632, 634))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
