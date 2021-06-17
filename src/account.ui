@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AccountUI</class>
+ <widget class="QWidget" name="AccountUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>657</width>
+    <height>739</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Account settings</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="account_progress_bar">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar:horizontal {
+background:rgba(0,0,0,0.1);
+color: white;
+background-color: rgba(49, 54, 59, 1);
+height: 1px;
+
+
+}
+QProgressBar::chunk:horizontal {
+background:rgb(0, 153, 255);
+color: white;
+
+}
+QProgressBar 
+{ 
+color: white; 
+}
+</string>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+     <property name="textVisible">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>637</width>
+        <height>639</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Account info</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_16">
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>12</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineEdit_plan">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+padding: 6px;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Evaluation</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="lineEdit_expires_on">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+padding: 6px;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Licence Expired! Purchase a new Licence</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLineEdit" name="lineEdit">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+padding: 6px;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Account ID:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineEdit_account_id">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+padding: 6px;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>8fjfdjhqoifj383ld</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLineEdit" name="lineEdit_7">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+padding: 6px;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Account Status:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLineEdit" name="lineEdit_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+padding: 6px;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Account Type:</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Purchase licence</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>12</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_17">
+            <item>
+             <widget class="QPushButton" name="purchase_licence">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Purchase Now</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../Y2MATE/src/resource.qrc">
+                <normaloff>:/myresource/resource/shopping-cart.png</normaloff>:/myresource/resource/shopping-cart.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>18</width>
+                <height>18</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="refresh_account">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Refresh Account</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../Y2MATE/src/resource.qrc">
+                <normaloff>:/myresource/resource/refresh--v1.png</normaloff>:/myresource/resource/refresh--v1.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>18</width>
+                <height>18</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>FREE vs PRO/EVALUATION comparison</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>12</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="5" column="0">
+               <widget class="QLineEdit" name="lineEdit_10">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Adjust image position on page</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QToolButton" name="toolButton_11">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QToolButton" name="toolButton_21">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLineEdit" name="lineEdit_3">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>List of features</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLineEdit" name="lineEdit_5">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Protect PDF</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="3">
+               <widget class="QToolButton" name="toolButton_15">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QToolButton" name="toolButton_2">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>28</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="5" column="1">
+               <widget class="QToolButton" name="toolButton_8">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QToolButton" name="toolButton_10">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLineEdit" name="lineEdit_4">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Set page margin</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>FREE VERSION</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QToolButton" name="toolButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLineEdit" name="lineEdit_12">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Support Auto Page format</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="3">
+               <widget class="QToolButton" name="toolButton_17">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QToolButton" name="toolButton_5">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3">
+               <widget class="QToolButton" name="toolButton_14">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QToolButton" name="toolButton_6">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QToolButton" name="toolButton_4">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLineEdit" name="lineEdit_9">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Rotate pdf pages</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="3">
+               <widget class="QToolButton" name="toolButton_16">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="3">
+               <widget class="QToolButton" name="toolButton_19">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLineEdit" name="lineEdit_6">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Support Auto orientation</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLineEdit" name="lineEdit_11">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Set DPI of image</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>PRO/EVALUATION </string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLineEdit" name="lineEdit_15">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Page numbering support</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QToolButton" name="toolButton_9">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QToolButton" name="toolButton_3">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_14">
+     <item>
+      <widget class="QLabel" name="error_message">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ef2929;&quot;&gt;Error Message&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../Y2MATE/src/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

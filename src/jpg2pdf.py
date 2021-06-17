@@ -12,7 +12,7 @@ from helper import load_images_from_folder, check_default_location, humanbytes, 
     check_for_already_file_exists, get_valid_images
 from initial_init import initial_defines
 from convert_pdf_threads import ConvertToPdfThread
-from setting_module import AdvanceSettingPage, AppSettingPage
+from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage
 from pixmap_loading_thread import PixMapLoadingThread
 from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
@@ -26,6 +26,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.advance_setting_ui = AdvanceSettingPage()
         self.general_setting_ui = AppSettingPage()
+        self.account_ui = AccountPage()
+        self.about_ui = AboutPage()
         self.ui.setupUi(self)
         self.setWindowTitle("JPG2PDF PRO")
         self.theme = 'dark'
@@ -68,9 +70,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toggle = 0
         self.default_selected = 0
         self.show_page_no = False
+        self.account_ui.ui.account_progress_bar.setFixedHeight(7)
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
+        self.ui.actionAccount.triggered.connect(self.show_account_page)
+        self.ui.actionAbout.triggered.connect(self.show_about_page)
         self.ui.actionAdd_folder.triggered.connect(self.load_folder)
         self.ui.actionClear_all.triggered.connect(self.clear_all_table_data)
         self.ui.actionRemove_Selected.triggered.connect(self.remove_selected)
@@ -140,13 +145,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ui.info_main.clicked.connect(self.main_info)
         self.advance_setting_ui.ui.reset_defaults.clicked.connect(self.reset_advanced_settings)
-
-        # self.all_images_list = ['/home/warlord/Pictures/htop.png']
-        # self.load_images = self.all_images_list
-        # self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
-        # self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
-        # self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
-        # self.pixmap_load_thread.start()
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -500,6 +498,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         set_theme(self, self.theme)
         set_theme(self.advance_setting_ui, self.theme)
         set_theme(self.general_setting_ui, self.theme)
+        set_theme(self.account_ui, self.theme)
+        set_theme(self.about_ui, self.theme)
         self.pop_up_stylesheet = popup_theme(self)
 
     def set_file_dialog(self):
@@ -690,6 +690,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.show()
         self.general_setting_ui.raise_()
         self.general_setting_ui.activateWindow()
+
+    def show_account_page(self):
+        self.account_ui.show()
+        self.account_ui.raise_()
+        self.account_ui.activateWindow()
+
+    def show_about_page(self):
+        self.about_ui.show()
+        self.about_ui.raise_()
+        self.about_ui.activateWindow()
 
     def closeEvent(self, event):
         self.advance_setting_ui.hide()

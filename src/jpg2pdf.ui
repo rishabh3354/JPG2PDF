@@ -780,9 +780,9 @@
    <addaction name="actionAdd_folder"/>
    <addaction name="actionRemove_Selected"/>
    <addaction name="actionClear_all"/>
+   <addaction name="actionSettings"/>
    <addaction name="actionAccount"/>
    <addaction name="actionAbout"/>
-   <addaction name="actionSettings"/>
   </widget>
   <action name="actionAdd_image">
    <property name="text">
@@ -799,11 +799,6 @@
     <string>Account</string>
    </property>
   </action>
-  <action name="actionAbout">
-   <property name="text">
-    <string>About</string>
-   </property>
-  </action>
   <action name="actionClear_all">
    <property name="text">
     <string>Clear all</string>
@@ -817,6 +812,11 @@
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
