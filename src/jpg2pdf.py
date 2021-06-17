@@ -1,10 +1,11 @@
 import datetime
+import json
 import os
 import sys
 import webbrowser
 from PIL import Image
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QProcessEnvironment, QUrl
+from PyQt5.QtCore import QProcessEnvironment, QUrl, QSettings
 from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
@@ -32,9 +33,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_ui = AboutPage()
         self.ui.setupUi(self)
         self.setWindowTitle("JPG2PDF PRO")
-        self.theme = 'dark'
-        self.file_dialog = 'native'
-        self.set_theme()
+        self.settings = QSettings("warlordsoft", "jpg2pdf")
+
+        # jpg2pdf settings initials-------------------------------------------------------------------------------------
+        self.image_hide = False
         self.pop_up_stylesheet = 'background-color:rgb(48,48,48);color:white;'
         self.all_images_list = []
         self.image_dimension = []
@@ -44,23 +46,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selected_list = []
         self.select_folder = None
         self.show_full_path_flag = False
-        self.overwrite_warning = True
-        self.ask_for_export = True
-        self.image_hide = False
         self.auto_resolution_button = True
-        self.main_table_pointer = 70  # this has to save only
-        self.t_width, self.t_height = self.main_table_pointer, self.main_table_pointer
-        self.default_table_width = self.main_table_pointer - 32
-        self.set_default_table_size()
-        self.filter = "Images (*.png *.jpeg *.jpg *.bmp *.tif *.tiff)"
-        self.filter_array = ["*.png", "*.jpeg", "*.jpg", "*.bmp", "*.tif", "*.tiff"]
         self.ui.protect_pdf.setEnabled(False)
         self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
-        self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
         self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
-        self.general_setting_ui.ui.import_path.setText(self.Default_loc_import)
         self.ui.tableWidget.verticalHeader().setVisible(False)
-        self.table_view_default_setting()
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.progress_bar_disable()
         largeWidth = QGuiApplication.primaryScreen().size().width()
@@ -71,6 +61,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toggle = 0
         self.default_selected = 0
         self.show_page_no = False
+
+        # general settings initials ------------------------------------------------------------------------------------
+        self.theme = 'dark'
+        self.general_setting_ui.ui.dark.setChecked(True)
+        self.file_dialog = 'qt'
+        self.main_table_pointer = 70
+        self.ask_for_export = True
+        self.overwrite_warning = True
+        self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+        self.jpg = True
+        self.jpeg = True
+        self.png = True
+        self.tif = True
+        self.tiff = True
+        self.bmp = True
+        self.all_files = True
+        self.load_settings()
+        self.general_setting_defaults(default=False)
+        print(self.filter_array)
+        print(self.filter)
+
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
         self.ui.actionAccount.triggered.connect(self.show_account_page)
@@ -168,6 +179,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
 
+    def save_settings(self):
+        # general settings save:----------------------------------------------------------------------------------------
+        self.settings.setValue("main_table_pointer", self.main_table_pointer)
+        self.settings.setValue("theme", self.theme)
+        self.settings.setValue("file_dialog", self.file_dialog)
+        self.settings.setValue("Default_loc_import", self.Default_loc_import)
+        self.settings.setValue("overwrite_warning", self.overwrite_warning)
+        self.settings.setValue("ask_for_export", self.ask_for_export)
+        self.settings.setValue("jpg", self.general_setting_ui.ui.jpg.isChecked())
+        self.settings.setValue("jpeg", self.general_setting_ui.ui.jpeg.isChecked())
+        self.settings.setValue("png", self.general_setting_ui.ui.png.isChecked())
+        self.settings.setValue("tif", self.general_setting_ui.ui.tif.isChecked())
+        self.settings.setValue("tiff", self.general_setting_ui.ui.tiff.isChecked())
+        self.settings.setValue("bmp", self.general_setting_ui.ui.bmp.isChecked())
+        self.settings.setValue("all_files", self.general_setting_ui.ui.all_files.isChecked())
+
+    def load_settings(self):
+        # general settings loads:---------------------------------------------------------------------------------------
+        if self.settings.contains("main_table_pointer"):
+            self.main_table_pointer = int(self.settings.value("main_table_pointer"))
+        if self.settings.contains("theme"):
+            self.theme = self.settings.value("theme")
+        if self.settings.contains("file_dialog"):
+            self.file_dialog = self.settings.value("file_dialog")
+        if self.settings.contains("Default_loc_import"):
+            self.Default_loc_import = self.settings.value("Default_loc_import")
+        if self.settings.contains("overwrite_warning"):
+            self.overwrite_warning = json.loads(self.settings.value("overwrite_warning"))
+        if self.settings.contains("ask_for_export"):
+            self.ask_for_export = json.loads(self.settings.value("ask_for_export"))
+        if self.settings.contains("jpg"):
+            self.jpg = json.loads(self.settings.value("jpg"))
+        if self.settings.contains("jpeg"):
+            self.jpeg = json.loads(self.settings.value("jpeg"))
+        if self.settings.contains("png"):
+            self.png = json.loads(self.settings.value("png"))
+        if self.settings.contains("tif"):
+            self.tif = json.loads(self.settings.value("tif"))
+        if self.settings.contains("tiff"):
+            self.tiff = json.loads(self.settings.value("tiff"))
+        if self.settings.contains("bmp"):
+            self.bmp = json.loads(self.settings.value("bmp"))
+        if self.settings.contains("all_files"):
+            self.all_files = json.loads(self.settings.value("all_files"))
+
+    def closeEvent(self, event):
+        self.save_settings()
+        self.advance_setting_ui.hide()
+        self.general_setting_ui.hide()
+        self.about_ui.hide()
+        self.account_ui.hide()
+        super().closeEvent(event)
+
     def main_info(self):
         title = "Image Orientation and page format detail info!"
         message = "Tip1: Orientation = 'Auto' | Page format = 'Auto'\nAutomatically adjust page orientation and page format (Best fit).\n\n" \
@@ -219,47 +283,77 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.advance_setting_ui.ui.show_page_no.setText("(OFF)")
             self.show_page_no = False
 
-    def reset_app_settings(self):
-        def reset_defaults():
-            #  table icon setting defaults
-            self.main_table_pointer = 70
-            self.set_default_table_size()
-            self.general_setting_ui.ui.icon_size.setValue(self.main_table_pointer)
-            if self.all_images_list:
-                self.process_images_into_table()
-
-            #  theme defaults
+    def general_setting_defaults(self, default=True):
+        if default:
             self.theme = 'dark'
             self.general_setting_ui.ui.dark.setChecked(True)
-            self.set_theme()
-
-            #  file dialog defaults
-            self.file_dialog = 'native'
-            self.general_setting_ui.ui.native_dialog.setChecked(True)
-
-            #  Import defaults
-            self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
-            self.general_setting_ui.ui.import_path.setText(self.Default_loc_import)
-
-            #  overwrite defaults
-            self.general_setting_ui.ui.overwrite_warning.setChecked(True)
+            self.file_dialog = 'qt'
+            self.main_table_pointer = 70
+            self.ask_for_export = True
             self.overwrite_warning = True
+            self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+            self.jpg = True
+            self.jpeg = True
+            self.png = True
+            self.tif = True
+            self.tiff = True
+            self.bmp = True
+            self.all_files = True
 
-            #  ask for export pdf name defaults
+        #  table icon setting defaults
+        self.table_view_default_setting()
+        self.set_default_table_size()
+        self.general_setting_ui.ui.icon_size.setValue(self.main_table_pointer)
+        if self.all_images_list:
+            self.process_images_into_table()
+
+        #  theme defaults
+        if self.theme == "dark":
+            self.general_setting_ui.ui.dark.setChecked(True)
+        elif self.theme == "light":
+            self.general_setting_ui.ui.light.setChecked(True)
+        else:
+            self.general_setting_ui.ui.dark.setChecked(True)
+        self.set_theme()
+
+        #  file dialog defaults
+        if self.file_dialog == "native":
+            self.general_setting_ui.ui.native_dialog.setChecked(True)
+            self.general_setting_ui.ui.qt_dialog.setChecked(False)
+        elif self.file_dialog == "qt":
+            self.general_setting_ui.ui.native_dialog.setChecked(False)
+            self.general_setting_ui.ui.qt_dialog.setChecked(True)
+        else:
+            self.general_setting_ui.ui.native_dialog.setChecked(True)
+            self.general_setting_ui.ui.qt_dialog.setChecked(False)
+
+        #  Import defaults
+        self.general_setting_ui.ui.import_path.setText(self.Default_loc_import)
+
+        #  overwrite defaults
+        self.general_setting_ui.ui.overwrite_warning.setChecked(self.overwrite_warning)
+
+        #  ask for export pdf name defaults
+        if self.ask_for_export:
             self.general_setting_ui.ui.auto_generate_pdf_name.setChecked(False)
             self.ui.pdf_name.setVisible(True)
             self.ui.label.setVisible(True)
-            self.ask_for_export = True
+        else:
+            self.general_setting_ui.ui.auto_generate_pdf_name.setChecked(True)
+            self.ui.pdf_name.setVisible(False)
+            self.ui.label.setVisible(False)
 
-            # filter images defaults
-            self.general_setting_ui.ui.jpg.setChecked(True)
-            self.general_setting_ui.ui.jpeg.setChecked(True)
-            self.general_setting_ui.ui.png.setChecked(True)
-            self.general_setting_ui.ui.tif.setChecked(True)
-            self.general_setting_ui.ui.tiff.setChecked(True)
-            self.general_setting_ui.ui.bmp.setChecked(True)
-            self.general_setting_ui.ui.all_files.setChecked(False)
+        # filter images defaults
+        self.general_setting_ui.ui.jpg.setChecked(self.jpg)
+        self.general_setting_ui.ui.jpeg.setChecked(self.jpeg)
+        self.general_setting_ui.ui.png.setChecked(self.png)
+        self.general_setting_ui.ui.tif.setChecked(self.tif)
+        self.general_setting_ui.ui.tiff.setChecked(self.tiff)
+        self.general_setting_ui.ui.bmp.setChecked(self.bmp)
+        self.general_setting_ui.ui.all_files.setChecked(self.all_files)
+        self.set_image_filter()
 
+    def reset_app_settings(self):
         self.msg = QMessageBox()
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.msg.setStyleSheet(self.pop_up_stylesheet)
@@ -269,7 +363,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         no_button = self.msg.addButton(QMessageBox.No)
         self.msg.exec_()
         if self.msg.clickedButton() == yes_button:
-            reset_defaults()
+            self.general_setting_defaults(default=True)
         if self.msg.clickedButton() == no_button:
             pass
 
@@ -712,10 +806,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_ui.show()
         self.about_ui.raise_()
         self.about_ui.activateWindow()
-
-    def closeEvent(self, event):
-        self.advance_setting_ui.hide()
-        self.general_setting_ui.hide()
 
     def sort_asc_desc(self):
         if self.all_images_list:

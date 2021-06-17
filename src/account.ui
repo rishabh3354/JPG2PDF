@@ -89,7 +89,7 @@ color: white;
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-35</y>
+        <y>0</y>
         <width>632</width>
         <height>626</height>
        </rect>
@@ -429,7 +429,7 @@ padding: 6px;
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>List of features</string>
+                 <string>LIST OF FEATURES</string>
                 </property>
                </widget>
               </item>
