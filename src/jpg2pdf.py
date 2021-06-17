@@ -10,7 +10,6 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeader
 from qtpy.QtGui import QDesktopServices
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
     check_for_already_file_exists, get_valid_images
-from initial_init import initial_defines
 from convert_pdf_threads import ConvertToPdfThread
 from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage
 from pixmap_loading_thread import PixMapLoadingThread
@@ -65,7 +64,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.splitter_2.setSizes([largeWidth / 2, 120])
         self.ui.image.setVisible(False)
 
-        initial_defines(self)
         self.counter = 0
         self.toggle = 0
         self.default_selected = 0
