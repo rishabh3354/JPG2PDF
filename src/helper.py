@@ -1,6 +1,16 @@
 import glob
 import os
 from PyQt5.QtCore import QProcessEnvironment, QStandardPaths
+from PyQt5.QtNetwork import QNetworkConfigurationManager
+
+
+def check_internet_connection():
+    try:
+        if QNetworkConfigurationManager().isOnline():
+            return True
+    except Exception as e:
+        pass
+    return False
 
 
 def load_images_from_folder(folder, supported_format):

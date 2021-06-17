@@ -89,9 +89,9 @@ color: white;
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-35</y>
         <width>632</width>
-        <height>634</height>
+        <height>626</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -376,8 +376,36 @@ padding: 6px;
            <layout class="QHBoxLayout" name="horizontalLayout_11">
             <item>
              <layout class="QGridLayout" name="gridLayout_5">
+              <item row="9" column="1">
+               <widget class="QToolButton" name="toolButton_38">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QToolButton" name="toolButton_42">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
               <item row="5" column="0">
-               <widget class="QLineEdit" name="lineEdit_10">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>➤ Set page margin</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="2">
+               <widget class="QToolButton" name="toolButton_5">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLineEdit" name="lineEdit_8">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -385,25 +413,14 @@ padding: 6px;
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>Adjust image position on page</string>
+                 <string>PRO/EVALUATION</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
-              <item row="8" column="1">
-               <widget class="QToolButton" name="toolButton_11">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="1">
-               <widget class="QToolButton" name="toolButton_21">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
+              <item row="2" column="0">
                <widget class="QLineEdit" name="lineEdit_3">
                 <property name="enabled">
                  <bool>false</bool>
@@ -416,220 +433,157 @@ padding: 6px;
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLineEdit" name="lineEdit_5">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Protect PDF</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="3">
-               <widget class="QToolButton" name="toolButton_15">
+              <item row="7" column="2">
+               <widget class="QToolButton" name="toolButton_44">
                 <property name="text">
                  <string>...</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
-               <widget class="QToolButton" name="toolButton_2">
+              <item row="3" column="2">
+               <widget class="QToolButton" name="toolButton_40">
                 <property name="text">
                  <string>...</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="2">
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>28</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="5" column="1">
-               <widget class="QToolButton" name="toolButton_8">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="1">
-               <widget class="QToolButton" name="toolButton_10">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLineEdit" name="lineEdit_4">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Set page margin</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>FREE VERSION</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="3">
-               <widget class="QToolButton" name="toolButton">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="0">
-               <widget class="QLineEdit" name="lineEdit_12">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Support Auto Page format</string>
-                </property>
-               </widget>
-              </item>
-              <item row="8" column="3">
-               <widget class="QToolButton" name="toolButton_17">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="3">
-               <widget class="QToolButton" name="toolButton_5">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="3">
-               <widget class="QToolButton" name="toolButton_14">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="3">
+              <item row="9" column="2">
                <widget class="QToolButton" name="toolButton_6">
                 <property name="text">
                  <string>...</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
-               <widget class="QToolButton" name="toolButton_4">
+              <item row="10" column="1">
+               <widget class="QToolButton" name="toolButton_39">
                 <property name="text">
                  <string>...</string>
                 </property>
                </widget>
               </item>
-              <item row="8" column="0">
-               <widget class="QLineEdit" name="lineEdit_9">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Rotate pdf pages</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="3">
-               <widget class="QToolButton" name="toolButton_16">
+              <item row="4" column="1">
+               <widget class="QToolButton" name="toolButton_33">
                 <property name="text">
                  <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="3">
-               <widget class="QToolButton" name="toolButton_19">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLineEdit" name="lineEdit_6">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Support Auto orientation</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="0">
-               <widget class="QLineEdit" name="lineEdit_11">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Set DPI of image</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>PRO/EVALUATION </string>
                 </property>
                </widget>
               </item>
               <item row="9" column="0">
-               <widget class="QLineEdit" name="lineEdit_15">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
+               <widget class="QLabel" name="label_12">
                 <property name="text">
-                 <string>Page numbering support</string>
+                 <string>➤ Rotate pdf pages</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
-               <widget class="QToolButton" name="toolButton_9">
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="text">
+                 <string>➤ Adjust image position on page</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="2">
+               <widget class="QToolButton" name="toolButton_43">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QToolButton" name="toolButton_3">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QToolButton" name="toolButton_36">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QToolButton" name="toolButton_41">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QToolButton" name="toolButton_34">
                 <property name="text">
                  <string>...</string>
                 </property>
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QToolButton" name="toolButton_3">
+               <widget class="QLineEdit" name="lineEdit_13">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>FREE VERSION</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>➤ Protect PDF</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>➤ Set DPI of image</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_9">
+                <property name="text">
+                 <string>➤ Support Auto Page format</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="label_11">
+                <property name="text">
+                 <string>➤ Page numbering support</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>➤ Support Auto orientation</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="2">
+               <widget class="QToolButton" name="toolButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QToolButton" name="toolButton_35">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QToolButton" name="toolButton_37">
                 <property name="text">
                  <string>...</string>
                 </property>

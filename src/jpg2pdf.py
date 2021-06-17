@@ -1,6 +1,7 @@
 import datetime
 import os
 import sys
+import webbrowser
 from PIL import Image
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QProcessEnvironment, QUrl
@@ -9,10 +10,12 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeader
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
 from qtpy.QtGui import QDesktopServices
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
-    check_for_already_file_exists, get_valid_images
+    check_for_already_file_exists, get_valid_images, check_internet_connection
 from convert_pdf_threads import ConvertToPdfThread
 from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage
 from pixmap_loading_thread import PixMapLoadingThread
+from accounts import ApplicationStartupTask, check_for_local_token, get_user_data_from_local, days_left
+from account_threads import RefreshButtonThread, SaveLocalInToken
 from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
@@ -68,8 +71,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toggle = 0
         self.default_selected = 0
         self.show_page_no = False
-        self.account_ui.ui.account_progress_bar.setFixedHeight(7)
-
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
         self.ui.actionAccount.triggered.connect(self.show_account_page)
@@ -81,14 +82,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.zoomout.clicked.connect(self.zoom_out_functionality)
         self.ui.rotate.clicked.connect(self.rotate_functionality)
         self.ui.change.clicked.connect(self.open_download_path)
-        self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
         self.ui.preview.clicked.connect(self.preview_image)
         self.ui.show_full_path.clicked.connect(self.toggle_full_half_path)
         self.ui.next.clicked.connect(self.next_button_clicked)
         self.ui.prev.clicked.connect(self.prev_button_clicked)
         self.ui.remove.clicked.connect(self.remove_item_from_table)
         self.ui.selectall.currentIndexChanged.connect(self.select_all_button_function)
-
         self.ui.checkBox_protect_pdf.stateChanged.connect(self.enable_pdf_password)
         self.ui.tableWidget.itemDoubleClicked.connect(self.select_item_on_double_clicked)
         self.ui.moveup.clicked.connect(self.move_up_item)
@@ -99,7 +98,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.hide_image.clicked.connect(self.hide_image_thumbnail)
         self.ui.duplicate.clicked.connect(self.remove_duplicate)
         self.ui.select_item.clicked.connect(self.select_item_one)
+        self.ui.stop.clicked.connect(self.kill_process)
+        self.ui.info_main.clicked.connect(self.main_info)
 
+        # advance settings
         self.advance_setting_ui.ui.okay.clicked.connect(self.ok_setting_clicked)
         self.advance_setting_ui.ui.page_from.textChanged.connect(self.check_from_to_page_validation)
         self.advance_setting_ui.ui.page_to.textChanged.connect(self.check_from_to_page_validation)
@@ -107,42 +109,54 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.page_from_grayscale.textChanged.connect(self.check_grayscale_validation)
         self.advance_setting_ui.ui.select_angle.currentIndexChanged.connect(self.validation_for_angle)
         self.advance_setting_ui.ui.select_scale.currentIndexChanged.connect(self.validation_for_scale)
-        self.ui.stop.clicked.connect(self.kill_process)
-
         self.advance_setting_ui.ui.mm.clicked.connect(self.change_default_unit)
         self.advance_setting_ui.ui.cm.clicked.connect(self.change_default_unit)
         self.advance_setting_ui.ui.pt.clicked.connect(self.change_default_unit)
         self.advance_setting_ui.ui.inch.clicked.connect(self.change_default_unit)
+        self.advance_setting_ui.ui.show_page_no.clicked.connect(self.on_page_no)
+        self.advance_setting_ui.ui.auto_resolution.clicked.connect(self.enable_auto_manual_resolution)
+        self.advance_setting_ui.ui.info_dpi.clicked.connect(self.dpi_info)
+        self.advance_setting_ui.ui.info_image_pos.clicked.connect(self.image_pos_info)
+        self.advance_setting_ui.ui.info_margin.clicked.connect(self.margin_info_details)
+        self.advance_setting_ui.ui.reset_defaults.clicked.connect(self.reset_advanced_settings)
 
+        # general settings
         self.general_setting_ui.ui.dark.clicked.connect(self.set_theme)
         self.general_setting_ui.ui.light.clicked.connect(self.set_theme)
-
         self.general_setting_ui.ui.native_dialog.clicked.connect(self.set_file_dialog)
         self.general_setting_ui.ui.qt_dialog.clicked.connect(self.set_file_dialog)
-
         self.general_setting_ui.ui.overwrite_warning.clicked.connect(self.set_overwrite_warning)
         self.general_setting_ui.ui.auto_generate_pdf_name.clicked.connect(self.pdf_name_set)
-
         self.general_setting_ui.ui.jpg.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.jpeg.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.png.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.tif.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.tiff.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.bmp.clicked.connect(self.set_image_filter)
-
         self.general_setting_ui.ui.all_files.clicked.connect(self.set_filter_disable)
         self.general_setting_ui.ui.close.clicked.connect(self.hide_general_settings)
         self.general_setting_ui.ui.icon_size.textChanged.connect(self.adjust_thumbnail_size)
         self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
-        self.advance_setting_ui.ui.show_page_no.clicked.connect(self.on_page_no)
-        self.advance_setting_ui.ui.auto_resolution.clicked.connect(self.enable_auto_manual_resolution)
+        self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
 
-        self.advance_setting_ui.ui.info_dpi.clicked.connect(self.dpi_info)
-        self.advance_setting_ui.ui.info_image_pos.clicked.connect(self.image_pos_info)
-        self.advance_setting_ui.ui.info_margin.clicked.connect(self.margin_info_details)
+        # accounts page
+        self.one_time_congratulate = True
+        self.is_plan_active = True
+        ApplicationStartupTask(PRODUCT_NAME).create_free_trial_offline()
+        self.account_ui.ui.error_message.clear()
+        self.account_ui.ui.error_message.setStyleSheet("color:red;")
+        self.account_ui.ui.account_progress_bar.setVisible(False)
+        self.my_plan()
+        self.account_ui.ui.purchase_licence.clicked.connect(self.purchase_licence)
+        self.account_ui.ui.refresh_account.clicked.connect(self.refresh_account)
+        self.account_ui.ui.account_progress_bar.setFixedHeight(5)
 
-        self.ui.info_main.clicked.connect(self.main_info)
-        self.advance_setting_ui.ui.reset_defaults.clicked.connect(self.reset_advanced_settings)
+        # about page
+        self.about_ui.ui.warlordsoft_button.clicked.connect(self.redirect_to_warlordsoft)
+        self.about_ui.ui.donate_button.clicked.connect(self.redirect_to_paypal_donation)
+        self.about_ui.ui.rate_button.clicked.connect(self.redirect_to_rate_snapstore)
+        self.about_ui.ui.feedback_button.clicked.connect(self.redirect_to_feedback_button)
+        self.about_ui.ui.ge_more_apps.clicked.connect(self.ge_more_apps)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -1464,6 +1478,150 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def setProgressVal_kill(self):
         self.progress_bar_disable()
+
+    """
+              About page functionality:---------------------------------------------------------------------------------
+    """
+
+    def redirect_to_warlordsoft(self):
+        warlord_soft_link = "https://warlordsoftwares.in/"
+        webbrowser.open(warlord_soft_link)
+
+    def redirect_to_paypal_donation(self):
+        paypal_donation_link = "https://www.paypal.com/paypalme/rishabh3354/10"
+        webbrowser.open(paypal_donation_link)
+
+    def ge_more_apps(self):
+        paypal_donation_link = "https://snapcraft.io/search?q=rishabh"
+        webbrowser.open(paypal_donation_link)
+
+    def redirect_to_rate_snapstore(self):
+        QDesktopServices.openUrl(QUrl("snap://jpg2pdf"))
+
+    def redirect_to_feedback_button(self):
+        feedback_link = "https://warlordsoftwares.in/contact_us/"
+        webbrowser.open(feedback_link)
+
+    """
+           Accounts page functionality:---------------------------------------------------------------------------------
+    """
+
+    def purchase_licence(self):
+        if check_internet_connection():
+            account_dict = get_user_data_from_local()
+            if account_dict:
+                account_id = str(account_dict.get("email")).split("@")[0]
+                if account_id:
+                    warlord_soft_link = f"https://warlordsoftwares.in/warlord_soft/subscription/?product={PRODUCT_NAME}&account_id={account_id} "
+                else:
+                    warlord_soft_link = f"https://warlordsoftwares.in/signup/"
+                webbrowser.open(warlord_soft_link)
+                data = dict()
+                data["email"] = f"{account_id}@warlordsoft.in"
+                data["password"] = f"{account_id}@warlordsoft.in"
+                data["re_password"] = f"{account_id}@warlordsoft.in"
+                self.save_token = SaveLocalInToken(data)
+                self.save_token.start()
+        else:
+            self.popup_message(title="No internet connection", message="Please check your internet connection!")
+
+    def refresh_account(self):
+        self.account_ui.ui.error_message.clear()
+        self.account_ui.ui.account_progress_bar.setRange(0, 0)
+        self.account_ui.ui.account_progress_bar.setVisible(True)
+        self.refresh_thread = RefreshButtonThread(PRODUCT_NAME)
+        self.refresh_thread.change_value_refresh.connect(self.after_refresh)
+        self.refresh_thread.start()
+
+    def after_refresh(self, response_dict):
+        if response_dict.get("status"):
+            user_plan_data = get_user_data_from_local()
+            if user_plan_data:
+                self.logged_in_user_plan_page(user_plan_data)
+        else:
+            self.account_ui.ui.error_message.setText(response_dict.get("message"))
+        self.account_ui.ui.account_progress_bar.setRange(0, 1)
+        self.account_ui.ui.account_progress_bar.setVisible(False)
+
+    def my_plan(self):
+        token = check_for_local_token()
+        if token not in [None, ""]:
+            user_plan_data = get_user_data_from_local()
+            if user_plan_data:
+                self.logged_in_user_plan_page(user_plan_data)
+            else:
+                user_plan_data = dict()
+                user_plan_data['plan'] = "N/A"
+                user_plan_data['expiry_date'] = "N/A"
+                user_plan_data['email'] = "N/A"
+                self.logged_in_user_plan_page(user_plan_data)
+        else:
+            user_plan_data = get_user_data_from_local()
+            if user_plan_data:
+                self.logged_in_user_plan_page(user_plan_data)
+
+    def logged_in_user_plan_page(self, user_plan_data):
+        account_email = user_plan_data.get('email')
+        plan = user_plan_data.get("plan", "N/A")
+        expiry_date = user_plan_data.get("expiry_date")
+        if account_email:
+            account_id = str(account_email).split("@")[0]
+            self.account_ui.ui.lineEdit_account_id.setText(account_id)
+        else:
+            self.account_ui.ui.lineEdit_account_id.setText("N/A")
+        if plan == "Free Trial":
+            self.account_ui.ui.lineEdit_plan.setText("Evaluation")
+        elif plan == "Life Time Free Plan":
+            self.account_ui.ui.purchase_licence.setEnabled(False)
+            self.account_ui.ui.refresh_account.setEnabled(False)
+            self.account_ui.ui.lineEdit_plan.setText(plan)
+            if self.one_time_congratulate:
+                self.account_ui.ui.account_progress_bar.setRange(0, 1)
+                self.account_ui.ui.account_progress_bar.setVisible(False)
+                self.popup_message(title="Congratulations! Plan Upgraded to PRO",
+                                   message="Your plan has been upgraded to PRO. Enjoy lifetime licence. Thankyou for your purchase.")
+                self.one_time_congratulate = False
+        else:
+            self.account_ui.ui.lineEdit_plan.setText(plan)
+        if expiry_date:
+            if plan == "Life Time Free Plan":
+                self.account_ui.ui.lineEdit_expires_on.setText("Active")
+            else:
+                plan_days_left = days_left(expiry_date)
+                if plan_days_left == "0 Day(s) Left":
+                    self.account_ui.ui.error_message.setText("Evaluation period ended, Upgrade to Pro")
+                    self.account_ui.ui.lineEdit_expires_on.setText(plan_days_left)
+                    self.is_plan_active = False
+                else:
+                    self.is_plan_active = True
+                    self.account_ui.ui.lineEdit_expires_on.setText(plan_days_left)
+        else:
+            self.account_ui.ui.lineEdit_expires_on.setText("N/A")
+
+    def check_your_plan(self):
+        if not self.is_plan_active:
+            self.msg = QMessageBox()
+            self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+            self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+            self.msg.setIcon(QMessageBox.Information)
+            self.msg.setText("Evaluation period ended, Upgrade to Pro")
+            self.msg.setInformativeText("Please purchase a licence to Unlock this feature")
+            purchase = self.msg.addButton(QMessageBox.Yes)
+            close = self.msg.addButton(QMessageBox.Yes)
+            purchase.setText('Purchase Licence')
+            close.setText('Close')
+            purchase.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogOkButton)))
+            close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
+            self.msg.exec_()
+            try:
+                if self.msg.clickedButton() == purchase:
+                    self.account_page()
+                elif self.msg.clickedButton() == close:
+                    pass
+            except Exception as e:
+                pass
+            return False
+        return True
 
 
 if __name__ == "__main__":
