@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AccountUI(object):
     def setupUi(self, AccountUI):
         AccountUI.setObjectName("AccountUI")
-        AccountUI.resize(666, 691)
+        AccountUI.resize(733, 727)
         self.verticalLayout = QtWidgets.QVBoxLayout(AccountUI)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(AccountUI)
@@ -64,7 +64,7 @@ class Ui_AccountUI(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 632, 626))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 713, 627))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -356,3 +356,4 @@ class Ui_AccountUI(object):
         self.toolButton_35.setText(_translate("AccountUI", "..."))
         self.toolButton_37.setText(_translate("AccountUI", "..."))
         self.error_message.setText(_translate("AccountUI", "<html><head/><body><p align=\"center\"><span style=\" color:#ef2929;\">Error Message</span></p></body></html>"))
+import resource_rc

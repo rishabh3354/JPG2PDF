@@ -131,11 +131,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.zoomout.clicked.connect(self.zoom_out_functionality)
         self.ui.rotate.clicked.connect(self.rotate_functionality)
         self.ui.change.clicked.connect(self.open_download_path)
-        self.ui.preview.clicked.connect(self.preview_image)
+        self.ui.preview_2.clicked.connect(self.preview_image)
         self.ui.show_full_path.clicked.connect(self.toggle_full_half_path)
         self.ui.next.clicked.connect(self.next_button_clicked)
         self.ui.prev.clicked.connect(self.prev_button_clicked)
-        self.ui.remove.clicked.connect(self.remove_item_from_table)
+        self.ui.remove_2.clicked.connect(self.remove_item_from_table)
         self.ui.selectall.currentIndexChanged.connect(self.select_all_button_function)
         self.ui.checkBox_protect_pdf.stateChanged.connect(self.enable_pdf_password)
         self.ui.tableWidget.itemDoubleClicked.connect(self.select_item_on_double_clicked)
@@ -739,20 +739,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.overwrite_warning = False
 
     def select_item_one(self):
-        # self.ui.tableWidget.selectRow(self.counter)
-        item = self.ui.tableWidget.item(self.counter, 0)
-
-        if item.column() == 0:
-            if item.checkState() == QtCore.Qt.Checked:
-                item.setCheckState(QtCore.Qt.Unchecked)
-            else:
-                item.setCheckState(QtCore.Qt.Checked)
-        elif item.column() != 0:
-            row = item.row()
-            if self.ui.tableWidget.item(row, 0).checkState() == QtCore.Qt.Checked:
-                self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Unchecked)
-            else:
-                self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Checked)
+        if self.all_images_list:
+            item = self.ui.tableWidget.item(self.counter, 0)
+            if item.column() == 0:
+                if item.checkState() == QtCore.Qt.Checked:
+                    item.setCheckState(QtCore.Qt.Unchecked)
+                else:
+                    item.setCheckState(QtCore.Qt.Checked)
+            elif item.column() != 0:
+                row = item.row()
+                if self.ui.tableWidget.item(row, 0).checkState() == QtCore.Qt.Checked:
+                    self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Unchecked)
+                else:
+                    self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Checked)
 
     def remove_duplicate(self):
         self.msg = QMessageBox()
@@ -792,15 +791,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def no_image_q_table_setting(self):
         self.ui.tableWidget.setColumnCount(6)
-        self.ui.tableWidget.setRowCount(14)
+        self.ui.tableWidget.setRowCount(12)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
-        self.ui.tableWidget.setColumnWidth(0, 30)
-        self.ui.tableWidget.setColumnWidth(1, 25)
+        self.ui.tableWidget.setColumnWidth(0, 40)
+        self.ui.tableWidget.setColumnWidth(1, 45)
         self.ui.tableWidget.setColumnWidth(2, 350)
-        self.ui.tableWidget.setColumnWidth(3, 90)
-        self.ui.tableWidget.setColumnWidth(4, 80)
+        self.ui.tableWidget.setColumnWidth(3, 95)
+        self.ui.tableWidget.setColumnWidth(4, 90)
         self.ui.tableWidget.setColumnWidth(5, 80)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -1133,17 +1132,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
-        self.ui.tableWidget.setRowCount(16)
+        self.ui.tableWidget.setRowCount(12)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)
-        self.ui.tableWidget.setColumnWidth(0, 30)
-        self.ui.tableWidget.setColumnWidth(1, 25)
+        self.ui.tableWidget.setColumnWidth(0, 40)
+        self.ui.tableWidget.setColumnWidth(1, 45)
         self.ui.tableWidget.setColumnWidth(2, self.main_table_pointer + 7)
         self.ui.tableWidget.setColumnWidth(3, 350)
-        self.ui.tableWidget.setColumnWidth(4, 90)
-        self.ui.tableWidget.setColumnWidth(5, 80)
+        self.ui.tableWidget.setColumnWidth(4, 95)
+        self.ui.tableWidget.setColumnWidth(5, 90)
         self.ui.tableWidget.setColumnWidth(6, 80)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)

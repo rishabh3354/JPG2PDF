@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AboutUI(object):
     def setupUi(self, AboutUI):
         AboutUI.setObjectName("AboutUI")
-        AboutUI.resize(550, 470)
+        AboutUI.resize(680, 517)
         self.verticalLayout = QtWidgets.QVBoxLayout(AboutUI)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(AboutUI)
@@ -159,3 +159,4 @@ class Ui_AboutUI(object):
         self.feedback_button.setText(_translate("AboutUI", "Feedback"))
         self.donate_button.setText(_translate("AboutUI", "Donate"))
         self.ge_more_apps.setText(_translate("AboutUI", "Get More Apps"))
+import resource_rc

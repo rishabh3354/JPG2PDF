@@ -147,126 +147,31 @@ QStatusBar QLabel {
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qcheckbox
 
 --------------------------------------------------------------------------- */
-QCheckBox {
-  background-color: #FAFAFA;
-  color: #19232D;
-  spacing: 4px;
-  outline: none;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
 
-QCheckBox:focus {
-  border: none;
-}
-
-QCheckBox QWidget:disabled {
-  background-color: #FAFAFA;
-  color: #788D9C;
-}
-
-QCheckBox::indicator {
-  margin-left: 2px;
-  height: 14px;
-  width: 14px;
-}
-
-QCheckBox::indicator:unchecked {
-  image: url(":/qss_icons/light/rc/checkbox_unchecked.png");
-}
-
-QCheckBox::indicator:unchecked:hover, QCheckBox::indicator:unchecked:focus, QCheckBox::indicator:unchecked:pressed {
-  border: none;
-  image: url(":/qss_icons/light/rc/checkbox_unchecked_focus.png");
-}
-
-QCheckBox::indicator:unchecked:disabled {
-  image: url(":/qss_icons/light/rc/checkbox_unchecked_disabled.png");
-}
-
-QCheckBox::indicator:checked {
-  image: url(":/qss_icons/light/rc/checkbox_checked.png");
-}
-
-QCheckBox::indicator:checked:hover, QCheckBox::indicator:checked:focus, QCheckBox::indicator:checked:pressed {
-  border: none;
-  image: url(":/qss_icons/light/rc/checkbox_checked_focus.png");
-}
-
-QCheckBox::indicator:checked:disabled {
-  image: url(":/qss_icons/light/rc/checkbox_checked_disabled.png");
-}
-
-QCheckBox::indicator:indeterminate {
-  image: url(":/qss_icons/light/rc/checkbox_indeterminate.png");
-}
-
-QCheckBox::indicator:indeterminate:disabled {
-  image: url(":/qss_icons/light/rc/checkbox_indeterminate_disabled.png");
-}
-
-QCheckBox::indicator:indeterminate:focus, QCheckBox::indicator:indeterminate:hover, QCheckBox::indicator:indeterminate:pressed {
-  image: url(":/qss_icons/light/rc/checkbox_indeterminate_focus.png");
-}
 
 /* QGroupBox --------------------------------------------------------------
 
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qgroupbox
 
 --------------------------------------------------------------------------- */
+
 QGroupBox {
-  font-weight: bold;
-  border: 1px solid #C9CDD0;
-  border-radius: 4px;
-  padding: 2px;
-  margin-top: 6px;
-  margin-bottom: 4px;
+    border: 1px solid rgb(38,106,133);
+    border-radius: 2px;
+    margin-top: 24px;
 }
 
-QGroupBox::title {
-  subcontrol-origin: margin;
-  subcontrol-position: top left;
-  left: 4px;
-  padding-left: 2px;
-  padding-right: 4px;
-  padding-top: -4px;
+QGroupBox::title{
+  subcontrol-origin:margin;
+  subcontrol-position:left top;
+  padding:4px 6px;
+  margin-left:0px;
+  background-color: rgb(108, 174, 255);
+
+  border-top-left-radius:3px;
+  border-top-right-radius:3px;
 }
 
-QGroupBox::indicator {
-  margin-left: 2px;
-  margin-top: 2px;
-  padding: 0;
-  height: 14px;
-  width: 14px;
-}
-
-QGroupBox::indicator:unchecked {
-  border: none;
-  image: url(":/qss_icons/light/rc/checkbox_unchecked.png");
-}
-
-QGroupBox::indicator:unchecked:hover, QGroupBox::indicator:unchecked:focus, QGroupBox::indicator:unchecked:pressed {
-  border: none;
-  image: url(":/qss_icons/light/rc/checkbox_unchecked_focus.png");
-}
-
-QGroupBox::indicator:unchecked:disabled {
-  image: url(":/qss_icons/light/rc/checkbox_unchecked_disabled.png");
-}
-
-QGroupBox::indicator:checked {
-  border: none;
-  image: url(":/qss_icons/light/rc/checkbox_checked.png");
-}
-
-QGroupBox::indicator:checked:hover, QGroupBox::indicator:checked:focus, QGroupBox::indicator:checked:pressed {
-  border: none;
-  image: url(":/qss_icons/light/rc/checkbox_checked_focus.png");
-}
-
-QGroupBox::indicator:checked:disabled {
-  image: url(":/qss_icons/light/rc/checkbox_checked_disabled.png");
-}
 
 /* QRadioButton -----------------------------------------------------------
 
@@ -312,7 +217,7 @@ QRadioButton::indicator {
 }
 
 QRadioButton::indicator:unchecked {
-  image: url(":/qss_icons/light/rc/radio_unchecked.png");
+  image: url(":/qss_icons/light/rc/radio_unchecked_focus@2x.png");
 }
 
 QRadioButton::indicator:unchecked:hover, QRadioButton::indicator:unchecked:focus, QRadioButton::indicator:unchecked:pressed {
@@ -328,7 +233,7 @@ QRadioButton::indicator:unchecked:disabled {
 QRadioButton::indicator:checked {
   border: none;
   outline: none;
-  image: url(":/qss_icons/light/rc/radio_checked.png");
+  image: url(":/qss_icons/light/rc/radio_checked_focus@2x.png");
 }
 
 QRadioButton::indicator:checked:hover, QRadioButton::indicator:checked:focus, QRadioButton::indicator:checked:pressed {
@@ -554,7 +459,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qscrollbar
 
 --------------------------------------------------------------------------- */
 QScrollBar:horizontal {
-  height: 16px;
+  height: 14px;
   margin: 2px 16px 2px 16px;
   border: 1px solid #C9CDD0;
   border-radius: 4px;
@@ -563,7 +468,7 @@ QScrollBar:horizontal {
 
 QScrollBar:vertical {
   background-color: #FAFAFA;
-  width: 16px;
+  width: 14px;
   margin: 16px 2px 16px 2px;
   border: 1px solid #C9CDD0;
   border-radius: 4px;
@@ -1009,7 +914,7 @@ QPushButton {
   background-color: #C9CDD0;
   color: #19232D;
   border-radius: 4px;
-  padding: 2px;
+  padding: 4px;
   outline: none;
   border: none;
 }
@@ -1074,7 +979,7 @@ QToolButton {
   background-color: #C9CDD0;
   color: #19232D;
   border-radius: 4px;
-  padding: 2px;
+  padding: 4px;
   outline: none;
   border: none;
   /* The subcontrols below are used only in the DelayedPopup mode */
@@ -1290,9 +1195,6 @@ QComboBox::item:alternate {
   background: #FAFAFA;
 }
 
-QComboBox::item:checked {
-  font-weight: bold;
-}
 
 QComboBox::item:selected {
   border: 0px solid transparent;
@@ -1774,6 +1676,49 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qlistview
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtableview
 
 --------------------------------------------------------------------------- */
+
+QTableWidget {
+	background-color: transparent;
+	padding: 10px;
+	border-radius: 5px;
+	gridline-color: rgb(44, 49, 58);
+	border-bottom: 1px solid rgb(44, 49, 60);
+}
+QTableWidget::item{
+	border-color: rgb(44, 49, 60);
+	padding-left: 5px;
+	padding-right: 5px;
+	gridline-color: rgb(44, 49, 60);
+}
+QTableWidget::item:selected{
+	background-color: rgb(189, 147, 249);
+}
+QHeaderView::section{
+	background-color: rgb(33, 37, 43);
+	max-width: 30px;
+	border: 1px solid rgb(44, 49, 58);
+	border-style: none;
+    border-bottom: 1px solid rgb(44, 49, 60);
+    border-right: 1px solid rgb(44, 49, 60);
+}
+QTableWidget::horizontalHeader {
+	background-color: rgb(33, 37, 43);
+}
+QHeaderView::section:horizontal
+{
+    border: 1px solid rgb(33, 37, 43);
+	background-color: rgb(108, 174, 255);
+	padding: 3px;
+	border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    height: 25px;
+    font-size: 14px;
+}
+QHeaderView::section:vertical
+{
+    border: 1px solid rgb(44, 49, 60);
+}
+
 QTreeView:branch:selected, QTreeView:branch:hover {
   background: url(":/qss_icons/light/rc/transparent.png");
 }
@@ -1810,7 +1755,7 @@ QTreeView:branch:open:has-children:!has-siblings:hover, QTreeView:branch:open:ha
 
 QTreeView::indicator:checked,
 QListView::indicator:checked,
-QTableView::indicator:checked,
+/*QTableView::indicator:checked,*/
 QColumnView::indicator:checked {
   image: url(":/qss_icons/light/rc/checkbox_checked.png");
 }
@@ -1819,9 +1764,9 @@ QTreeView::indicator:checked:hover, QTreeView::indicator:checked:focus, QTreeVie
 QListView::indicator:checked:hover,
 QListView::indicator:checked:focus,
 QListView::indicator:checked:pressed,
-QTableView::indicator:checked:hover,
-QTableView::indicator:checked:focus,
-QTableView::indicator:checked:pressed,
+/*QTableView::indicator:checked:hover,*/
+/*QTableView::indicator:checked:focus,*/
+/*QTableView::indicator:checked:pressed,*/
 QColumnView::indicator:checked:hover,
 QColumnView::indicator:checked:focus,
 QColumnView::indicator:checked:pressed {
@@ -2116,34 +2061,12 @@ https://stackoverflow.com/questions/14581498/qt-stylesheet-for-hline-vline-color
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qsplitter
 
 --------------------------------------------------------------------------- */
-QSplitter {
-  background-color: #C9CDD0;
-  spacing: 0px;
-  padding: 0px;
-  margin: 0px;
-}
 
-QSplitter::handle {
-  background-color: #C9CDD0;
-  border: 0px solid #FAFAFA;
-  spacing: 0px;
-  padding: 1px;
-  margin: 0px;
-}
 
 QSplitter::handle:hover {
   background-color: #788D9C;
 }
 
-QSplitter::handle:horizontal {
-  width: 5px;
-  image: url(":/qss_icons/light/rc/line_vertical.png");
-}
-
-QSplitter::handle:vertical {
-  height: 5px;
-  image: url(":/qss_icons/light/rc/line_horizontal.png");
-}
 
 /* QDateEdit, QDateTimeEdit -----------------------------------------------
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
-    <height>610</height>
+    <width>648</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,8 +41,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>572</width>
-          <height>1095</height>
+          <width>612</width>
+          <height>1094</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -67,6 +67,9 @@
                   <property name="focusPolicy">
                    <enum>Qt::StrongFocus</enum>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
                   <property name="text">
                    <string>mm (default)</string>
                   </property>
@@ -77,6 +80,9 @@
                 </item>
                 <item row="0" column="3">
                  <widget class="QRadioButton" name="inch">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
                   <property name="text">
                    <string>inch</string>
                   </property>
@@ -84,6 +90,9 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QRadioButton" name="cm">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
                   <property name="text">
                    <string>cm</string>
                   </property>
@@ -91,6 +100,9 @@
                 </item>
                 <item row="0" column="2">
                  <widget class="QRadioButton" name="pt">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
                   <property name="text">
                    <string>pt</string>
                   </property>
@@ -406,7 +418,7 @@
                 <item row="2" column="1">
                  <widget class="QCheckBox" name="auto_resolution">
                   <property name="styleSheet">
-                   <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
                   </property>
                   <property name="text">
                    <string>Auto image size</string>
@@ -822,7 +834,7 @@
                 <item row="4" column="1">
                  <widget class="QCheckBox" name="bold">
                   <property name="styleSheet">
-                   <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
                   </property>
                   <property name="text">
                    <string>Bold</string>
@@ -946,7 +958,7 @@
                 <item row="4" column="3">
                  <widget class="QCheckBox" name="underline">
                   <property name="styleSheet">
-                   <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
                   </property>
                   <property name="text">
                    <string>Underline</string>
@@ -969,7 +981,7 @@
                 <item row="4" column="2">
                  <widget class="QCheckBox" name="italic">
                   <property name="styleSheet">
-                   <string notr="true">QCheckBox::indicator { width: 17px;height:17px };</string>
+                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
                   </property>
                   <property name="text">
                    <string>Italic</string>
