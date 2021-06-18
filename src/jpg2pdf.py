@@ -37,6 +37,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # jpg2pdf settings initials-------------------------------------------------------------------------------------
         self.image_hide = False
+        self.ui.hide_image.setText("Hide icons")
+        self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
+        self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+        self.ui.checkBox_protect_pdf.setChecked(False)
+        self.enable_pdf_password()
+        self.show_full_path_flag = False
+        self.ui.show_full_path.setText("Show full path")
+
         self.pop_up_stylesheet = 'background-color:rgb(48,48,48);color:white;'
         self.all_images_list = []
         self.image_dimension = []
@@ -44,23 +52,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image_extension = []
         self.all_pixmap_data = []
         self.selected_list = []
-        self.select_folder = None
-        self.show_full_path_flag = False
-        self.auto_resolution_button = True
-        self.ui.protect_pdf.setEnabled(False)
-        self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
-        self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.progress_bar_disable()
         largeWidth = QGuiApplication.primaryScreen().size().width()
         self.ui.splitter_2.setSizes([largeWidth / 2, 120])
         self.ui.image.setVisible(False)
-
         self.counter = 0
         self.toggle = 0
         self.default_selected = 0
-        self.show_page_no = False
 
         # general settings initials ------------------------------------------------------------------------------------
         self.theme = 'dark'
@@ -77,10 +77,48 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tiff = True
         self.bmp = True
         self.all_files = True
+
+        # advance settings initials ------------------------------------------------------------------------------------
+        self.mm = True
+        self.cm = False
+        self.pt = False
+        self.inch = False
+        self.l_margin = 0.00
+        self.r_margin = 0.00
+        self.t_margin = 0.00
+        self.b_margin = 0.00
+        self.zoom = 0
+        self.layout = 0
+        self.h_value = 0.00
+        self.v_value = 0.00
+        self.auto_resolution = True
+        self.dpi = 150
+        self.page_from = ""
+        self.page_to = ""
+        self.select_angle = 0
+        self.page_from_grayscale = ""
+        self.page_to_grayscale = ""
+        self.select_scale = 0
+        self.show_page_no = False
+        self.page_starts = 1
+        self.font_position = 15
+        self.font_size = 8
+        self.font_align = 0
+        self.comboBox = 0
+        self.bold = False
+        self.italic = False
+        self.underline = False
+        self.r = 0
+        self.g = 0
+        self.b = 0
+        self.keywords = ""
+        self.producer = ""
+        self.creator = ""
+        self.created_on = ""
+
         self.load_settings()
         self.general_setting_defaults(default=False)
-        print(self.filter_array)
-        print(self.filter)
+        self.advance_settings_defaults(default=False)
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
@@ -180,6 +218,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.factor = 1
 
     def save_settings(self):
+        # jpg2pdf settings save: --------------------------------------------------------------------------------------
+        self.settings.setValue("Default_loc", self.Default_loc)
+        self.settings.setValue("status_protect_pdf", self.ui.checkBox_protect_pdf.isChecked())
+
         # general settings save:----------------------------------------------------------------------------------------
         self.settings.setValue("main_table_pointer", self.main_table_pointer)
         self.settings.setValue("theme", self.theme)
@@ -195,7 +237,60 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("bmp", self.general_setting_ui.ui.bmp.isChecked())
         self.settings.setValue("all_files", self.general_setting_ui.ui.all_files.isChecked())
 
+        # advance settings save:----------------------------------------------------------------------------------------
+        self.settings.setValue("mm", self.advance_setting_ui.ui.mm.isChecked())
+        self.settings.setValue("cm", self.advance_setting_ui.ui.cm.isChecked())
+        self.settings.setValue("pt", self.advance_setting_ui.ui.pt.isChecked())
+        self.settings.setValue("inch", self.advance_setting_ui.ui.inch.isChecked())
+
+        self.settings.setValue("l_margin", self.advance_setting_ui.ui.l_margin.value())
+        self.settings.setValue("r_margin", self.advance_setting_ui.ui.r_margin.value())
+        self.settings.setValue("t_margin", self.advance_setting_ui.ui.t_margin.value())
+        self.settings.setValue("b_margin", self.advance_setting_ui.ui.b_margin.value())
+
+        self.settings.setValue("zoom", self.advance_setting_ui.ui.zoom.currentIndex())
+        self.settings.setValue("layout", self.advance_setting_ui.ui.layout.currentIndex())
+
+        self.settings.setValue("h_value", self.advance_setting_ui.ui.h_value.value())
+        self.settings.setValue("v_value", self.advance_setting_ui.ui.v_value.value())
+        self.settings.setValue("auto_resolution", self.advance_setting_ui.ui.auto_resolution.isChecked())
+        self.settings.setValue("dpi", self.advance_setting_ui.ui.dpi.value())
+
+        self.settings.setValue("page_from", self.advance_setting_ui.ui.page_from.text())
+        self.settings.setValue("page_to", self.advance_setting_ui.ui.page_to.text())
+        self.settings.setValue("select_angle", self.advance_setting_ui.ui.select_angle.currentIndex())
+
+        self.settings.setValue("page_from_grayscale", self.advance_setting_ui.ui.page_from_grayscale.text())
+        self.settings.setValue("page_to_grayscale", self.advance_setting_ui.ui.page_to_grayscale.text())
+        self.settings.setValue("select_scale", self.advance_setting_ui.ui.select_scale.currentIndex())
+
+        self.settings.setValue("show_page_no", self.advance_setting_ui.ui.show_page_no.isChecked())
+        self.settings.setValue("page_starts", self.advance_setting_ui.ui.page_starts.value())
+        self.settings.setValue("font_position", self.advance_setting_ui.ui.font_position.value())
+        self.settings.setValue("font_size", self.advance_setting_ui.ui.font_size.value())
+        self.settings.setValue("font_align", self.advance_setting_ui.ui.font_align.currentIndex())
+        self.settings.setValue("comboBox", self.advance_setting_ui.ui.comboBox.currentIndex())
+        self.settings.setValue("bold", self.advance_setting_ui.ui.bold.isChecked())
+        self.settings.setValue("italic", self.advance_setting_ui.ui.italic.isChecked())
+        self.settings.setValue("underline", self.advance_setting_ui.ui.underline.isChecked())
+        self.settings.setValue("r", self.advance_setting_ui.ui.r.value())
+        self.settings.setValue("g", self.advance_setting_ui.ui.g.value())
+        self.settings.setValue("b", self.advance_setting_ui.ui.b.value())
+
+        self.settings.setValue("keywords", self.advance_setting_ui.ui.keywords.text())
+        self.settings.setValue("producer", self.advance_setting_ui.ui.producer.text())
+        self.settings.setValue("creator", self.advance_setting_ui.ui.creator.text())
+        self.settings.setValue("created_on", self.advance_setting_ui.ui.created_on.text())
+
     def load_settings(self):
+        # jpg2pdf settings loads: --------------------------------------------------------------------------------------
+        if self.settings.contains("Default_loc"):
+            self.Default_loc = self.settings.value("Default_loc")
+            self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+        if self.settings.contains("status_protect_pdf"):
+            self.ui.checkBox_protect_pdf.setChecked(json.loads(self.settings.value("status_protect_pdf")))
+            self.enable_pdf_password()
+
         # general settings loads:---------------------------------------------------------------------------------------
         if self.settings.contains("main_table_pointer"):
             self.main_table_pointer = int(self.settings.value("main_table_pointer"))
@@ -223,6 +318,89 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.bmp = json.loads(self.settings.value("bmp"))
         if self.settings.contains("all_files"):
             self.all_files = json.loads(self.settings.value("all_files"))
+
+        # advance setting load:-----------------------------------------------------------------------------------------
+        if self.settings.contains("mm"):
+            self.mm = json.loads(self.settings.value("mm"))
+        if self.settings.contains("cm"):
+            self.cm = json.loads(self.settings.value("cm"))
+        if self.settings.contains("pt"):
+            self.pt = json.loads(self.settings.value("pt"))
+        if self.settings.contains("inch"):
+            self.inch = json.loads(self.settings.value("inch"))
+
+        if self.settings.contains("l_margin"):
+            self.l_margin = float(self.settings.value("l_margin"))
+        if self.settings.contains("r_margin"):
+            self.r_margin = float(self.settings.value("r_margin"))
+        if self.settings.contains("t_margin"):
+            self.t_margin = float(self.settings.value("t_margin"))
+        if self.settings.contains("b_margin"):
+            self.b_margin = float(self.settings.value("b_margin"))
+
+        if self.settings.contains("zoom"):
+            self.zoom = int(self.settings.value("zoom"))
+        if self.settings.contains("layout"):
+            self.layout = int(self.settings.value("layout"))
+
+        if self.settings.contains("h_value"):
+            self.h_value = float(self.settings.value("h_value"))
+        if self.settings.contains("v_value"):
+            self.v_value = float(self.settings.value("v_value"))
+        if self.settings.contains("auto_resolution"):
+            self.auto_resolution = json.loads(self.settings.value("auto_resolution"))
+        if self.settings.contains("dpi"):
+            self.dpi = int(self.settings.value("dpi"))
+
+        if self.settings.contains("page_from"):
+            self.page_from = self.settings.value("page_from")
+        if self.settings.contains("page_to"):
+            self.page_to = self.settings.value("page_to")
+        if self.settings.contains("select_angle"):
+            self.select_angle = int(self.settings.value("select_angle"))
+
+        if self.settings.contains("page_from_grayscale"):
+            self.page_from_grayscale = self.settings.value("page_from_grayscale")
+        if self.settings.contains("page_to_grayscale"):
+            self.page_to_grayscale = self.settings.value("page_to_grayscale")
+        if self.settings.contains("select_scale"):
+            self.select_scale = int(self.settings.value("select_scale"))
+
+        if self.settings.contains("show_page_no"):
+            self.show_page_no = json.loads(self.settings.value("show_page_no"))
+        if self.settings.contains("page_starts"):
+            self.page_starts = int(self.settings.value("page_starts"))
+        if self.settings.contains("font_position"):
+            self.font_position = int(self.settings.value("font_position"))
+        if self.settings.contains("font_size"):
+            self.font_size = int(self.settings.value("font_size"))
+        if self.settings.contains("font_align"):
+            self.font_align = int(self.settings.value("font_align"))
+        if self.settings.contains("comboBox"):
+            self.comboBox = int(self.settings.value("comboBox"))
+
+        if self.settings.contains("bold"):
+            self.bold = json.loads(self.settings.value("bold"))
+        if self.settings.contains("italic"):
+            self.italic = json.loads(self.settings.value("italic"))
+        if self.settings.contains("underline"):
+            self.underline = json.loads(self.settings.value("underline"))
+
+        if self.settings.contains("r"):
+            self.r = int(self.settings.value("r"))
+        if self.settings.contains("g"):
+            self.g = int(self.settings.value("g"))
+        if self.settings.contains("b"):
+            self.b = int(self.settings.value("b"))
+
+        if self.settings.contains("keywords"):
+            self.keywords = self.settings.value("keywords")
+        if self.settings.contains("producer"):
+            self.producer = self.settings.value("producer")
+        if self.settings.contains("creator"):
+            self.creator = self.settings.value("creator")
+        if self.settings.contains("created_on"):
+            self.created_on = self.settings.value("created_on")
 
     def closeEvent(self, event):
         self.save_settings()
@@ -269,10 +447,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def enable_auto_manual_resolution(self):
         if self.advance_setting_ui.ui.auto_resolution.isChecked():
-            self.auto_resolution_button = True
             self.advance_setting_ui.ui.dpi.setEnabled(False)
         else:
-            self.auto_resolution_button = False
             self.advance_setting_ui.ui.dpi.setEnabled(True)
 
     def on_page_no(self):
@@ -367,65 +543,104 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.msg.clickedButton() == no_button:
             pass
 
-    def reset_advanced_settings(self):
-        def reset_ad_defaults():
-            #  unit measure
+    def advance_settings_defaults(self, default=True):
+        if default:
+            self.mm = True
+            self.cm = False
+            self.pt = False
+            self.inch = False
+            self.l_margin = 0.00
+            self.r_margin = 0.00
+            self.t_margin = 0.00
+            self.b_margin = 0.00
+            self.zoom = 0
+            self.layout = 0
+            self.h_value = 0.00
+            self.v_value = 0.00
+            self.auto_resolution = True
+            self.dpi = 150
+            self.page_from = ""
+            self.page_to = ""
+            self.select_angle = 0
+            self.page_from_grayscale = ""
+            self.page_to_grayscale = ""
+            self.select_scale = 0
+            self.show_page_no = True
+            self.page_starts = 1
+            self.font_position = 15
+            self.font_size = 8
+            self.font_align = 0
+            self.comboBox = 0
+            self.bold = False
+            self.italic = False
+            self.underline = False
+            self.r = 0
+            self.g = 0
+            self.b = 0
+            self.keywords = ""
+            self.producer = ""
+            self.creator = ""
+            self.created_on = ""
+
+        if self.mm:
             self.advance_setting_ui.ui.mm.setChecked(True)
-            self.advance_setting_ui.ui.h_value.setSuffix(f" mm")
-            self.advance_setting_ui.ui.v_value.setSuffix(f" mm")
-            self.advance_setting_ui.ui.l_margin.setSuffix(f" mm")
-            self.advance_setting_ui.ui.r_margin.setSuffix(f" mm")
-            self.advance_setting_ui.ui.t_margin.setSuffix(f" mm")
-            self.advance_setting_ui.ui.b_margin.setSuffix(f" mm")
-            self.advance_setting_ui.ui.font_position.setSuffix(f" mm")
+        if self.cm:
+            self.advance_setting_ui.ui.cm.setChecked(True)
+        if self.pt:
+            self.advance_setting_ui.ui.pt.setChecked(True)
+        if self.inch:
+            self.advance_setting_ui.ui.inch.setChecked(True)
+        self.change_default_unit()
 
-            # page margin:
-            self.advance_setting_ui.ui.l_margin.setValue(0.00)
-            self.advance_setting_ui.ui.r_margin.setValue(0.00)
-            self.advance_setting_ui.ui.t_margin.setValue(0.00)
-            self.advance_setting_ui.ui.b_margin.setValue(0.00)
+        # page margin:
+        self.advance_setting_ui.ui.l_margin.setValue(self.l_margin)
+        self.advance_setting_ui.ui.r_margin.setValue(self.r_margin)
+        self.advance_setting_ui.ui.t_margin.setValue(self.t_margin)
+        self.advance_setting_ui.ui.b_margin.setValue(self.b_margin)
 
-            # pdf page view
-            self.advance_setting_ui.ui.zoom.setCurrentIndex(0)
-            self.advance_setting_ui.ui.layout.setCurrentIndex(0)
+        # pdf page view
+        self.advance_setting_ui.ui.zoom.setCurrentIndex(self.zoom)
+        self.advance_setting_ui.ui.layout.setCurrentIndex(self.layout)
 
-            # image position on page
-            self.advance_setting_ui.ui.h_value.setValue(0.00)
-            self.advance_setting_ui.ui.v_value.setValue(0.00)
-            self.advance_setting_ui.ui.auto_resolution.setChecked(True)
-            self.advance_setting_ui.ui.dpi.setValue(150)
-            self.advance_setting_ui.ui.dpi.setEnabled(False)
+        # image position on page
+        self.advance_setting_ui.ui.h_value.setValue(self.h_value)
+        self.advance_setting_ui.ui.v_value.setValue(self.v_value)
+        self.advance_setting_ui.ui.auto_resolution.setChecked(self.auto_resolution)
+        self.advance_setting_ui.ui.dpi.setValue(self.dpi)
+        self.enable_auto_manual_resolution()
 
-            #  rotate pages
-            self.advance_setting_ui.ui.page_from.clear()
-            self.advance_setting_ui.ui.page_to.clear()
-            self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
+        #  rotate pages
+        self.advance_setting_ui.ui.page_from.setText(self.page_from)
+        self.advance_setting_ui.ui.page_to.setText(self.page_to)
+        self.advance_setting_ui.ui.select_angle.setCurrentIndex(self.select_angle)
 
-            #  grayscale pages
-            self.advance_setting_ui.ui.page_from_grayscale.clear()
-            self.advance_setting_ui.ui.page_to_grayscale.clear()
-            self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
+        #  grayscale pages
+        self.advance_setting_ui.ui.page_from_grayscale.setText(self.page_from_grayscale)
+        self.advance_setting_ui.ui.page_to_grayscale.setText(self.page_to_grayscale)
+        self.advance_setting_ui.ui.select_scale.setCurrentIndex(self.select_scale)
 
-            # page number
-            self.advance_setting_ui.ui.show_page_no.setChecked(False)
-            self.advance_setting_ui.ui.page_starts.setValue(1)
-            self.advance_setting_ui.ui.font_position.setValue(15)
-            self.advance_setting_ui.ui.font_size.setValue(8)
-            self.advance_setting_ui.ui.font_align.setCurrentIndex(0)
-            self.advance_setting_ui.ui.comboBox.setCurrentIndex(0)
-            self.advance_setting_ui.ui.bold.setChecked(False)
-            self.advance_setting_ui.ui.italic.setChecked(False)
-            self.advance_setting_ui.ui.underline.setChecked(False)
-            self.advance_setting_ui.ui.r.setValue(0)
-            self.advance_setting_ui.ui.g.setValue(0)
-            self.advance_setting_ui.ui.b.setValue(0)
+        # page number
+        self.advance_setting_ui.ui.show_page_no.setChecked(self.show_page_no)
+        self.on_page_no()
+        self.advance_setting_ui.ui.page_starts.setValue(self.page_starts)
+        self.advance_setting_ui.ui.font_position.setValue(self.font_position)
+        self.advance_setting_ui.ui.font_size.setValue(self.font_size)
+        self.advance_setting_ui.ui.font_align.setCurrentIndex(self.font_align)
+        self.advance_setting_ui.ui.comboBox.setCurrentIndex(self.comboBox)
+        self.advance_setting_ui.ui.bold.setChecked(self.bold)
+        self.advance_setting_ui.ui.italic.setChecked(self.italic)
+        self.advance_setting_ui.ui.underline.setChecked(self.underline)
+        self.advance_setting_ui.ui.r.setValue(self.r)
+        self.advance_setting_ui.ui.g.setValue(self.g)
+        self.advance_setting_ui.ui.b.setValue(self.b)
 
-            # meta data
-            self.advance_setting_ui.ui.keywords.clear()
-            self.advance_setting_ui.ui.producer.clear()
-            self.advance_setting_ui.ui.creator.clear()
-            self.advance_setting_ui.ui.created_on.clear()
+        # meta data
+        self.advance_setting_ui.ui.keywords.setText(self.keywords)
+        self.advance_setting_ui.ui.producer.setText(self.producer)
+        self.advance_setting_ui.ui.creator.setText(self.creator)
+        self.advance_setting_ui.ui.created_on.setText(self.created_on)
 
+    def reset_advanced_settings(self):
         self.msg = QMessageBox()
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.msg.setStyleSheet(self.pop_up_stylesheet)
@@ -435,7 +650,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         no_button = self.msg.addButton(QMessageBox.No)
         self.msg.exec_()
         if self.msg.clickedButton() == yes_button:
-            reset_ad_defaults()
+            self.advance_settings_defaults(default=True)
         if self.msg.clickedButton() == no_button:
             pass
 
@@ -485,7 +700,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.general_setting_ui.ui.all_files.setChecked(False)
 
         if self.filter_array:
-            self.filter = "Images (" + "".join(self.filter_array) + ")"
+            self.filter = "Images (" + " ".join(self.filter_array) + ")"
         else:
             self.filter = "*"
 
@@ -822,7 +1037,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             self.get_all_selected_items()
             if len(self.selected_list) == 0:
-                self.popup_message(title="No image selected!", message="Please select images checkbox for move up")
+                self.popup_message(title="No image checkbox selected!", message="Please select an image's checkbox in order to move up")
                 return
             for selected_item in self.selected_list:
                 pos2 = selected_item
@@ -847,7 +1062,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.get_all_selected_items()
             self.selected_list.reverse()
             if len(self.selected_list) == 0:
-                self.popup_message(title="No image selected!", message="Please select images checkbox for move down")
+                self.popup_message(title="No image checkbox selected!", message="Please select an image's checkbox in order to move down")
                 return
             for selected_item in self.selected_list:
                 pos2 = selected_item
@@ -995,56 +1210,82 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.sort.setCurrentIndex(0)
 
     def load_images(self):
-        self.ui.stop.setEnabled(False)
-        if self.file_dialog == "native":
-            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
-                                                               self.filter)
-        else:
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-            self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
-                                                               self.filter,
-                                                               options=options)
-        if len(self.load_images) == 0:
-            return False
+        try:
+            is_running = self.convert_pdf_thread.isRunning()
+        except Exception as e:
+            is_running = False
 
-        self.load_images, invalid_list = get_valid_images(self.load_images)
-        if invalid_list:
-            message = "\n".join(invalid_list)
-            self.popup_message(title="Invalid image file(s)! Please import valid image file",
-                               message=message)
-        self.all_images_list += self.load_images
-        self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
-        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
-        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
-        self.pixmap_load_thread.start()
+        try:
+            is_running_pixmap = self.pixmap_load_thread.isRunning()
+        except Exception as e:
+            is_running_pixmap = False
+
+        if is_running or is_running_pixmap:
+            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
+        else:
+            self.ui.stop.setEnabled(False)
+            if self.file_dialog == "native":
+                self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
+                                                                   self.filter)
+            else:
+                options = QFileDialog.Options()
+                options |= QFileDialog.DontUseNativeDialog
+                self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
+                                                                   self.filter,
+                                                                   options=options)
+            if len(self.load_images) == 0:
+                return False
+
+            self.load_images, invalid_list = get_valid_images(self.load_images)
+            if invalid_list:
+                message = "\n".join(invalid_list)
+                self.popup_message(title="Invalid image file(s)! Please import valid image file",
+                                   message=message)
+            self.all_images_list += self.load_images
+            self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
+            self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+            self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+            self.pixmap_load_thread.start()
 
     def load_folder(self):
-        self.ui.stop.setEnabled(False)
-        self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.Default_loc_import,
-                                                              QFileDialog.ShowDirsOnly
-                                                              | QFileDialog.DontResolveSymlinks)
-        if not self.select_folder:
-            return False
+        try:
+            is_running = self.convert_pdf_thread.isRunning()
+        except Exception as e:
+            is_running = False
 
-        self.load_images = load_images_from_folder(self.select_folder, self.filter_array)
+        try:
+            is_running_pixmap = self.pixmap_load_thread.isRunning()
+        except Exception as e:
+            is_running_pixmap = False
 
-        if len(self.load_images) == 0:
-            self.popup_message(title="Images not found!",
-                               message="Selected folder might be empty or image extension does not match.\n\n"
-                                       "TIP: Go to settings and enable specific image extension")
-            return False
+        if is_running or is_running_pixmap:
+            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
+        else:
+            self.ui.stop.setEnabled(False)
+            self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.Default_loc_import,
+                                                                  QFileDialog.ShowDirsOnly
+                                                                  | QFileDialog.DontResolveSymlinks)
+            if not self.select_folder:
+                return False
 
-        self.load_images, invalid_list = get_valid_images(self.load_images)
-        if invalid_list:
-            message = "\n".join(invalid_list)
-            self.popup_message(title="Invalid image file(s)! Please import valid image file",
-                               message=message)
-        self.all_images_list += self.load_images
-        self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
-        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
-        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
-        self.pixmap_load_thread.start()
+            self.load_images = load_images_from_folder(self.select_folder, self.filter_array)
+
+            if len(self.load_images) == 0:
+                self.popup_message(title="Images not found!",
+                                   message="Selected folder might be empty or image extension does not match.\n\n"
+                                           "TIP: Go to settings and enable specific image extension")
+                return False
+
+            self.load_images, invalid_list = get_valid_images(self.load_images)
+            if invalid_list:
+                message = "\n".join(invalid_list)
+                self.popup_message(title="Invalid image file(s)! Please import valid image file",
+                                   message=message)
+            self.all_images_list += self.load_images
+            self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
+            self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+            self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+            self.pixmap_load_thread.start()
 
     def setProgressVal_pixmap(self, pixmap_dict):
         progress = pixmap_dict.get("progress")
@@ -1495,7 +1736,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             is_running = False
 
-        if is_running:
+        try:
+            is_running_pixmap = self.pixmap_load_thread.isRunning()
+        except Exception as e:
+            is_running_pixmap = False
+
+        if is_running or is_running_pixmap:
             self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
         else:
             self.get_all_selected_items()
