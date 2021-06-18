@@ -356,4 +356,3 @@ class Ui_AccountUI(object):
         self.toolButton_35.setText(_translate("AccountUI", "..."))
         self.toolButton_37.setText(_translate("AccountUI", "..."))
         self.error_message.setText(_translate("AccountUI", "<html><head/><body><p align=\"center\"><span style=\" color:#ef2929;\">Error Message</span></p></body></html>"))
-import resource_rc

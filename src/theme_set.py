@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QFile, QTextStream
 
-THEME_DICT = {"dark": "theme/dark.qss", "light": "theme/light.qss"}
+THEME_DICT = {"dark": "dark.qss", "light": "light.qss"}
 
 
 def set_theme(self, theme):

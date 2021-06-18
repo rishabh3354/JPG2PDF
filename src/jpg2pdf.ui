@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1162</width>
+    <width>1187</width>
     <height>702</height>
    </rect>
   </property>
@@ -821,8 +821,8 @@
   </action>
  </widget>
  <resources>
-  <include location="theme/dark.qrc"/>
-  <include location="theme/light.qrc"/>
+  <include location="light.qrc"/>
+  <include location="dark.qrc"/>
  </resources>
  <connections/>
 </ui>

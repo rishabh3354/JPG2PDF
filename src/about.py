@@ -159,4 +159,3 @@ class Ui_AboutUI(object):
         self.feedback_button.setText(_translate("AboutUI", "Feedback"))
         self.donate_button.setText(_translate("AboutUI", "Donate"))
         self.ge_more_apps.setText(_translate("AboutUI", "Get More Apps"))
-import resource_rc
