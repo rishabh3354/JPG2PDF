@@ -901,9 +901,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.msg.exec_()
         try:
             if self.msg.clickedButton() == open_folder:
-                QDesktopServices.openUrl(QUrl(folder_path))
+                QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
             elif self.msg.clickedButton() == open_pdf:
-                QDesktopServices.openUrl(QUrl(play_path))
+                QDesktopServices.openUrl(QUrl.fromLocalFile(str(play_path)))
             elif self.msg.clickedButton() == close:
                 pass
         except Exception as e:
