@@ -187,7 +187,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.bmp.clicked.connect(self.set_image_filter)
         self.general_setting_ui.ui.all_files.clicked.connect(self.set_filter_disable)
         self.general_setting_ui.ui.close.clicked.connect(self.hide_general_settings)
-        self.general_setting_ui.ui.icon_size.textChanged.connect(self.adjust_thumbnail_size)
+        self.general_setting_ui.ui.icon_size.valueChanged.connect(self.adjust_thumbnail_size)
         self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
         self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
 
