@@ -12,7 +12,7 @@ class AdvanceSettingPage(QWidget):
         QWidget.__init__(self)
         self.ui = Ui_AdvanceSettings()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | Advance Settings")
+        self.setWindowTitle("JPG2PDF PRO | Advanced Settings")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()
@@ -26,7 +26,7 @@ class AppSettingPage(QWidget):
         QWidget.__init__(self)
         self.ui = Ui_AppSettings()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | General Settings")
+        self.setWindowTitle("JPG2PDF PRO | App Settings")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()

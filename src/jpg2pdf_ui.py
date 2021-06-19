@@ -585,7 +585,7 @@ class Ui_MainWindow(object):
         self.pdf_name.setPlaceholderText(_translate("MainWindow", "PDF export name"))
         self.label_27.setText(_translate("MainWindow", "Orientation"))
         self.label.setText(_translate("MainWindow", "PDF Export name"))
-        self.more_setting_button.setText(_translate("MainWindow", "Advance PDF settings"))
+        self.more_setting_button.setText(_translate("MainWindow", "Advanced PDF settings"))
         self.page_format.setItemText(0, _translate("MainWindow", "Auto"))
         self.page_format.setItemText(1, _translate("MainWindow", "A3"))
         self.page_format.setItemText(2, _translate("MainWindow", "A4"))

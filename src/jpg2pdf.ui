@@ -837,7 +837,7 @@ border: none;
              <item row="3" column="0" colspan="2">
               <widget class="QPushButton" name="more_setting_button">
                <property name="text">
-                <string>Advance PDF settings</string>
+                <string>Advanced PDF settings</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
