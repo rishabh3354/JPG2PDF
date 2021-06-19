@@ -98,3 +98,16 @@ def check_for_already_file_exists(download_path, pdf_settings):
             return True, title, output_path
     except Exception as e:
         return False, title, output_path
+
+
+def check_if_pro_feature_used(pdf_settings):
+    pro_keys = ["keywords", "producer", "creator", "created_on", "rotation_angle", "scale_type",
+                "h_value", "v_value", "show_page_no", "magnification", "layout", "l_margin", "r_margin",
+                "t_margin", "b_margin", "auto_resolution"]
+
+    for keys in pdf_settings.keys():
+        if keys in pro_keys:
+            print(keys)
+            return True
+
+    return False

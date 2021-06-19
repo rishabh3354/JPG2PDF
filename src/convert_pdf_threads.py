@@ -109,7 +109,7 @@ class ConvertToPdfThread(QtCore.QThread):
 
         # DPI
         self.dpi = self.pdf_settings.get("dpi", 0.00)
-        self.auto_resolution = self.pdf_settings.get("auto_resolution", False)
+        self.auto_resolution = self.pdf_settings.get("auto_resolution", True)
 
     def convert_in_unit(self, input_value):
         converted_value = 0

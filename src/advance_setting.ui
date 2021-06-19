@@ -56,7 +56,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-588</y>
+          <y>-589</y>
           <width>612</width>
           <height>1094</height>
          </rect>
@@ -1118,7 +1118,7 @@ p, li { white-space: pre-wrap; }
                    <string/>
                   </property>
                   <property name="placeholderText">
-                   <string>Created on (eg. yyyy/mm/dd)</string>
+                   <string>Created on (eg. yyyy-mm-dd)</string>
                   </property>
                  </widget>
                 </item>

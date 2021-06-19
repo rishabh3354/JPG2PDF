@@ -499,7 +499,7 @@ class Ui_MainWindow(object):
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setIconSize(QtCore.QSize(55, 30))
         self.toolBar.setObjectName("toolBar")
-        MainWindow.addToolBar(QtCore.Qt.BottomToolBarArea, self.toolBar)
+        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actionAdd_image = QtWidgets.QAction(MainWindow)
         icon18 = QtGui.QIcon()
         icon18.addPixmap(QtGui.QPixmap(":/myresource/resource/icons8-add-image-96.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

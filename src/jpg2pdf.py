@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeader
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
 from qtpy.QtGui import QDesktopServices
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
-    check_for_already_file_exists, get_valid_images, check_internet_connection
+    check_for_already_file_exists, get_valid_images, check_internet_connection, check_if_pro_feature_used
 from convert_pdf_threads import ConvertToPdfThread
 from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage
 from pixmap_loading_thread import PixMapLoadingThread
@@ -116,6 +116,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.creator = ""
         self.created_on = ""
 
+        # plan flags ---------------------------------------------------------------------------------------------------------
+        self.one_time_congratulate = True
+        self.is_plan_active = True
+
         self.load_settings()
         self.general_setting_defaults(default=False)
         self.advance_settings_defaults(default=False)
@@ -189,8 +193,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
 
         # accounts page
-        self.one_time_congratulate = True
-        self.is_plan_active = True
         ApplicationStartupTask(PRODUCT_NAME).create_free_trial_offline()
         self.account_ui.ui.error_message.clear()
         self.account_ui.ui.error_message.setStyleSheet("color:red;")
@@ -281,6 +283,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("producer", self.advance_setting_ui.ui.producer.text())
         self.settings.setValue("creator", self.advance_setting_ui.ui.creator.text())
         self.settings.setValue("created_on", self.advance_setting_ui.ui.created_on.text())
+
+        # one time congratulate
+        self.settings.setValue("one_time_congratulate", self.one_time_congratulate)
 
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
@@ -401,6 +406,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.creator = self.settings.value("creator")
         if self.settings.contains("created_on"):
             self.created_on = self.settings.value("created_on")
+
+        # one time congratulate
+        if self.settings.contains("one_time_congratulate"):
+            self.one_time_congratulate = json.loads(self.settings.value("one_time_congratulate"))
 
     def closeEvent(self, event):
         self.save_settings()
@@ -565,7 +574,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.page_from_grayscale = ""
             self.page_to_grayscale = ""
             self.select_scale = 0
-            self.show_page_no = True
+            self.show_page_no = False
             self.page_starts = 1
             self.font_position = 15
             self.font_size = 8
@@ -996,6 +1005,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
 
     def ok_setting_clicked(self):
+        pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
+        if pro_plan_status:
+            if not self.check_your_plan():
+                self.advance_settings_defaults(default=True)
+                self.popup_message("Your PDF Advanced settings was Reset!",
+                                   "Your can still use JPG2PDF free version without Advanced features. "
+                                   "Your advanced setting is not saved for this PDF.")
         self.advance_setting_ui.hide()
 
     def hide_general_settings(self):
@@ -1036,7 +1052,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             self.get_all_selected_items()
             if len(self.selected_list) == 0:
-                self.popup_message(title="No image checkbox selected!", message="Please select an image's checkbox in order to move up")
+                self.popup_message(title="No image checkbox selected!",
+                                   message="Please select an image's checkbox in order to move up")
                 return
             for selected_item in self.selected_list:
                 pos2 = selected_item
@@ -1061,7 +1078,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.get_all_selected_items()
             self.selected_list.reverse()
             if len(self.selected_list) == 0:
-                self.popup_message(title="No image checkbox selected!", message="Please select an image's checkbox in order to move down")
+                self.popup_message(title="No image checkbox selected!",
+                                   message="Please select an image's checkbox in order to move down")
                 return
             for selected_item in self.selected_list:
                 pos2 = selected_item
@@ -1630,8 +1648,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         pdf_settings["page_to"] = page_to
 
                 pdf_settings["rotation_angle"] = \
-                str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
-                    0].strip()
+                    str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
+                        0].strip()
 
             #  grayscale page
             page_to = self.advance_setting_ui.ui.page_to_grayscale.text()
@@ -1701,26 +1719,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pdf_settings["underline"] = "U"
 
             #  page display mode:-
-            pdf_settings["magnification"] = self.advance_setting_ui.ui.zoom.currentText()
-            pdf_settings["layout"] = self.advance_setting_ui.ui.layout.currentText()
+            if self.advance_setting_ui.ui.zoom.currentIndex() != 0:
+                pdf_settings["magnification"] = self.advance_setting_ui.ui.zoom.currentText()
+            if self.advance_setting_ui.ui.layout.currentIndex() != 0:
+                pdf_settings["layout"] = self.advance_setting_ui.ui.layout.currentText()
 
             # page margins:-
-            pdf_settings["l_margin"] = self.advance_setting_ui.ui.l_margin.value()
-            pdf_settings["r_margin"] = self.advance_setting_ui.ui.r_margin.value()
-            pdf_settings["t_margin"] = self.advance_setting_ui.ui.t_margin.value()
-            pdf_settings["b_margin"] = self.advance_setting_ui.ui.b_margin.value()
+            if self.advance_setting_ui.ui.l_margin.value() > 0:
+                pdf_settings["l_margin"] = self.advance_setting_ui.ui.l_margin.value()
+            if self.advance_setting_ui.ui.r_margin.value() > 0:
+                pdf_settings["r_margin"] = self.advance_setting_ui.ui.r_margin.value()
+            if self.advance_setting_ui.ui.t_margin.value() > 0:
+                pdf_settings["t_margin"] = self.advance_setting_ui.ui.t_margin.value()
+            if self.advance_setting_ui.ui.b_margin.value() > 0:
+                pdf_settings["b_margin"] = self.advance_setting_ui.ui.b_margin.value()
 
             # DPI
             pdf_settings["dpi"] = self.advance_setting_ui.ui.dpi.value()
-            if self.advance_setting_ui.ui.auto_resolution.isChecked():
-                pdf_settings["auto_resolution"] = True
-            else:
+            if not self.advance_setting_ui.ui.auto_resolution.isChecked():
                 pdf_settings["auto_resolution"] = False
 
         except Exception as e:
             status = False
 
-        return pdf_settings, status
+        pro_plan_status = check_if_pro_feature_used(pdf_settings)
+        return pdf_settings, status, pro_plan_status
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
         self.convert_pdf_thread = ConvertToPdfThread(selected_list_items, download_path, pdf_settings)
@@ -1747,7 +1770,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.selected_list:
                 selected_list_items = [self.all_images_list[i] for i in self.selected_list]
                 download_path = get_download_path(self.Default_loc)
-                pdf_settings, status = self.get_pdf_setting_all()
+                pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
+                if pro_plan_status:
+                    if not self.check_your_plan():
+                        self.advance_settings_defaults(default=True)
+                        self.popup_message("Your PDF Advanced settings was Reset!",
+                                           "Your can still use JPG2PDF free version without Advanced features. "
+                                           "Your advanced setting is not saved for this PDF.")
+                        return False
                 if status:
                     self.progress_bar_enable()
                     if self.overwrite_warning:
@@ -1910,6 +1940,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.account_ui.ui.purchase_licence.setEnabled(False)
             self.account_ui.ui.refresh_account.setEnabled(False)
             self.account_ui.ui.lineEdit_plan.setText(plan)
+            self.account_ui.ui.groupBox_12.setVisible(False)
+            self.account_ui.resize(600, 400)
             if self.one_time_congratulate:
                 self.account_ui.ui.account_progress_bar.setRange(0, 1)
                 self.account_ui.ui.account_progress_bar.setVisible(False)
@@ -1920,7 +1952,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.account_ui.ui.lineEdit_plan.setText(plan)
         if expiry_date:
             if plan == "Life Time Free Plan":
-                self.account_ui.ui.lineEdit_expires_on.setText("Active")
+                self.account_ui.ui.lineEdit_expires_on.setText(f"{PRODUCT_NAME} PRO VERSION")
+                self.is_plan_active = True
             else:
                 plan_days_left = days_left(expiry_date)
                 if plan_days_left == "0 Day(s) Left":
@@ -1937,10 +1970,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.is_plan_active:
             self.msg = QMessageBox()
             self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-            self.msg.setStyleSheet("background-color:rgb(48,48,48);color:white;")
+            self.msg.setStyleSheet(self.pop_up_stylesheet)
             self.msg.setIcon(QMessageBox.Information)
             self.msg.setText("Evaluation period ended, Upgrade to Pro")
-            self.msg.setInformativeText("Please purchase a licence to Unlock this feature")
+            self.msg.setInformativeText("In JPG2PDF free version, Advanced settings option is not available. "
+                                        "Please support the developer and purchase a license to UNLOCK this feature.")
             purchase = self.msg.addButton(QMessageBox.Yes)
             close = self.msg.addButton(QMessageBox.Yes)
             purchase.setText('Purchase Licence')
@@ -1950,7 +1984,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.exec_()
             try:
                 if self.msg.clickedButton() == purchase:
-                    self.account_page()
+                    self.show_account_page()
                 elif self.msg.clickedButton() == close:
                     pass
             except Exception as e:
