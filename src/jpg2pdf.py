@@ -64,7 +64,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # general settings initials ------------------------------------------------------------------------------------
         self.theme = 'dark'
         self.general_setting_ui.ui.dark.setChecked(True)
-        self.file_dialog = 'qt'
+        self.file_dialog = 'native'
         self.main_table_pointer = 70
         self.ask_for_export = True
         self.overwrite_warning = True
@@ -471,7 +471,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if default:
             self.theme = 'dark'
             self.general_setting_ui.ui.dark.setChecked(True)
-            self.file_dialog = 'qt'
+            self.file_dialog = 'native'
             self.main_table_pointer = 70
             self.ask_for_export = True
             self.overwrite_warning = True
@@ -1224,6 +1224,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selected_list = []
         self.all_pixmap_data = []
         self.ui.sort.setCurrentIndex(0)
+        self.ui.image_label.setText(f"Image 0 of 0")
 
     def load_images(self):
         try:

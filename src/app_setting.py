@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AppSettings(object):
     def setupUi(self, AppSettings):
         AppSettings.setObjectName("AppSettings")
-        AppSettings.resize(647, 656)
+        AppSettings.resize(647, 678)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(AppSettings)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -33,7 +33,7 @@ class Ui_AppSettings(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 627, 505))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 627, 527))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")

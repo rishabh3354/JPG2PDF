@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AccountUI(object):
     def setupUi(self, AccountUI):
         AccountUI.setObjectName("AccountUI")
-        AccountUI.resize(733, 758)
+        AccountUI.resize(733, 773)
         self.verticalLayout = QtWidgets.QVBoxLayout(AccountUI)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
