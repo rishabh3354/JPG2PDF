@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1271</width>
-    <height>702</height>
+    <width>1270</width>
+    <height>714</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,13 +114,30 @@
         <item>
          <widget class="QGroupBox" name="groupBox_4">
           <property name="title">
-           <string> Options</string>
+           <string>OPTIONS</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
             <layout class="QGridLayout" name="gridLayout_25">
-             <item row="0" column="4">
-              <widget class="QToolButton" name="moveup">
+             <item row="3" column="7">
+              <widget class="QPushButton" name="stop">
+               <property name="text">
+                <string>Stop</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-stop-96.png</normaloff>:/myresource/resource/icons8-stop-96.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>22</width>
+                 <height>22</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4" colspan="3">
+              <widget class="QPushButton" name="show_full_path">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -128,57 +145,46 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Move Up</string>
+                <string>full path</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-file-preview-96.png</normaloff>:/myresource/resource/icons8-file-preview-96.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>19</width>
+                 <height>19</height>
+                </size>
                </property>
               </widget>
              </item>
-             <item row="0" column="6">
-              <widget class="QLabel" name="image_label">
-               <property name="text">
-                <string>Image 0 of 0</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QToolButton" name="movedown">
+             <item row="0" column="0" colspan="4">
+              <widget class="QComboBox" name="selectall">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text">
-                <string>Move Down</string>
-               </property>
+               <item>
+                <property name="text">
+                 <string>Select Item</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Select All</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Deselect All</string>
+                </property>
+               </item>
               </widget>
              </item>
-             <item row="0" column="3">
-              <widget class="QToolButton" name="duplicate">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Duplicate</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="6">
-              <widget class="QPushButton" name="change">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Change</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="5" colspan="2">
+             <item row="3" column="8" colspan="2">
               <widget class="QPushButton" name="start_convert">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -189,10 +195,149 @@
                <property name="text">
                 <string>Start Convert</string>
                </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-play-100.png</normaloff>:/myresource/resource/icons8-play-100.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>22</width>
+                 <height>22</height>
+                </size>
+               </property>
               </widget>
              </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_49">
+             <item row="3" column="1" colspan="6">
+              <widget class="QProgressBar" name="progress_bar">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QProgressBar{
+height: 28px;
+}</string>
+               </property>
+               <property name="value">
+                <number>24</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="image_label">
+               <property name="text">
+                <string>Image 0 of 0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="7">
+              <widget class="QPushButton" name="moveup">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QToolButton{
+
+border: none;
+}</string>
+               </property>
+               <property name="text">
+                <string>Move Up</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-scroll-up-96.png</normaloff>:/myresource/resource/icons8-scroll-up-96.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>19</width>
+                 <height>19</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="8">
+              <widget class="QPushButton" name="movedown">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QToolButton{
+
+border: none;
+}</string>
+               </property>
+               <property name="text">
+                <string>Move Down</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-scroll-down-96.png</normaloff>:/myresource/resource/icons8-scroll-down-96.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>19</width>
+                 <height>19</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="9">
+              <widget class="QPushButton" name="duplicate">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Duplicate</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-remove-delivery-96.png</normaloff>:/myresource/resource/icons8-remove-delivery-96.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>19</width>
+                 <height>19</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="9">
+              <widget class="QPushButton" name="hide_image">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Hide icons</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-image-90.png</normaloff>:/myresource/resource/icons8-image-90.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>19</width>
+                 <height>19</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="8">
+              <widget class="QPushButton" name="change">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -202,32 +347,19 @@
                <property name="text">
                 <string>Export path</string>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-export-52.png</normaloff>:/myresource/resource/icons8-export-52.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>18</width>
+                 <height>18</height>
+                </size>
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QToolButton" name="show_full_path">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Show full path</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="4">
-              <widget class="QPushButton" name="stop">
-               <property name="text">
-                <string>Stop</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
+             <item row="2" column="0" colspan="3">
               <widget class="QComboBox" name="sort">
                <item>
                 <property name="text">
@@ -246,39 +378,7 @@
                </item>
               </widget>
              </item>
-             <item row="0" column="0" colspan="2">
-              <widget class="QComboBox" name="selectall">
-               <item>
-                <property name="text">
-                 <string>Select Item</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Select All</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Deselect All</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QToolButton" name="hide_image">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Hide icons</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3" colspan="3">
+             <item row="2" column="3" colspan="5">
               <widget class="QLineEdit" name="output_path">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -288,19 +388,6 @@
                </property>
                <property name="readOnly">
                 <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0" colspan="4">
-              <widget class="QProgressBar" name="progress_bar">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="value">
-                <number>24</number>
                </property>
               </widget>
              </item>
@@ -361,6 +448,16 @@
             <property name="text">
              <string>Select</string>
             </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
@@ -374,18 +471,15 @@
             <property name="text">
              <string>Preview</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="remove_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-show-property-96.png</normaloff>:/myresource/resource/icons8-show-property-96.png</iconset>
             </property>
-            <property name="text">
-             <string>Remove</string>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -400,6 +494,16 @@
             <property name="text">
              <string>Zoom In</string>
             </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-zoom-in-52.png</normaloff>:/myresource/resource/icons8-zoom-in-52.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
@@ -413,6 +517,16 @@
             <property name="text">
              <string>Zoom out</string>
             </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-zoom-out-52.png</normaloff>:/myresource/resource/icons8-zoom-out-52.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
@@ -423,8 +537,44 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>Rotate</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-rotate-96.png</normaloff>:/myresource/resource/icons8-rotate-96.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="remove_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Remove</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-multiply-96.png</normaloff>:/myresource/resource/icons8-multiply-96.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -433,7 +583,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QToolButton" name="prev">
+           <widget class="QPushButton" name="prev">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -443,10 +593,20 @@
             <property name="text">
              <string>Prev</string>
             </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-go-back-90.png</normaloff>:/myresource/resource/icons8-go-back-90.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="next">
+           <widget class="QPushButton" name="next">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -455,6 +615,16 @@
             </property>
             <property name="text">
              <string>Next</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/myresource/resource/icons8-forward-button-90.png</normaloff>:/myresource/resource/icons8-forward-button-90.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -469,7 +639,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>   PDF Properties</string>
+           <string>   PDF PROPERTIES</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_12">
            <item>
@@ -629,7 +799,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>   PDF Settings</string>
+           <string>   PDF SETTINGS</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_15">
            <item>
@@ -668,6 +838,16 @@
               <widget class="QPushButton" name="more_setting_button">
                <property name="text">
                 <string>Advance PDF settings</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-settings-96.png</normaloff>:/myresource/resource/icons8-settings-96.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>22</width>
+                 <height>22</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -722,8 +902,21 @@
              </item>
              <item row="3" column="2">
               <widget class="QToolButton" name="info_main">
+               <property name="toolTip">
+                <string>pdf setting help</string>
+               </property>
                <property name="text">
-                <string>i</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>23</width>
+                 <height>23</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -774,8 +967,14 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>55</width>
+     <height>30</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
+    <enum>BottomToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
@@ -789,36 +988,64 @@
    <addaction name="actionAbout"/>
   </widget>
   <action name="actionAdd_image">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-add-image-96.png</normaloff>:/myresource/resource/icons8-add-image-96.png</iconset>
+   </property>
    <property name="text">
     <string>Add images</string>
    </property>
   </action>
   <action name="actionAdd_folder">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-add-folder-96.png</normaloff>:/myresource/resource/icons8-add-folder-96.png</iconset>
+   </property>
    <property name="text">
     <string>Add folder</string>
    </property>
   </action>
   <action name="actionAccount">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-account-96.png</normaloff>:/myresource/resource/icons8-account-96.png</iconset>
+   </property>
    <property name="text">
     <string>Account</string>
    </property>
   </action>
   <action name="actionClear_all">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-delete-bin-96.png</normaloff>:/myresource/resource/icons8-delete-bin-96.png</iconset>
+   </property>
    <property name="text">
     <string>Clear all</string>
    </property>
   </action>
   <action name="actionRemove_Selected">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-multiply-52.png</normaloff>:/myresource/resource/icons8-multiply-52.png</iconset>
+   </property>
    <property name="text">
     <string>Remove Selected</string>
    </property>
   </action>
   <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-settings-96.png</normaloff>:/myresource/resource/icons8-settings-96.png</iconset>
+   </property>
    <property name="text">
     <string>Settings</string>
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
@@ -826,6 +1053,7 @@
  </widget>
  <resources>
   <include location="light.qrc"/>
+  <include location="resource.qrc"/>
   <include location="dark.qrc"/>
  </resources>
  <connections/>

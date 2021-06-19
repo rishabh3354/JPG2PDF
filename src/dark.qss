@@ -719,7 +719,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbar
 
 --------------------------------------------------------------------------- */
 QToolBar {
-  background-color: #455364;
+/*  background-color: #455364;*/
   border-bottom: 1px solid #19232D;
   padding: 1px;
   font-weight: bold;
@@ -1034,10 +1034,10 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbutton
 
 --------------------------------------------------------------------------- */
 QToolButton {
-  background-color: #455364;
+/*  background-color: #455364;*/
   color: #E0E1E3;
   border-radius: 4px;
-  padding: 4px;
+  padding: 3px;
   outline: none;
   border: none;
   /* The subcontrols below are used only in the DelayedPopup mode */

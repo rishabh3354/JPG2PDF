@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>680</width>
-    <height>517</height>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,25 +15,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>About</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="font">
+        <font>
+         <family>Ubuntu Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu Mono'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:18pt; font-weight:600; color:#888a85;&quot;&gt;ABOUT&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/myresource/resource/icons8-info-104.png&quot; width=&quot;45&quot; /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_23">
@@ -66,13 +76,11 @@ border-radius:2px;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/myresource/resource/icon.png&quot; width=&quot;70&quot; height=&quot;70&quot; /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt;Y2MATE PRO&lt;/span&gt;&lt;span style=&quot; color:#d1d1d1;&quot;&gt; For Linux Desktop&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt;Developer Email:&lt;/span&gt;&lt;span style=&quot; color:#d1d1d1;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;mailto: contact@warlordsoftwares.in&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#d1d1d1;&quot;&gt;contact@warlordsoftwares.in&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt;Version: 0.2 &lt;/span&gt;&lt;span style=&quot; color:#d1d1d1;&quot;&gt;|&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt; Language used: &lt;/span&gt;&lt;span style=&quot; color:#d1d1d1;&quot;&gt;Python (PyQt5)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#d1d1d1;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/myresource/resource/jpg2pdf.png&quot; width=&quot;110&quot; /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#888a85;&quot;&gt;JPG2PDF PRO&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#888a85;&quot;&gt;Language used: &lt;/span&gt;&lt;span style=&quot; color:#888a85;&quot;&gt;Python (PyQt5)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#888a85;&quot;&gt;Version: 0.1&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#888a85;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -112,11 +120,12 @@ border-radius:2px;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/myresource/resource/user_blue.png&quot; width=&quot;100&quot; height=&quot;100&quot; /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#d1d1d1;&quot;&gt;Developed by:&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt;Rishabh Bhardwaj (S.D.E)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt;Checkout &lt;/span&gt;&lt;a href=&quot;https://github.com/rishabh3354&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#d1d1d1;&quot;&gt;GitHub&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600; color:#d1d1d1;&quot;&gt; | &lt;/span&gt;&lt;a href=&quot;https://www.buymeacoffee.com/rishabh33&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#d1d1d1;&quot;&gt;BuyMeCoffee&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#d1d1d1;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/myresource/resource/user_blue.png&quot; width=&quot;90&quot; /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#888a85;&quot;&gt;Developed by:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#888a85;&quot;&gt;Rishabh Bhardwaj (S.D.E)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#888a85;&quot;&gt;Checkout &lt;/span&gt;&lt;a href=&quot;https://github.com/rishabh3354&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#888a85;&quot;&gt;GitHub&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600; color:#888a85;&quot;&gt; | &lt;/span&gt;&lt;a href=&quot;https://www.buymeacoffee.com/rishabh33&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#888a85;&quot;&gt;BuyMeCoffee&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#888a85;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -141,13 +150,13 @@ p, li { white-space: pre-wrap; }
         <string>Visit @WarlordSoft</string>
        </property>
        <property name="icon">
-        <iconset resource="../../Y2MATE/src/resource.qrc">
-         <normaloff>:/myresource/resource/link.png</normaloff>:/myresource/resource/link.png</iconset>
+        <iconset resource="resource.qrc">
+         <normaloff>:/myresource/resource/icons8-link-52.png</normaloff>:/myresource/resource/icons8-link-52.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>25</width>
+         <height>25</height>
         </size>
        </property>
       </widget>
@@ -170,13 +179,13 @@ p, li { white-space: pre-wrap; }
         <string>Rate</string>
        </property>
        <property name="icon">
-        <iconset resource="../../Y2MATE/src/resource.qrc">
-         <normaloff>:/myresource/resource/facebook-like.png</normaloff>:/myresource/resource/facebook-like.png</iconset>
+        <iconset resource="resource.qrc">
+         <normaloff>:/myresource/resource/icons8-facebook-like-96.png</normaloff>:/myresource/resource/icons8-facebook-like-96.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>25</width>
+         <height>25</height>
         </size>
        </property>
       </widget>
@@ -193,13 +202,13 @@ p, li { white-space: pre-wrap; }
         <string>Feedback</string>
        </property>
        <property name="icon">
-        <iconset resource="../../Y2MATE/src/resource.qrc">
-         <normaloff>:/myresource/resource/person-growth.png</normaloff>:/myresource/resource/person-growth.png</iconset>
+        <iconset resource="resource.qrc">
+         <normaloff>:/myresource/resource/icons8-feedback-hub-144.png</normaloff>:/myresource/resource/icons8-feedback-hub-144.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>25</width>
+         <height>25</height>
         </size>
        </property>
       </widget>
@@ -218,13 +227,13 @@ p, li { white-space: pre-wrap; }
       <string>Donate</string>
      </property>
      <property name="icon">
-      <iconset resource="../../Y2MATE/src/resource.qrc">
-       <normaloff>:/myresource/resource/paypal.png</normaloff>:/myresource/resource/paypal.png</iconset>
+      <iconset resource="resource.qrc">
+       <normaloff>:/myresource/resource/icons8-paypal-144.png</normaloff>:/myresource/resource/icons8-paypal-144.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>18</width>
-       <height>18</height>
+       <width>25</width>
+       <height>25</height>
       </size>
      </property>
     </widget>
@@ -241,13 +250,13 @@ p, li { white-space: pre-wrap; }
       <string>Get More Apps</string>
      </property>
      <property name="icon">
-      <iconset resource="../../Y2MATE/src/resource.qrc">
-       <normaloff>:/myresource/resource/user-male--v1.png</normaloff>:/myresource/resource/user-male--v1.png</iconset>
+      <iconset resource="resource.qrc">
+       <normaloff>:/myresource/resource/icons8-apps-tab-100.png</normaloff>:/myresource/resource/icons8-apps-tab-100.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>18</width>
-       <height>18</height>
+       <width>25</width>
+       <height>25</height>
       </size>
      </property>
     </widget>
@@ -271,7 +280,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="../../Y2MATE/src/resource.qrc"/>
+  <include location="resource.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -56,7 +56,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.progress_bar_disable()
         largeWidth = QGuiApplication.primaryScreen().size().width()
-        self.ui.splitter_2.setSizes([largeWidth / 2, 120])
+        self.ui.splitter_2.setSizes([largeWidth / 3, 120])
         self.ui.image.setVisible(False)
         self.counter = 0
         self.toggle = 0
@@ -791,7 +791,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def no_image_q_table_setting(self):
         self.ui.tableWidget.setColumnCount(6)
-        self.ui.tableWidget.setRowCount(12)
+        self.ui.tableWidget.setRowCount(11)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
@@ -1132,7 +1132,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
-        self.ui.tableWidget.setRowCount(12)
+        self.ui.tableWidget.setRowCount(11)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'Format', "File size"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)

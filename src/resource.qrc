@@ -1,0 +1,40 @@
+<RCC>
+  <qresource prefix="myresource">
+    <file>resource/icons8-account-96.png</file>
+    <file>resource/icons8-add-folder-96.png</file>
+    <file>resource/icons8-add-image-96.png</file>
+    <file>resource/icons8-apps-tab-100.png</file>
+    <file>resource/icons8-buy-96.png</file>
+    <file>resource/icons8-delete-bin-96.png</file>
+    <file>resource/icons8-double-tick-100.png</file>
+    <file>resource/icons8-export-52.png</file>
+    <file>resource/icons8-facebook-like-96.png</file>
+    <file>resource/icons8-feedback-hub-144.png</file>
+    <file>resource/icons8-file-preview-96.png</file>
+    <file>resource/icons8-forward-button-90.png</file>
+    <file>resource/icons8-gear-90.png</file>
+    <file>resource/icons8-go-back-90.png</file>
+    <file>resource/icons8-image-90.png</file>
+    <file>resource/icons8-info-104.png</file>
+    <file>resource/icons8-link-52.png</file>
+    <file>resource/icons8-multiply-52.png</file>
+    <file>resource/icons8-multiply-96.png</file>
+    <file>resource/icons8-ok-144.png</file>
+    <file>resource/icons8-paypal-144.png</file>
+    <file>resource/icons8-play-100.png</file>
+    <file>resource/icons8-refresh-128.png</file>
+    <file>resource/icons8-remove-delivery-96.png</file>
+    <file>resource/icons8-reset-256.png</file>
+    <file>resource/icons8-rotate-96.png</file>
+    <file>resource/icons8-scroll-down-96.png</file>
+    <file>resource/icons8-scroll-up-96.png</file>
+    <file>resource/icons8-settings-96.png</file>
+    <file>resource/icons8-show-property-96.png</file>
+    <file>resource/icons8-stop-96.png</file>
+    <file>resource/icons8-zoom-in-52.png</file>
+    <file>resource/icons8-zoom-out-52.png</file>
+    <file>resource/jpg2pdf.png</file>
+    <file>resource/user_blue.png</file>
+
+  </qresource>
+</RCC>

@@ -661,7 +661,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbar
 
 --------------------------------------------------------------------------- */
 QToolBar {
-  background-color: #C9CDD0;
+/*  background-color: #C9CDD0;*/
   border-bottom: 1px solid #FAFAFA;
   padding: 1px;
   font-weight: bold;
@@ -976,7 +976,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbutton
 
 --------------------------------------------------------------------------- */
 QToolButton {
-  background-color: #C9CDD0;
+/*  background-color: #C9CDD0;*/
   color: #19232D;
   border-radius: 4px;
   padding: 4px;

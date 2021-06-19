@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>733</width>
-    <height>727</height>
+    <height>758</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,25 +15,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Account settings</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="font">
+        <font>
+         <family>Ubuntu Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu Mono'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:18pt; font-weight:600; color:#888a85;&quot;&gt;ACCOUNT INFO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/myresource/resource/icons8-account-96.png&quot; width=&quot;45&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QProgressBar" name="account_progress_bar">
@@ -90,8 +100,8 @@ color: white;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>713</width>
-        <height>627</height>
+        <width>699</width>
+        <height>657</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -104,7 +114,7 @@ color: white;
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Account info</string>
+          <string>ACCOUNT DETAILS</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
@@ -254,7 +264,7 @@ padding: 6px;
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Purchase licence</string>
+          <string>PURCHASE LICENSE</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
@@ -296,13 +306,13 @@ padding: 6px;
                <string>Purchase Now</string>
               </property>
               <property name="icon">
-               <iconset resource="../../Y2MATE/src/resource.qrc">
-                <normaloff>:/myresource/resource/shopping-cart.png</normaloff>:/myresource/resource/shopping-cart.png</iconset>
+               <iconset resource="resource.qrc">
+                <normaloff>:/myresource/resource/icons8-buy-96.png</normaloff>:/myresource/resource/icons8-buy-96.png</iconset>
               </property>
               <property name="iconSize">
                <size>
-                <width>18</width>
-                <height>18</height>
+                <width>25</width>
+                <height>25</height>
                </size>
               </property>
              </widget>
@@ -328,13 +338,13 @@ padding: 6px;
                <string>Refresh Account</string>
               </property>
               <property name="icon">
-               <iconset resource="../../Y2MATE/src/resource.qrc">
-                <normaloff>:/myresource/resource/refresh--v1.png</normaloff>:/myresource/resource/refresh--v1.png</iconset>
+               <iconset resource="resource.qrc">
+                <normaloff>:/myresource/resource/icons8-refresh-128.png</normaloff>:/myresource/resource/icons8-refresh-128.png</iconset>
               </property>
               <property name="iconSize">
                <size>
-                <width>18</width>
-                <height>18</height>
+                <width>25</width>
+                <height>25</height>
                </size>
               </property>
              </widget>
@@ -353,7 +363,7 @@ padding: 6px;
           </sizepolicy>
          </property>
          <property name="title">
-          <string>FREE vs PRO/EVALUATION comparison</string>
+          <string>FREE vs PRO</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_19">
           <item>
@@ -376,31 +386,95 @@ padding: 6px;
            <layout class="QHBoxLayout" name="horizontalLayout_11">
             <item>
              <layout class="QGridLayout" name="gridLayout_5">
-              <item row="9" column="1">
-               <widget class="QToolButton" name="toolButton_38">
+              <item row="9" column="0">
+               <widget class="QLabel" name="label_12">
+                <property name="text">
+                 <string>➤ Rotate pdf pages</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QToolButton" name="toolButton_7">
                 <property name="text">
                  <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="2">
+               <widget class="QToolButton" name="toolButton_12">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QToolButton" name="toolButton_45">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-multiply-96.png</normaloff>:/myresource/resource/icons8-multiply-96.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
               <item row="5" column="2">
-               <widget class="QToolButton" name="toolButton_42">
+               <widget class="QToolButton" name="toolButton_8">
                 <property name="text">
                  <string>...</string>
                 </property>
-               </widget>
-              </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>➤ Set page margin</string>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
-              <item row="8" column="2">
-               <widget class="QToolButton" name="toolButton_5">
+              <item row="7" column="1">
+               <widget class="QToolButton" name="toolButton_16">
                 <property name="text">
                  <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -408,6 +482,12 @@ padding: 6px;
                <widget class="QLineEdit" name="lineEdit_8">
                 <property name="enabled">
                  <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -420,61 +500,6 @@ padding: 6px;
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLineEdit" name="lineEdit_3">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>LIST OF FEATURES</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="2">
-               <widget class="QToolButton" name="toolButton_44">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2">
-               <widget class="QToolButton" name="toolButton_40">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="2">
-               <widget class="QToolButton" name="toolButton_6">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="10" column="1">
-               <widget class="QToolButton" name="toolButton_39">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QToolButton" name="toolButton_33">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="0">
-               <widget class="QLabel" name="label_12">
-                <property name="text">
-                 <string>➤ Rotate pdf pages</string>
-                </property>
-               </widget>
-              </item>
               <item row="6" column="0">
                <widget class="QLabel" name="label_10">
                 <property name="text">
@@ -482,38 +507,99 @@ padding: 6px;
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
-               <widget class="QToolButton" name="toolButton_43">
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_4">
                 <property name="text">
-                 <string>...</string>
+                 <string>➤ Set page margin</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
-               <widget class="QToolButton" name="toolButton_3">
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_3">
                 <property name="text">
-                 <string>...</string>
+                 <string>➤ Support Auto orientation</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="1">
-               <widget class="QToolButton" name="toolButton_36">
+              <item row="4" column="1">
+               <widget class="QToolButton" name="toolButton_15">
                 <property name="text">
                  <string>...</string>
                 </property>
-               </widget>
-              </item>
-              <item row="4" column="2">
-               <widget class="QToolButton" name="toolButton_41">
-                <property name="text">
-                 <string>...</string>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
-               <widget class="QToolButton" name="toolButton_34">
+              <item row="8" column="2">
+               <widget class="QToolButton" name="toolButton_11">
                 <property name="text">
                  <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>➤ Set DPI of image</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QToolButton" name="toolButton_6">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="label_11">
+                <property name="text">
+                 <string>➤ Page numbering support</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QToolButton" name="toolButton_44">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-multiply-96.png</normaloff>:/myresource/resource/icons8-multiply-96.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -521,6 +607,12 @@ padding: 6px;
                <widget class="QLineEdit" name="lineEdit_13">
                 <property name="enabled">
                  <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -540,10 +632,107 @@ padding: 6px;
                 </property>
                </widget>
               </item>
-              <item row="8" column="0">
-               <widget class="QLabel" name="label_8">
+              <item row="6" column="2">
+               <widget class="QToolButton" name="toolButton_9">
                 <property name="text">
-                 <string>➤ Set DPI of image</string>
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QToolButton" name="toolButton_46">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-multiply-96.png</normaloff>:/myresource/resource/icons8-multiply-96.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QToolButton" name="toolButton_14">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLineEdit" name="lineEdit_3">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>LIST OF FEATURES</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QToolButton" name="toolButton_47">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-multiply-96.png</normaloff>:/myresource/resource/icons8-multiply-96.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QToolButton" name="toolButton_48">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-multiply-96.png</normaloff>:/myresource/resource/icons8-multiply-96.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -554,38 +743,37 @@ padding: 6px;
                 </property>
                </widget>
               </item>
-              <item row="10" column="0">
-               <widget class="QLabel" name="label_11">
+              <item row="7" column="2">
+               <widget class="QToolButton" name="toolButton_10">
                 <property name="text">
-                 <string>➤ Page numbering support</string>
+                 <string>...</string>
                 </property>
-               </widget>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>➤ Support Auto orientation</string>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
               <item row="10" column="2">
-               <widget class="QToolButton" name="toolButton">
+               <widget class="QToolButton" name="toolButton_13">
                 <property name="text">
                  <string>...</string>
                 </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QToolButton" name="toolButton_35">
-                <property name="text">
-                 <string>...</string>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/myresource/resource/icons8-double-tick-100.png</normaloff>:/myresource/resource/icons8-double-tick-100.png</iconset>
                 </property>
-               </widget>
-              </item>
-              <item row="8" column="1">
-               <widget class="QToolButton" name="toolButton_37">
-                <property name="text">
-                 <string>...</string>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -623,7 +811,7 @@ padding: 6px;
   </layout>
  </widget>
  <resources>
-  <include location="../../Y2MATE/src/resource.qrc"/>
+  <include location="resource.qrc"/>
  </resources>
  <connections/>
 </ui>
