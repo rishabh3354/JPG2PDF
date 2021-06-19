@@ -6,10 +6,9 @@ import webbrowser
 from PIL import Image
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QProcessEnvironment, QUrl, QSettings
-from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon
+from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon, QDesktopServices
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
-from qtpy.QtGui import QDesktopServices
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
     check_for_already_file_exists, get_valid_images, check_internet_connection, check_if_pro_feature_used
 from convert_pdf_threads import ConvertToPdfThread
