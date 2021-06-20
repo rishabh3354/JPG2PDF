@@ -2,7 +2,8 @@ THEME_DICT = {"dark": "dark.qss", "light": "light.qss"}
 
 
 def set_theme(self, theme):
-    self.setStyleSheet(open(THEME_DICT.get(theme, "dark"), 'r').read())
+    from jpg2pdf import THEME_PATH
+    self.setStyleSheet(open(THEME_PATH + THEME_DICT.get(theme, "dark"), 'r').read())
 
 
 def popup_theme(self):

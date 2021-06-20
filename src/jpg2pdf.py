@@ -20,6 +20,7 @@ from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPG2PDF'
+THEME_PATH = '/snap/jpg2pdf/current/'
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
