@@ -290,9 +290,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
-        # if self.settings.contains("Default_loc"):
-        #     self.Default_loc = self.settings.value("Default_loc")
-        #     self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+        if self.settings.contains("Default_loc"):
+            self.Default_loc = self.settings.value("Default_loc")
+            self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
         if self.settings.contains("status_protect_pdf"):
             self.ui.checkBox_protect_pdf.setChecked(json.loads(self.settings.value("status_protect_pdf")))
             self.enable_pdf_password()
