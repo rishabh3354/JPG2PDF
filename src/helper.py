@@ -1,6 +1,7 @@
+import getpass
 import glob
 import os
-from PyQt5.QtCore import QProcessEnvironment, QStandardPaths
+from PyQt5.QtCore import QProcessEnvironment
 from PyQt5.QtNetwork import QNetworkConfigurationManager
 
 
@@ -74,15 +75,35 @@ def get_download_path(location):
             os.makedirs(location, exist_ok=True)
             return location
         else:
-            HOME = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
-            if HOME != '':
-                HOME += '/Downloads/JPG2PDF/'
-                os.makedirs(HOME, exist_ok=True)
-            else:
-                HOME = QStandardPaths.writableLocation(QStandardPaths.HomeLocation)
+            HOME = get_initial_download_dir()
+            HOME += '/JPG2PDF/'
+            os.makedirs(HOME, exist_ok=True)
             return HOME
     except Exception as e:
-        return QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads/JPG2PDF/"
+        return get_initial_download_dir() + '/JPG2PDF/'
+
+
+def get_initial_download_dir():
+    try:
+        download_path = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+        if download_path not in ["", None]:
+            download_path = download_path + "/Downloads"
+        else:
+            username = getpass.getuser()
+            if username not in ["", None]:
+                download_path = f"/home/{username}/Downloads"
+            else:
+                download_path = os.environ['HOME']
+                if download_path not in ["", None]:
+                    download_path = download_path + "/Downloads"
+                else:
+                    download_path = os.path.expanduser("~") + "/Downloads"
+        os.makedirs(download_path, exist_ok=True)
+        print(download_path)
+    except Exception as e:
+        print("error in getting download path", str(e))
+        return "/Downloads"
+    return download_path
 
 
 def check_for_already_file_exists(download_path, pdf_settings):
@@ -107,7 +128,6 @@ def check_if_pro_feature_used(pdf_settings):
 
     for keys in pdf_settings.keys():
         if keys in pro_keys:
-            print(keys)
             return True
 
     return False

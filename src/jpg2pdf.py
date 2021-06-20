@@ -10,7 +10,8 @@ from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon, QDesktopServices
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
-    check_for_already_file_exists, get_valid_images, check_internet_connection, check_if_pro_feature_used
+    check_for_already_file_exists, get_valid_images, check_internet_connection, check_if_pro_feature_used, \
+    get_initial_download_dir
 from convert_pdf_threads import ConvertToPdfThread
 from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage
 from pixmap_loading_thread import PixMapLoadingThread
@@ -38,7 +39,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # jpg2pdf settings initials-------------------------------------------------------------------------------------
         self.image_hide = False
         self.ui.hide_image.setText("Hide icons")
-        self.Default_loc = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') + "/Downloads"
+        self.Default_loc = get_initial_download_dir()
         self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
         self.ui.checkBox_protect_pdf.setChecked(False)
         self.enable_pdf_password()
@@ -69,7 +70,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.main_table_pointer = 70
         self.ask_for_export = True
         self.overwrite_warning = True
-        self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+        self.Default_loc_import = get_initial_download_dir()
         self.jpg = True
         self.jpeg = True
         self.png = True
@@ -289,9 +290,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
-        if self.settings.contains("Default_loc"):
-            self.Default_loc = self.settings.value("Default_loc")
-            self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+        # if self.settings.contains("Default_loc"):
+        #     self.Default_loc = self.settings.value("Default_loc")
+        #     self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
         if self.settings.contains("status_protect_pdf"):
             self.ui.checkBox_protect_pdf.setChecked(json.loads(self.settings.value("status_protect_pdf")))
             self.enable_pdf_password()
@@ -1793,14 +1794,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         self.msg.setIcon(QMessageBox.Information)
                         self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
                         self.msg.setInformativeText(
-                            "TIP: Change the Title in PDF Properties.\n\nDo you want to replace existing one ?")
+                            "TIP: Change the PDF Export name.\n\nDo you want to replace existing one ?")
+                        open_file = self.msg.addButton(QMessageBox.Yes)
                         open_folder = self.msg.addButton(QMessageBox.Yes)
                         close = self.msg.addButton(QMessageBox.Yes)
                         yes_button = self.msg.addButton(QMessageBox.Yes)
                         open_folder.setText('See PDF location')
+                        open_file.setText('Open PDF')
                         close.setText('No')
                         close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
                         open_folder.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
+                        open_file.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
                         yes_button.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton)))
                         self.msg.exec_()
                         try:
@@ -1808,8 +1812,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                 self.progress_bar_enable()
                                 self.start_convert_thread(selected_list_items, download_path, pdf_settings)
                             if self.msg.clickedButton() == open_folder:
+                                QDesktopServices.openUrl(QUrl(self.Default_loc + "/JPG2PDF"))
+                            if self.msg.clickedButton() == open_file:
                                 QDesktopServices.openUrl(QUrl(path))
-                            elif self.msg.clickedButton() == close:
+                            if self.msg.clickedButton() == close:
                                 pass
                         except Exception as e:
                             pass
