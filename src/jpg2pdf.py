@@ -790,20 +790,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.toggle % 2 == 0:
                 self.image_hide = True
                 self.ui.hide_image.setText("Show icons")
+                self.get_all_selected_items()
                 self.no_image_q_table_setting()
+                self.process_images_into_table()
             else:
                 self.image_hide = False
                 self.ui.hide_image.setText("Hide icons")
+                self.get_all_selected_items()
                 self.table_view_default_setting()
-            self.toggle += 1
+                self.process_images_into_table()
 
-            self.process_images_into_table()
+            self.toggle += 1
+            self.keep_selected_items(operation="stable")
 
     def no_image_q_table_setting(self):
         self.ui.tableWidget.setColumnCount(6)
         self.ui.tableWidget.setRowCount(11)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'Format', "File size"])
+        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'File size', "Format"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 40)
         self.ui.tableWidget.setColumnWidth(1, 45)
@@ -1153,7 +1157,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.setColumnCount(7)
         self.ui.tableWidget.setRowCount(11)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'Format', "File size"])
+        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'File size', "Format"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 40)
