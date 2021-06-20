@@ -1,13 +1,8 @@
-from PyQt5.QtCore import QFile, QTextStream
-
 THEME_DICT = {"dark": "dark.qss", "light": "light.qss"}
 
 
 def set_theme(self, theme):
-    file = QFile(THEME_DICT.get(theme, "dark"))
-    file.open(QFile.ReadOnly | QFile.Text)
-    stream = QTextStream(file)
-    self.setStyleSheet(stream.readAll())
+    self.setStyleSheet(open(THEME_DICT.get(theme, "dark"), 'r').read())
 
 
 def popup_theme(self):
