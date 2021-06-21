@@ -326,6 +326,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # one time congratulate
         self.settings.setValue("one_time_congratulate", self.one_time_congratulate)
 
+        # save window state
+        self.settings.setValue("geometry", self.saveGeometry())
+        self.settings.setValue("windowState", self.saveState())
+
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
         if self.settings.contains("Default_loc"):
@@ -449,6 +453,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # one time congratulate
         if self.settings.contains("one_time_congratulate"):
             self.one_time_congratulate = json.loads(self.settings.value("one_time_congratulate"))
+
+        # load window state
+        if self.settings.contains("geometry"):
+            self.restoreGeometry(self.settings.value("geometry"))
+        if self.settings.contains("windowState"):
+            self.restoreState(self.settings.value("windowState", ""))
+
 
     def closeEvent(self, event):
         self.save_settings()
@@ -843,7 +854,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def no_image_q_table_setting(self):
         self.ui.tableWidget.setColumnCount(6)
-        self.ui.tableWidget.setRowCount(11)
+        self.ui.tableWidget.setRowCount(15)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'File size', "Format"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
@@ -1193,7 +1204,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
-        self.ui.tableWidget.setRowCount(11)
+        self.ui.tableWidget.setRowCount(15)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
         self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'File size', "Format"])
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
