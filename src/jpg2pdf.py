@@ -219,6 +219,44 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.graphicsView.setScene(self._scene)
         self.ui.graphicsView.scale(2, 2)
         self.factor = 1
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event):
+        event.accept()
+
+    def dropEvent(self, event):
+        event.setDropAction(QtCore.Qt.CopyAction)
+        self.load_images = [item.toLocalFile() for item in event.mimeData().urls()]
+        try:
+            is_running = self.convert_pdf_thread.isRunning()
+        except Exception as e:
+            is_running = False
+
+        try:
+            is_running_pixmap = self.pixmap_load_thread.isRunning()
+        except Exception as e:
+            is_running_pixmap = False
+
+        if is_running or is_running_pixmap:
+            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
+        else:
+            self.ui.stop.setEnabled(False)
+
+        if len(self.load_images) == 0:
+            return False
+
+        self.load_images, invalid_list = get_valid_images(self.load_images)
+        if invalid_list:
+            message = "\n\n".join([f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
+            self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
+                               message=message)
+        self.all_images_list += self.load_images
+        self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
+        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+        self.pixmap_load_thread.start()
+
+        event.accept()
 
     def save_settings(self):
         # jpg2pdf settings save: --------------------------------------------------------------------------------------
@@ -1261,8 +1299,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             self.load_images, invalid_list = get_valid_images(self.load_images)
             if invalid_list:
-                message = "\n".join(invalid_list)
-                self.popup_message(title="Invalid image file(s)! Please import valid image file",
+                message = "\n\n".join(
+                    [f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
+                self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
                                    message=message)
             self.all_images_list += self.load_images
             self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
@@ -1301,8 +1340,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             self.load_images, invalid_list = get_valid_images(self.load_images)
             if invalid_list:
-                message = "\n".join(invalid_list)
-                self.popup_message(title="Invalid image file(s)! Please import valid image file",
+                message = "\n\n".join(
+                    [f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
+                self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
                                    message=message)
             self.all_images_list += self.load_images
             self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
