@@ -247,7 +247,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.load_images, invalid_list = get_valid_images(self.load_images)
         if invalid_list:
-            message = "\n\n".join([f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
+            message = "\n\n".join(
+                [f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
             self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
                                message=message)
         self.all_images_list += self.load_images
@@ -459,7 +460,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.restoreGeometry(self.settings.value("geometry"))
         if self.settings.contains("windowState"):
             self.restoreState(self.settings.value("windowState", ""))
-
 
     def closeEvent(self, event):
         self.save_settings()
@@ -813,26 +813,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ui.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Checked)
 
     def remove_duplicate(self):
-        self.msg = QMessageBox()
-        self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-        self.msg.setStyleSheet(self.pop_up_stylesheet)
-        self.msg.setIcon(QMessageBox.Information)
-        self.msg.setText("Are you sure want to remove duplicate images?")
-        yes_button = self.msg.addButton(QMessageBox.Yes)
-        no_button = self.msg.addButton(QMessageBox.No)
-        self.msg.exec_()
-        if self.msg.clickedButton() == yes_button:
-            if self.all_images_list:
-                temp = []
-                for item in self.all_images_list:
-                    if item not in temp:
-                        temp.append(item)
-                self.all_images_list = temp
-                self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
-                self.process_images_into_table()
-                self.popup_message("Duplicate images have been successfully removed!", "")
-        if self.msg.clickedButton() == no_button:
-            pass
+        if self.all_images_list:
+            self.msg = QMessageBox()
+            self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+            self.msg.setStyleSheet(self.pop_up_stylesheet)
+            self.msg.setIcon(QMessageBox.Information)
+            self.msg.setText("Are you sure want to remove duplicate image files?")
+            yes_button = self.msg.addButton(QMessageBox.Yes)
+            no_button = self.msg.addButton(QMessageBox.No)
+            self.msg.exec_()
+            if self.msg.clickedButton() == yes_button:
+                if self.all_images_list:
+                    temp = []
+                    for item in self.all_images_list:
+                        if item not in temp:
+                            temp.append(item)
+                    self.all_images_list = temp
+                    self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
+                    self.process_images_into_table()
+                    self.popup_message("Duplicate images have been successfully removed!", "")
+            if self.msg.clickedButton() == no_button:
+                pass
 
     def hide_image_thumbnail(self):
         if self.all_images_list:
@@ -1604,13 +1605,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     if len(self.selected_list) == len(self.all_images_list):
                         self.reset_cache()
                     else:
-                        for row in self.selected_list:
-                            if self.all_images_list:
-                                self.all_images_list.pop(row)
-                                self.image_dimension.pop(row)
-                                self.image_size.pop(row)
-                                self.image_extension.pop(row)
-                                self.all_pixmap_data.pop(row)
+                        if self.all_images_list:
+                            self.all_images_list = [i for j, i in enumerate(self.all_images_list) if
+                                                    j not in self.selected_list]
+                            self.image_dimension = [i for j, i in enumerate(self.image_dimension) if
+                                                    j not in self.selected_list]
+                            self.image_size = [i for j, i in enumerate(self.image_size) if j not in self.selected_list]
+                            self.image_extension = [i for j, i in enumerate(self.image_extension) if
+                                                    j not in self.selected_list]
+                            self.all_pixmap_data = [i for j, i in enumerate(self.all_pixmap_data) if
+                                                    j not in self.selected_list]
                     self.process_images_into_table()
                 if self.msg.clickedButton() == no_button:
                     pass
@@ -1880,8 +1884,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.popup_message(title="Invalid advance settings detected!",
                                        message="Please check your advance settings once.", error=True)
             else:
-                self.popup_message(title="No Images selected!",
-                                   message="Please select the images by clicking on checkboxes.", error=True)
+                if self.all_images_list:
+                    self.popup_message(title="No Images checkbox selected!",
+                                       message="Please select images by clicking on checkbox next to images.", error=True)
+                else:
+                    self.popup_message(title="No Images files are loaded!",
+                                       message="Please import the images by clicking on Add image button or Drag n Drop image files.", error=True)
 
     def setProgressVal(self, json_data):
         self.progress_bar_disable()

@@ -29,7 +29,8 @@ def get_valid_images(image_list):
     valid_list = []
     in_valid_list = []
     for item in image_list:
-        if str(item).lower().endswith((".png", ".jpeg", ".jpg", ".bmp", ".tif", ".tiff")):
+        if str(item).lower().endswith((".png", ".jpeg", ".jpg", ".bmp", ".tif", ".tiff",
+                                       ".svg", ".gif", ".webp", ".pnm", ".jpe", ".ico")):
             valid_list.append(item)
         else:
             in_valid_list.append(item)
