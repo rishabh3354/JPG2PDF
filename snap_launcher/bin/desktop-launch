@@ -132,8 +132,8 @@ WITH_RUNTIME=no
 # webengine513 runtime selection #
 ###########################
 
-if [ -d $SNAP/pyqt5-runtime ]; then
-  RUNTIME=$SNAP/pyqt5-runtime
+if [ -d $SNAP/pyqt5-runtime-lite ]; then
+  RUNTIME=$SNAP/pyqt5-runtime-lite
   WITH_RUNTIME=yes
 fi
 
@@ -519,7 +519,7 @@ ln -sfn $REALHOME/.config/ibus/bus $IBUS_CONFIG_PATH
 #############################
 
 # select qt version
-. $SNAP/pyqt5-runtime/flavor-select
+. $SNAP/pyqt5-runtime-lite/flavor-select
 
 export QTCHOOSER_NO_GLOBAL_DIR=1
 if [ "$USE_qt5" = true ]; then
