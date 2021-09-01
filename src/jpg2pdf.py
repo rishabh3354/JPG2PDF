@@ -22,6 +22,8 @@ from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPG2PDF'
 THEME_PATH = '/snap/jpg2pdf/current/'
+DAY_TRAIL = {"day_limit": 3, "used_limit": 0}
+TODAY_DATE = datetime.datetime.now().date()
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -331,6 +333,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("geometry", self.saveGeometry())
         self.settings.setValue("windowState", self.saveState())
 
+        # save daily limit
+        self.settings.setValue("used_limit", DAY_TRAIL.get('used_limit'))
+        self.settings.setValue("today_date", str(TODAY_DATE))
+
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
         if self.settings.contains("Default_loc"):
@@ -460,6 +466,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.restoreGeometry(self.settings.value("geometry"))
         if self.settings.contains("windowState"):
             self.restoreState(self.settings.value("windowState", ""))
+
+        # daily limit loads
+        if self.settings.contains("today_date"):
+            saved_date = datetime.datetime.strptime(self.settings.value("today_date"), "%Y-%m-%d").date()
+            if saved_date == TODAY_DATE:
+                if self.settings.contains("used_limit"):
+                    DAY_TRAIL["used_limit"] = int(self.settings.value("used_limit"))
 
     def closeEvent(self, event):
         self.save_settings()
@@ -1060,13 +1073,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
 
     def ok_setting_clicked(self):
-        pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
-        if pro_plan_status:
-            if not self.check_your_plan():
-                self.advance_settings_defaults(default=True)
-                self.popup_message("Your PDF Advanced settings was Reset!",
-                                   "Your can still use JPG2PDF free version without Advanced features. "
-                                   "Your advanced setting is not saved for this PDF.")
+        # pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
+        # if pro_plan_status:
+        #     if not self.check_your_plan():
+        #         self.advance_settings_defaults(default=True)
+        #         self.popup_message("Your PDF Advanced settings was Reset!",
+        #                            "Your can still use JPG2PDF free version without Advanced features. "
+        #                            "Your advanced setting is not saved for this PDF.")
         self.advance_setting_ui.hide()
 
     def hide_general_settings(self):
@@ -1803,8 +1816,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             status = False
 
-        pro_plan_status = check_if_pro_feature_used(pdf_settings)
-        return pdf_settings, status, pro_plan_status
+        # pro_plan_status = check_if_pro_feature_used(pdf_settings)
+        day_limit_status = False
+        DAY_TRAIL["used_limit"] += 1
+        if DAY_TRAIL.get("used_limit") > DAY_TRAIL.get("day_limit"):
+            day_limit_status = True
+
+        return pdf_settings, status, day_limit_status
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
         self.convert_pdf_thread = ConvertToPdfThread(selected_list_items, download_path, pdf_settings)
@@ -1833,11 +1851,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 download_path = get_download_path(self.Default_loc)
                 pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
                 if pro_plan_status:
-                    if not self.check_your_plan():
-                        self.advance_settings_defaults(default=True)
-                        self.popup_message("Your PDF Advanced settings was Reset!",
-                                           "Your can still use JPG2PDF free version without Advanced features. "
-                                           "Your advanced setting is not saved for this PDF.")
+                    if not self.is_plan_active:
+                        # self.advance_settings_defaults(default=True)
+                        self.check_your_plan()
                         return False
                 if status:
                     self.progress_bar_enable()
@@ -2043,8 +2059,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.setStyleSheet(self.pop_up_stylesheet)
             self.msg.setIcon(QMessageBox.Information)
             self.msg.setText("Evaluation period ended, Upgrade to Pro")
-            self.msg.setInformativeText("In JPG2PDF free version, Advanced settings option is not available. "
-                                        "Please support the developer and purchase a license to UNLOCK this feature.")
+            self.msg.setInformativeText(f"Your Daily Free PDF Conversion Limit of {DAY_TRAIL.get('day_limit')} PDFs is Over.\n\n"
+                                        "Please Support The Developer and Purchase a License To UNLOCK UNLIMITED Daily Limit.")
             purchase = self.msg.addButton(QMessageBox.Yes)
             close = self.msg.addButton(QMessageBox.Yes)
             purchase.setText('Purchase Licence')
