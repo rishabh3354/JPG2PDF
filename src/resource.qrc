@@ -35,6 +35,8 @@
     <file>resource/icons8-zoom-out-52.png</file>
     <file>resource/jpg2pdf.png</file>
     <file>resource/user_blue.png</file>
+    <file>resource/refresh--v1.png</file>
+    <file>resource/shopping-cart.png</file>
 
   </qresource>
 </RCC>

@@ -316,14 +316,30 @@ padding: 6px;
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="styleSheet">
-               <string notr="true"/>
+               <string notr="true">QPushButton{
+  background-color:#d23426;
+
+
+
+color:#eff0f1;
+
+
+}
+	
+QPushButton:hover {background-color: #009b22
+
+
+
+
+
+;}</string>
               </property>
               <property name="text">
-               <string>Purchase Now</string>
+               <string>PURCHASE NOW</string>
               </property>
               <property name="icon">
                <iconset resource="resource.qrc">
-                <normaloff>:/myresource/resource/icons8-buy-96.png</normaloff>:/myresource/resource/icons8-buy-96.png</iconset>
+                <normaloff>:/myresource/resource/shopping-cart.png</normaloff>:/myresource/resource/shopping-cart.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -348,14 +364,31 @@ padding: 6px;
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="styleSheet">
-               <string notr="true"/>
+               <string notr="true">QPushButton{
+  background-color: #018282;
+
+
+
+
+color:#eff0f1;
+
+
+}
+
+QPushButton:hover {background-color: #009b22
+
+
+
+
+
+;}</string>
               </property>
               <property name="text">
-               <string>Refresh Account</string>
+               <string>REFRESH ACCOUNT</string>
               </property>
               <property name="icon">
                <iconset resource="resource.qrc">
-                <normaloff>:/myresource/resource/icons8-refresh-128.png</normaloff>:/myresource/resource/icons8-refresh-128.png</iconset>
+                <normaloff>:/myresource/resource/refresh--v1.png</normaloff>:/myresource/resource/refresh--v1.png</iconset>
               </property>
               <property name="iconSize">
                <size>
