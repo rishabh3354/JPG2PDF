@@ -173,9 +173,25 @@ class Ui_AccountUI(object):
         sizePolicy.setHeightForWidth(self.purchase_licence.sizePolicy().hasHeightForWidth())
         self.purchase_licence.setSizePolicy(sizePolicy)
         self.purchase_licence.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.purchase_licence.setStyleSheet("")
+        self.purchase_licence.setStyleSheet("QPushButton{\n"
+"  background-color:#d23426;\n"
+"\n"
+"\n"
+"\n"
+"color:#eff0f1;\n"
+"\n"
+"\n"
+"}\n"
+"    \n"
+"QPushButton:hover {background-color: #009b22\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+";}")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/myresource/resource/icons8-buy-96.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/myresource/resource/shopping-cart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.purchase_licence.setIcon(icon)
         self.purchase_licence.setIconSize(QtCore.QSize(25, 25))
         self.purchase_licence.setObjectName("purchase_licence")
@@ -188,9 +204,26 @@ class Ui_AccountUI(object):
         sizePolicy.setHeightForWidth(self.refresh_account.sizePolicy().hasHeightForWidth())
         self.refresh_account.setSizePolicy(sizePolicy)
         self.refresh_account.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.refresh_account.setStyleSheet("")
+        self.refresh_account.setStyleSheet("QPushButton{\n"
+"  background-color: #018282;\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"color:#eff0f1;\n"
+"\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton:hover {background-color: #009b22\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+";}")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/myresource/resource/icons8-refresh-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/myresource/resource/refresh--v1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.refresh_account.setIcon(icon1)
         self.refresh_account.setIconSize(QtCore.QSize(25, 25))
         self.refresh_account.setObjectName("refresh_account")
@@ -431,8 +464,8 @@ class Ui_AccountUI(object):
         self.lineEdit_2.setText(_translate("AccountUI", "Account Type:"))
         self.error_message.setText(_translate("AccountUI", "<html><head/><body><p align=\"center\"><span style=\" color:#ef2929;\">Error Message</span></p></body></html>"))
         self.groupBox_10.setTitle(_translate("AccountUI", "PURCHASE LICENSE"))
-        self.purchase_licence.setText(_translate("AccountUI", "Purchase Now"))
-        self.refresh_account.setText(_translate("AccountUI", "Refresh Account"))
+        self.purchase_licence.setText(_translate("AccountUI", "PURCHASE NOW"))
+        self.refresh_account.setText(_translate("AccountUI", "REFRESH ACCOUNT"))
         self.groupBox_12.setTitle(_translate("AccountUI", "FREE vs PRO"))
         self.label_2.setText(_translate("AccountUI", "➤ Protect PDF"))
         self.label_11.setText(_translate("AccountUI", "➤ Page numbering support"))
