@@ -1,11 +1,11 @@
 [Desktop Entry]
 Version=1.0
-GenericName=jpg2pdf
-Name=jpg2pdf
+GenericName=jpeg2pdf
+Name=JPEG2PDF
 Type=Application
 Icon=jpg2pdf.png
 Keywords= jpgtopdf; jpg2pdf; image2pdf; jpeg2pdf; png2pdf; convert image to pdf; png to pdf; png2pdf; pdf converter;
 Exec=jpg2pdf %F
 Categories=Utility;Qt;
 Terminal=false
-Name[en_US]=Jpg2pdf
+Name[en_US]=JPEG2PDF

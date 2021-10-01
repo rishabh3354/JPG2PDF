@@ -35,7 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.account_ui = AccountPage()
         self.about_ui = AboutPage()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO")
+        self.setWindowTitle("JPEG2PDF PRO")
         self.settings = QSettings("warlordsoft", "jpg2pdf")
 
         # jpg2pdf settings initials-------------------------------------------------------------------------------------

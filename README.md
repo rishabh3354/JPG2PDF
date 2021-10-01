@@ -1,8 +1,8 @@
 Summary: Convert Your Images Into PDF With Standard Encryption, Supports JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF Etc Images Format
 
-JPG2PDF Convert Your **Images Into PDFs** and Supports **JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF** Etc Images Format, Also you can Encrypt your PDF files with **AES-256 bit Encryption.**
+JPEG2PDF Convert Your **Images Into PDFs** and Supports **JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF** Etc Images Format, Also you can Encrypt your PDF files with **AES-256 bit Encryption.**
 
-**Features of JPG2PDF:**
+**Features of JPEG2PDF:**
 
  - Select Images in Bulk and **One Click** to Convert Images into PDFs.
  - Support **Auto orientation** and Auto page formatting.

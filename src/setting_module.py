@@ -12,7 +12,7 @@ class AdvanceSettingPage(QWidget):
         QWidget.__init__(self)
         self.ui = Ui_AdvanceSettings()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | Advanced Settings")
+        self.setWindowTitle("JPEG2PDF PRO | Advanced Settings")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()
@@ -26,7 +26,7 @@ class AppSettingPage(QWidget):
         QWidget.__init__(self)
         self.ui = Ui_AppSettings()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | App Settings")
+        self.setWindowTitle("JPEG2PDF PRO | App Settings")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()
@@ -40,7 +40,7 @@ class AccountPage(QWidget):
         QWidget.__init__(self)
         self.ui = Ui_AccountUI()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | Account Page")
+        self.setWindowTitle("JPEG2PDF PRO | Account Page")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()
@@ -54,7 +54,7 @@ class AboutPage(QWidget):
         QWidget.__init__(self)
         self.ui = Ui_AboutUI()
         self.ui.setupUi(self)
-        self.setWindowTitle("JPG2PDF PRO | About Page")
+        self.setWindowTitle("JPEG2PDF PRO | About Page")
 
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         qtRectangle = self.frameGeometry()
