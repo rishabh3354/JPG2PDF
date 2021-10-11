@@ -13,7 +13,7 @@ from helper import load_images_from_folder, check_default_location, humanbytes, 
     check_for_already_file_exists, get_valid_images, check_internet_connection, check_if_pro_feature_used, \
     get_initial_download_dir
 from convert_pdf_threads import ConvertToPdfThread
-from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage
+from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage, DonatePage
 from pixmap_loading_thread import PixMapLoadingThread
 from accounts import ApplicationStartupTask, check_for_local_token, get_user_data_from_local, days_left
 from account_threads import RefreshButtonThread, SaveLocalInToken
@@ -22,8 +22,8 @@ from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPG2PDF'
 THEME_PATH = '/snap/jpg2pdf/current/'
-DAY_TRAIL = {"day_limit": 3, "used_limit": 0}
-TODAY_DATE = datetime.datetime.now().date()
+# DAY_TRAIL = {"day_limit": 3, "used_limit": 0}
+# TODAY_DATE = datetime.datetime.now().date()
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -34,6 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui = AppSettingPage()
         self.account_ui = AccountPage()
         self.about_ui = AboutPage()
+        self.donate_ui = DonatePage()
         self.ui.setupUi(self)
         self.setWindowTitle("JPEG2PDF PRO")
         self.settings = QSettings("warlordsoft", "jpg2pdf")
@@ -119,7 +120,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.creator = ""
         self.created_on = ""
 
-        # plan flags ---------------------------------------------------------------------------------------------------------
+        # plan flags
+        # ---------------------------------------------------------------------------------------------------------
         self.one_time_congratulate = True
         self.is_plan_active = True
 
@@ -129,8 +131,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
-        self.ui.actionAccount.triggered.connect(self.show_account_page)
+        # self.ui.actionAccount.triggered.connect(self.show_account_page)
         self.ui.actionAbout.triggered.connect(self.show_about_page)
+        self.ui.actionDonate.triggered.connect(self.show_donate_page)
         self.ui.actionAdd_folder.triggered.connect(self.load_folder)
         self.ui.actionClear_all.triggered.connect(self.clear_all_table_data)
         self.ui.actionRemove_Selected.triggered.connect(self.remove_selected)
@@ -196,14 +199,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
 
         # accounts page
-        ApplicationStartupTask(PRODUCT_NAME).create_free_trial_offline()
-        self.account_ui.ui.error_message.clear()
-        self.account_ui.ui.error_message.setStyleSheet("color:red;")
-        self.account_ui.ui.account_progress_bar.setVisible(False)
-        self.my_plan()
-        self.account_ui.ui.purchase_licence.clicked.connect(self.purchase_licence)
-        self.account_ui.ui.refresh_account.clicked.connect(self.refresh_account)
-        self.account_ui.ui.account_progress_bar.setFixedHeight(5)
+        # ApplicationStartupTask(PRODUCT_NAME).create_free_trial_offline()
+        # self.account_ui.ui.error_message.clear()
+        # self.account_ui.ui.error_message.setStyleSheet("color:red;")
+        # self.account_ui.ui.account_progress_bar.setVisible(False)
+        # self.my_plan()
+        # self.account_ui.ui.purchase_licence.clicked.connect(self.purchase_licence)
+        # self.account_ui.ui.refresh_account.clicked.connect(self.refresh_account)
+        # self.account_ui.ui.account_progress_bar.setFixedHeight(5)
 
         # about page
         self.about_ui.ui.warlordsoft_button.clicked.connect(self.redirect_to_warlordsoft)
@@ -211,6 +214,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_ui.ui.rate_button.clicked.connect(self.redirect_to_rate_snapstore)
         self.about_ui.ui.feedback_button.clicked.connect(self.redirect_to_feedback_button)
         self.about_ui.ui.ge_more_apps.clicked.connect(self.ge_more_apps)
+        self.donate_ui.ui.donate_button.clicked.connect(self.redirect_to_paypal_donation)
 
         # scroll zoom functionality:-
         self._zoom = 0
@@ -334,8 +338,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("windowState", self.saveState())
 
         # save daily limit
-        self.settings.setValue("used_limit", DAY_TRAIL.get('used_limit'))
-        self.settings.setValue("today_date", str(TODAY_DATE))
+        # self.settings.setValue("used_limit", DAY_TRAIL.get('used_limit'))
+        # self.settings.setValue("today_date", str(TODAY_DATE))
 
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
@@ -468,11 +472,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.restoreState(self.settings.value("windowState", ""))
 
         # daily limit loads
-        if self.settings.contains("today_date"):
-            saved_date = datetime.datetime.strptime(self.settings.value("today_date"), "%Y-%m-%d").date()
-            if saved_date == TODAY_DATE:
-                if self.settings.contains("used_limit"):
-                    DAY_TRAIL["used_limit"] = int(self.settings.value("used_limit"))
+        # if self.settings.contains("today_date"):
+        #     saved_date = datetime.datetime.strptime(self.settings.value("today_date"), "%Y-%m-%d").date()
+        #     if saved_date == TODAY_DATE:
+        #         if self.settings.contains("used_limit"):
+        #             DAY_TRAIL["used_limit"] = int(self.settings.value("used_limit"))
 
     def closeEvent(self, event):
         self.save_settings()
@@ -897,6 +901,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         set_theme(self.general_setting_ui, self.theme)
         set_theme(self.account_ui, self.theme)
         set_theme(self.about_ui, self.theme)
+        set_theme(self.donate_ui, self.theme)
         self.pop_up_stylesheet = popup_theme(self)
 
     def set_file_dialog(self):
@@ -1104,6 +1109,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_ui.show()
         self.about_ui.raise_()
         self.about_ui.activateWindow()
+
+    def show_donate_page(self):
+        self.donate_ui.show()
+        self.donate_ui.raise_()
+        self.donate_ui.activateWindow()
 
     def sort_asc_desc(self):
         if self.all_images_list:
@@ -1817,12 +1827,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             status = False
 
         # pro_plan_status = check_if_pro_feature_used(pdf_settings)
-        day_limit_status = False
-        DAY_TRAIL["used_limit"] += 1
-        if DAY_TRAIL.get("used_limit") > DAY_TRAIL.get("day_limit"):
-            day_limit_status = True
+        # day_limit_status = False
+        # DAY_TRAIL["used_limit"] += 1
+        # if DAY_TRAIL.get("used_limit") > DAY_TRAIL.get("day_limit"):
+        #     day_limit_status = True
 
-        return pdf_settings, status, day_limit_status
+        return pdf_settings, status, False
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
         self.convert_pdf_thread = ConvertToPdfThread(selected_list_items, download_path, pdf_settings)
@@ -1851,10 +1861,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 download_path = get_download_path(self.Default_loc)
                 pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
                 if pro_plan_status:
-                    if not self.is_plan_active:
-                        # self.advance_settings_defaults(default=True)
-                        self.check_your_plan()
-                        return False
+                    pass
+                    # if not self.is_plan_active:
+                    #     # self.advance_settings_defaults(default=True)
+                    #     self.check_your_plan()
+                    #     return False
                 if status:
                     self.progress_bar_enable()
                     if self.overwrite_warning:
@@ -2058,9 +2069,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
             self.msg.setStyleSheet(self.pop_up_stylesheet)
             self.msg.setIcon(QMessageBox.Information)
-            self.msg.setText("Evaluation period ended, Upgrade to Pro")
-            self.msg.setInformativeText(f"Your Daily Free PDF Conversion Limit of {DAY_TRAIL.get('day_limit')} PDFs is Over.\n\n"
-                                        "Please Support The Developer and Purchase a License To UNLOCK UNLIMITED Daily Limit.")
+            # self.msg.setText("Evaluation period ended, Upgrade to Pro")
+            self.msg.setText("")
+            # self.msg.setInformativeText(f"Your Daily Free PDF Conversion Limit of {DAY_TRAIL.get('day_limit')} PDFs is Over.\n\n"
+            #                             "Please Support The Developer and Purchase a License To UNLOCK UNLIMITED Daily Limit.")
+            self.msg.setInformativeText("")
             purchase = self.msg.addButton(QMessageBox.Yes)
             close = self.msg.addButton(QMessageBox.Yes)
             purchase.setText('Purchase Licence')

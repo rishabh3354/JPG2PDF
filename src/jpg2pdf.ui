@@ -984,7 +984,7 @@ border: none;
    <addaction name="actionRemove_Selected"/>
    <addaction name="actionClear_all"/>
    <addaction name="actionSettings"/>
-   <addaction name="actionAccount"/>
+   <addaction name="actionDonate"/>
    <addaction name="actionAbout"/>
   </widget>
   <action name="actionAdd_image">
@@ -1003,15 +1003,6 @@ border: none;
    </property>
    <property name="text">
     <string>Add folder</string>
-   </property>
-  </action>
-  <action name="actionAccount">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/myresource/resource/icons8-account-96.png</normaloff>:/myresource/resource/icons8-account-96.png</iconset>
-   </property>
-   <property name="text">
-    <string>Account</string>
    </property>
   </action>
   <action name="actionClear_all">
@@ -1048,6 +1039,18 @@ border: none;
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionDonate">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/myresource/resource/icons8-paypal-144.png</normaloff>:/myresource/resource/icons8-paypal-144.png</iconset>
+   </property>
+   <property name="text">
+    <string>Donate</string>
+   </property>
+   <property name="toolTip">
+    <string>Support the Developer</string>
    </property>
   </action>
  </widget>
