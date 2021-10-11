@@ -450,7 +450,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.hide()
         self.general_setting_ui.hide()
         self.about_ui.hide()
-        self.account_ui.hide()
         super().closeEvent(event)
 
     def main_info(self):
@@ -1058,11 +1057,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.show()
         self.general_setting_ui.raise_()
         self.general_setting_ui.activateWindow()
-
-    def show_account_page(self):
-        self.account_ui.show()
-        self.account_ui.raise_()
-        self.account_ui.activateWindow()
 
     def show_about_page(self):
         self.about_ui.show()
