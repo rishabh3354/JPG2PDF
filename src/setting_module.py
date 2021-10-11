@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QWidget, QDesktopWidget
 
 from advance_setting import Ui_AdvanceSettings
 from app_setting import Ui_AppSettings
-from account import Ui_AccountUI
 from about import Ui_AboutUI
 from donate_page import Ui_Donate
 
