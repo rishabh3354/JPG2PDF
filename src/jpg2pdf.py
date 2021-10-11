@@ -10,20 +10,15 @@ from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon, QDesktopServices
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
     QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
-    check_for_already_file_exists, get_valid_images, check_internet_connection, check_if_pro_feature_used, \
-    get_initial_download_dir
+    check_for_already_file_exists, get_valid_images, get_initial_download_dir
 from convert_pdf_threads import ConvertToPdfThread
-from setting_module import AdvanceSettingPage, AppSettingPage, AccountPage, AboutPage, DonatePage
+from setting_module import AdvanceSettingPage, AppSettingPage, AboutPage, DonatePage
 from pixmap_loading_thread import PixMapLoadingThread
-from accounts import ApplicationStartupTask, check_for_local_token, get_user_data_from_local, days_left
-from account_threads import RefreshButtonThread, SaveLocalInToken
 from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPG2PDF'
 THEME_PATH = '/snap/jpg2pdf/current/'
-# DAY_TRAIL = {"day_limit": 3, "used_limit": 0}
-# TODAY_DATE = datetime.datetime.now().date()
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -32,7 +27,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.advance_setting_ui = AdvanceSettingPage()
         self.general_setting_ui = AppSettingPage()
-        self.account_ui = AccountPage()
         self.about_ui = AboutPage()
         self.donate_ui = DonatePage()
         self.ui.setupUi(self)
@@ -120,18 +114,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.creator = ""
         self.created_on = ""
 
-        # plan flags
-        # ---------------------------------------------------------------------------------------------------------
-        self.one_time_congratulate = True
-        self.is_plan_active = True
-
         self.load_settings()
         self.general_setting_defaults(default=False)
         self.advance_settings_defaults(default=False)
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
-        # self.ui.actionAccount.triggered.connect(self.show_account_page)
         self.ui.actionAbout.triggered.connect(self.show_about_page)
         self.ui.actionDonate.triggered.connect(self.show_donate_page)
         self.ui.actionAdd_folder.triggered.connect(self.load_folder)
@@ -197,16 +185,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.icon_size.valueChanged.connect(self.adjust_thumbnail_size)
         self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
         self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
-
-        # accounts page
-        # ApplicationStartupTask(PRODUCT_NAME).create_free_trial_offline()
-        # self.account_ui.ui.error_message.clear()
-        # self.account_ui.ui.error_message.setStyleSheet("color:red;")
-        # self.account_ui.ui.account_progress_bar.setVisible(False)
-        # self.my_plan()
-        # self.account_ui.ui.purchase_licence.clicked.connect(self.purchase_licence)
-        # self.account_ui.ui.refresh_account.clicked.connect(self.refresh_account)
-        # self.account_ui.ui.account_progress_bar.setFixedHeight(5)
 
         # about page
         self.about_ui.ui.warlordsoft_button.clicked.connect(self.redirect_to_warlordsoft)
@@ -337,10 +315,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("geometry", self.saveGeometry())
         self.settings.setValue("windowState", self.saveState())
 
-        # save daily limit
-        # self.settings.setValue("used_limit", DAY_TRAIL.get('used_limit'))
-        # self.settings.setValue("today_date", str(TODAY_DATE))
-
     def load_settings(self):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
         if self.settings.contains("Default_loc"):
@@ -470,13 +444,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.restoreGeometry(self.settings.value("geometry"))
         if self.settings.contains("windowState"):
             self.restoreState(self.settings.value("windowState", ""))
-
-        # daily limit loads
-        # if self.settings.contains("today_date"):
-        #     saved_date = datetime.datetime.strptime(self.settings.value("today_date"), "%Y-%m-%d").date()
-        #     if saved_date == TODAY_DATE:
-        #         if self.settings.contains("used_limit"):
-        #             DAY_TRAIL["used_limit"] = int(self.settings.value("used_limit"))
 
     def closeEvent(self, event):
         self.save_settings()
@@ -899,7 +866,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         set_theme(self, self.theme)
         set_theme(self.advance_setting_ui, self.theme)
         set_theme(self.general_setting_ui, self.theme)
-        set_theme(self.account_ui, self.theme)
         set_theme(self.about_ui, self.theme)
         set_theme(self.donate_ui, self.theme)
         self.pop_up_stylesheet = popup_theme(self)
@@ -1078,13 +1044,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
 
     def ok_setting_clicked(self):
-        # pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
-        # if pro_plan_status:
-        #     if not self.check_your_plan():
-        #         self.advance_settings_defaults(default=True)
-        #         self.popup_message("Your PDF Advanced settings was Reset!",
-        #                            "Your can still use JPG2PDF free version without Advanced features. "
-        #                            "Your advanced setting is not saved for this PDF.")
         self.advance_setting_ui.hide()
 
     def hide_general_settings(self):
@@ -1826,12 +1785,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             status = False
 
-        # pro_plan_status = check_if_pro_feature_used(pdf_settings)
-        # day_limit_status = False
-        # DAY_TRAIL["used_limit"] += 1
-        # if DAY_TRAIL.get("used_limit") > DAY_TRAIL.get("day_limit"):
-        #     day_limit_status = True
-
         return pdf_settings, status, False
 
     def start_convert_thread(self, selected_list_items, download_path, pdf_settings):
@@ -1860,12 +1813,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 selected_list_items = [self.all_images_list[i] for i in self.selected_list]
                 download_path = get_download_path(self.Default_loc)
                 pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
-                if pro_plan_status:
-                    pass
-                    # if not self.is_plan_active:
-                    #     # self.advance_settings_defaults(default=True)
-                    #     self.check_your_plan()
-                    #     return False
                 if status:
                     self.progress_bar_enable()
                     if self.overwrite_warning:
@@ -1963,133 +1910,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def redirect_to_feedback_button(self):
         feedback_link = "https://warlordsoftwares.in/contact_us/"
         webbrowser.open(feedback_link)
-
-    """
-           Accounts page functionality:---------------------------------------------------------------------------------
-    """
-
-    def purchase_licence(self):
-        if check_internet_connection():
-            account_dict = get_user_data_from_local()
-            if account_dict:
-                account_id = str(account_dict.get("email")).split("@")[0]
-                if account_id:
-                    warlord_soft_link = f"https://warlordsoftwares.in/warlord_soft/subscription/?product={PRODUCT_NAME}&account_id={account_id} "
-                else:
-                    warlord_soft_link = f"https://warlordsoftwares.in/signup/"
-                webbrowser.open(warlord_soft_link)
-                data = dict()
-                data["email"] = f"{account_id}@warlordsoft.in"
-                data["password"] = f"{account_id}@warlordsoft.in"
-                data["re_password"] = f"{account_id}@warlordsoft.in"
-                self.save_token = SaveLocalInToken(data)
-                self.save_token.start()
-        else:
-            self.popup_message(title="No internet connection", message="Please check your internet connection!")
-
-    def refresh_account(self):
-        self.account_ui.ui.error_message.clear()
-        self.account_ui.ui.account_progress_bar.setRange(0, 0)
-        self.account_ui.ui.account_progress_bar.setVisible(True)
-        self.refresh_thread = RefreshButtonThread(PRODUCT_NAME)
-        self.refresh_thread.change_value_refresh.connect(self.after_refresh)
-        self.refresh_thread.start()
-
-    def after_refresh(self, response_dict):
-        if response_dict.get("status"):
-            user_plan_data = get_user_data_from_local()
-            if user_plan_data:
-                self.logged_in_user_plan_page(user_plan_data)
-        else:
-            self.account_ui.ui.error_message.setText(response_dict.get("message"))
-        self.account_ui.ui.account_progress_bar.setRange(0, 1)
-        self.account_ui.ui.account_progress_bar.setVisible(False)
-
-    def my_plan(self):
-        token = check_for_local_token()
-        if token not in [None, ""]:
-            user_plan_data = get_user_data_from_local()
-            if user_plan_data:
-                self.logged_in_user_plan_page(user_plan_data)
-            else:
-                user_plan_data = dict()
-                user_plan_data['plan'] = "N/A"
-                user_plan_data['expiry_date'] = "N/A"
-                user_plan_data['email'] = "N/A"
-                self.logged_in_user_plan_page(user_plan_data)
-        else:
-            user_plan_data = get_user_data_from_local()
-            if user_plan_data:
-                self.logged_in_user_plan_page(user_plan_data)
-
-    def logged_in_user_plan_page(self, user_plan_data):
-        account_email = user_plan_data.get('email')
-        plan = user_plan_data.get("plan", "N/A")
-        expiry_date = user_plan_data.get("expiry_date")
-        if account_email:
-            account_id = str(account_email).split("@")[0]
-            self.account_ui.ui.lineEdit_account_id.setText(account_id)
-        else:
-            self.account_ui.ui.lineEdit_account_id.setText("N/A")
-        if plan == "Free Trial":
-            self.account_ui.ui.lineEdit_plan.setText("Evaluation")
-        elif plan == "Life Time Free Plan":
-            self.account_ui.ui.purchase_licence.setEnabled(False)
-            self.account_ui.ui.refresh_account.setEnabled(False)
-            self.account_ui.ui.lineEdit_plan.setText(plan)
-            self.account_ui.ui.groupBox_12.setVisible(False)
-            self.account_ui.resize(600, 400)
-            if self.one_time_congratulate:
-                self.account_ui.ui.account_progress_bar.setRange(0, 1)
-                self.account_ui.ui.account_progress_bar.setVisible(False)
-                self.popup_message(title="Congratulations! Plan Upgraded to PRO",
-                                   message="Your plan has been upgraded to PRO. Enjoy lifetime licence. Thankyou for your purchase.")
-                self.one_time_congratulate = False
-        else:
-            self.account_ui.ui.lineEdit_plan.setText(plan)
-        if expiry_date:
-            if plan == "Life Time Free Plan":
-                self.account_ui.ui.lineEdit_expires_on.setText(f"{PRODUCT_NAME} PRO VERSION")
-                self.is_plan_active = True
-            else:
-                plan_days_left = days_left(expiry_date)
-                if plan_days_left == "0 Day(s) Left":
-                    self.account_ui.ui.error_message.setText("Evaluation period ended, Upgrade to Pro")
-                    self.account_ui.ui.lineEdit_expires_on.setText(plan_days_left)
-                    self.is_plan_active = False
-                else:
-                    self.is_plan_active = True
-                    self.account_ui.ui.lineEdit_expires_on.setText(plan_days_left)
-        else:
-            self.account_ui.ui.lineEdit_expires_on.setText("N/A")
-
-    def check_your_plan(self):
-        if not self.is_plan_active:
-            self.msg = QMessageBox()
-            self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-            self.msg.setStyleSheet(self.pop_up_stylesheet)
-            self.msg.setIcon(QMessageBox.Information)
-            # self.msg.setText("Evaluation period ended, Upgrade to Pro")
-            self.msg.setText("")
-            # self.msg.setInformativeText(f"Your Daily Free PDF Conversion Limit of {DAY_TRAIL.get('day_limit')} PDFs is Over.\n\n"
-            #                             "Please Support The Developer and Purchase a License To UNLOCK UNLIMITED Daily Limit.")
-            self.msg.setInformativeText("")
-            purchase = self.msg.addButton(QMessageBox.Yes)
-            close = self.msg.addButton(QMessageBox.Yes)
-            purchase.setText('Purchase Licence')
-            close.setText('Close')
-            purchase.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogOkButton)))
-            close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
-            self.msg.exec_()
-            try:
-                if self.msg.clickedButton() == purchase:
-                    self.show_account_page()
-                elif self.msg.clickedButton() == close:
-                    pass
-            except Exception as e:
-                pass
-            return False
-        return True
 
 
 if __name__ == "__main__":

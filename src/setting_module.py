@@ -36,20 +36,6 @@ class AppSettingPage(QWidget):
         self.move(qtRectangle.topLeft())
 
 
-class AccountPage(QWidget):
-    def __init__(self):
-        QWidget.__init__(self)
-        self.ui = Ui_AccountUI()
-        self.ui.setupUi(self)
-        self.setWindowTitle("JPEG2PDF PRO | Account Page")
-
-        self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
-        qtRectangle = self.frameGeometry()
-        centerPoint = QDesktopWidget().availableGeometry().center()
-        qtRectangle.moveCenter(centerPoint)
-        self.move(qtRectangle.topLeft())
-
-
 class AboutPage(QWidget):
     def __init__(self):
         QWidget.__init__(self)
