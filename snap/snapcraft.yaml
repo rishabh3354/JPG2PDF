@@ -26,6 +26,8 @@ apps:
        - unity7
        - wayland
        - opengl
+       - optical-drive
+       - removable-media
     desktop: jpg2pdf.desktop
 
 plugs:

@@ -1,8 +1,20 @@
-Summary: Convert Your Images Into PDF With Standard Encryption, Supports JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF Etc Images Format
+**IMPORTANT NOTE :#**
 
-JPEG2PDF Convert Your **Images Into PDFs** and Supports **JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF** Etc Images Format, Also you can Encrypt your PDF files with **AES-256 bit Encryption.**
+**IF APP IS NOT LAUNCHING AFTER INSTALL, THEN RUN CMD BELOW IN YOUR SHELL.****
 
-**Features of JPEG2PDF:**
+    sudo snap remove jpg2pdf --purge && sudo snap install jpg2pdf && sudo snap refresh jpg2pdf && sudo snap install pyqt5-runtime-lite && sudo snap refresh pyqt5-runtime-lite && jpg2pdf
+    
+***FYI:***  *Be Patient, Sometimes Snap Applications Takes A While To Launch At First Time Installations*
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+**ABOUT APPLICATION :**
+
+JPEG2PDF Convert Your **Images Into PDFs** and Supports JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF Etc Images Format, Also you can Encrypt your PDF files with **AES-256 bit Encryption.**
+
+***Update:** Drag drop files feature is added in the app.*
+
+**FEATURES :** 
 
  - Select Images in Bulk and **One Click** to Convert Images into PDFs.
  - Support **Auto orientation** and Auto page formatting.
@@ -14,19 +26,27 @@ JPEG2PDF Convert Your **Images Into PDFs** and Supports **JPG, JPEG, PNG, BMP, P
  - Set Manual **DPI** of the images.
  - Protect your PDF with **AES 256bit Encryptions.**
 
-**Note:**  If Your are Facing any Issues with the App, then Run below command in Your Terminal/Shell.
 
-`sudo snap refresh jpg2pdf`
+**NOTE  #1**
 
-`sudo snap refresh pyqt5-runtime-lite`
+**Give Permission to removable-media interface and optical-drive interface**  
+  
+Run below command in your Terminal/Shell.  
+  
+     sudo snap connect formatlab:removable-media  
 
-Keywords: smallpdf, ilovepdf, freepdfconverter, toolpdf24, adobepdf, jpg2pdf, jpgtopdf, imagetopdf, image2pdf, sejda, pdfonline, sodapdf, pdf2go, itextpdf, image converter, convert jpg to pdf, pspdfkit, pdftools, avepdf, foxit, wondershare, pdfresizer, img2go, img2pdf, online2pdf, bigpdf, pdfelement, nitro
+     sudo snap connect formatlab:optical-drive
 
-**To Install, use cmd:**
+ 
 
-    snap install jpg2pdf
+ubuntu-restricted-extras package allows users to install ability to play popular non-free media formats, including DVD, MP3, Quicktime, and Windows Media formats. without this you would not be able to play videos inside the app.
 
-[Get it from Snapstore](https://snapcraft.io/jpg2pdf)
+    sudo apt-get install ubuntu-restricted-extras
 
-![enter image description here](https://camo.githubusercontent.com/ab077b20ad9938c23fbdac223ab101df5ed27329bbadbe7f98bfd62d5808f0a7/68747470733a2f2f736e617063726166742e696f2f7374617469632f696d616765732f6261646765732f656e2f736e61702d73746f72652d626c61636b2e737667)
+
+**KEYWORDS:** 
+
+*smallpdf, ilovepdf, freepdfconverter, toolpdf24, adobepdf, jpg2pdf, jpgtopdf, imagetopdf, image2pdf, sejda, pdfonline, sodapdf, pdf2go, itextpdf, image converter, convert jpg to pdf, pspdfkit, pdftools, avepdf, foxit, wondershare, pdfresizer, img2go, img2pdf, online2pdf, bigpdf, pdfelement, nitro, jpg2pdf linux, pdf2go*
+
+-------------------------------------------------------------------------------------------------------
 
