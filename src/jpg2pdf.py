@@ -1891,7 +1891,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         webbrowser.open(warlord_soft_link)
 
     def redirect_to_paypal_donation(self):
-        paypal_donation_link = "https://www.paypal.com/paypalme/rishabh3354/10"
+        paypal_donation_link = "https://www.paypal.com/paypalme/rishabh3354/5"
         webbrowser.open(paypal_donation_link)
 
     def ge_more_apps(self):
