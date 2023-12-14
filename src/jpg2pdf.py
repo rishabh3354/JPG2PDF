@@ -1887,7 +1887,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     """
 
     def redirect_to_warlordsoft(self):
-        warlord_soft_link = "https://warlordsoftwares.in/"
+        warlord_soft_link = "https://warlordsoftwares.com/"
         webbrowser.open(warlord_soft_link)
 
     def redirect_to_paypal_donation(self):
@@ -1902,7 +1902,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QDesktopServices.openUrl(QUrl("snap://jpg2pdf"))
 
     def redirect_to_feedback_button(self):
-        feedback_link = "https://warlordsoftwares.in/contact_us/"
+        feedback_link = "https://warlordsoftwares.com/contact_us/"
         webbrowser.open(feedback_link)
 
 
