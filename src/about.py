@@ -149,7 +149,7 @@ class Ui_AboutUI(object):
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/myresource/resource/jpg2pdf.png\" width=\"110\" /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#888a85;\">JPEG2PDF PRO</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#888a85;\">Version: 0.1</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#888a85;\">Version: 7.4</span></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#888a85;\"><br /></p></body></html>"))
         self.developer_info.setHtml(_translate("AboutUI", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -161,7 +161,7 @@ class Ui_AboutUI(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#888a85;\">Rishabh Bhardwaj</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#888a85;\">Checkout </span><a href=\"https://github.com/rishabh3354\"><span style=\" text-decoration: underline; color:#888a85;\">GitHub</span></a><span style=\" font-weight:600; color:#888a85;\"> | </span><a href=\"https://www.buymeacoffee.com/rishabh33\"><span style=\" text-decoration: underline; color:#888a85;\">BuyMeCoffee</span></a></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#888a85;\"><br /></p></body></html>"))
-        self.warlordsoft_button.setText(_translate("AboutUI", "Visit @WarlordSoft"))
+        self.warlordsoft_button.setText(_translate("AboutUI", "Visit @Site"))
         self.rate_button.setText(_translate("AboutUI", "Rate"))
         self.feedback_button.setText(_translate("AboutUI", "Feedback"))
         self.donate_button.setText(_translate("AboutUI", "Donate"))
