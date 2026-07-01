@@ -1,6 +1,5 @@
-# JPEG2PDF
+# JPEG2PDF - Convert your images into high-quality PDF documents with ease.
 
-Convert your images into high-quality PDF documents with ease.
 
 **JPEG2PDF** is a fast, lightweight, and privacy-friendly image to PDF converter for Linux. It lets you convert **JPG, JPEG, PNG, BMP, GIF, TIFF, SVG, WebP, and many other image formats** into professional PDF files in just a few clicks. All processing is performed locally on your computer, ensuring your files remain private.
 
@@ -55,8 +54,34 @@ Convert your images into high-quality PDF documents with ease.
 * Reports and presentations
 * Digital archiving
 
+
+## Install FormatLab on Linux Desktop:
+
+**Snap**
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/jpg2pdf)
+
+Install with command-line
+
+`snap install jpg2pdf`
+
+and run
+
+`jpg2pdf`
+
+**Flatpak**
+
+<a href="https://flathub.org/apps/details/com.warlordsoftwares.jpeg2pdf"><img src="https://flathub.org/assets/badges/flathub-badge-en.png"  height="56" width="186" alt="Get it from the Flathub Store" ></a>
+
+Install with command-line
+
+`flatpak install flathub com.warlordsoftwares.jpeg2pdf`
+
+and run
+
+`flatpak run com.warlordsoftwares.jpeg2pdf`
+
+
 ## Keywords
 
 JPEG2PDF, Image to PDF, JPG to PDF, JPEG to PDF, PNG to PDF, BMP to PDF, TIFF to PDF, SVG to PDF, WebP to PDF, Image Converter, PDF Creator, PDF Converter, Batch Image to PDF, Merge Images into PDF, Photo to PDF, Linux PDF Converter, Offline PDF Converter, AES-256 PDF Encryption, Password Protected PDF, PDF Generator, PDF Tools, Document Converter, Scan to PDF, JPG2PDF Linux, Image2PDF, Img2PDF, Convert Images to PDF, PDF Utility.
-
-This version is more SEO-friendly for GitHub and search engines while avoiding keyword stuffing. It emphasizes the features users commonly search for, especially "image to PDF", "JPG to PDF", "Linux PDF converter", "offline PDF converter", and "AES-256 PDF encryption".
