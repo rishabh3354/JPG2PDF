@@ -100,7 +100,6 @@ def get_initial_download_dir():
                 else:
                     download_path = os.path.expanduser("~") + "/Downloads"
         os.makedirs(download_path, exist_ok=True)
-        print(download_path)
     except Exception as e:
         print("error in getting download path", str(e))
         return "/Downloads"
