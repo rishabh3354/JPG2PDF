@@ -1,8 +1,8 @@
 name: jpg2pdf
 base: core22
 version: '2026.7.2'
-summary: Convert jpg jpeg png bmp svg tiff images to pdf format with encryption
-description: jpeg2pdf is a powerful pdf converter for converting any images like jpg jpeg png bmp svg tiff to standard pdf format with encryption and other addition features
+summary: Convert JPG, PNG, SVG, TIFF and BMP images into encrypted PDF files
+description: JPG2PDF converts JPG, JPEG, PNG, BMP, SVG, TIFF and many other image formats into high-quality PDF documents.
 grade: stable
 confinement: strict
 
@@ -29,7 +29,6 @@ apps:
        - unity7
        - wayland
        - opengl
-       - optical-drive
        - removable-media
     desktop: jpg2pdf.desktop
     environment:
@@ -72,7 +71,6 @@ parts:
 
   jpg2pdf:
       plugin: python
-      python-version: python3
       source: .
       python-packages:
           - requests
@@ -80,4 +78,3 @@ parts:
           - fpdf2
           - Pillow
           - pikepdf
-      build-attributes: [ keep-execstack ]
