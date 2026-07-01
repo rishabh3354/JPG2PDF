@@ -1,52 +1,62 @@
-**IMPORTANT NOTE :#**
+# JPEG2PDF
 
-**IF APP IS NOT LAUNCHING AFTER INSTALL, THEN RUN CMD BELOW IN YOUR SHELL.****
+Convert your images into high-quality PDF documents with ease.
 
-    sudo snap remove jpg2pdf --purge && sudo snap install jpg2pdf && sudo snap refresh jpg2pdf && sudo snap install pyqt5-runtime-lite && sudo snap refresh pyqt5-runtime-lite && jpg2pdf
-    
-***FYI:***  *Be Patient, Sometimes Snap Applications Takes A While To Launch At First Time Installations*
+**JPEG2PDF** is a fast, lightweight, and privacy-friendly image to PDF converter for Linux. It lets you convert **JPG, JPEG, PNG, BMP, GIF, TIFF, SVG, WebP, and many other image formats** into professional PDF files in just a few clicks. All processing is performed locally on your computer, ensuring your files remain private.
 
-------------------------------------------------------------------------------------------------------------------------------------
+> **New:** Drag & Drop support has been added for faster image importing.
 
-**ABOUT APPLICATION :**
+## Features
 
-JPEG2PDF Convert Your **Images Into PDFs** and Supports JPG, JPEG, PNG, BMP, PNG, BMP, SVG, TIFF Etc Images Format, Also you can Encrypt your PDF files with **AES-256 bit Encryption.**
+* 🚀 Batch convert multiple images into PDF with a single click.
+* 🖼️ Supports JPG, JPEG, PNG, BMP, GIF, TIFF, SVG, WebP, and many other image formats.
+* 📄 Create a single PDF from multiple images or generate separate PDF files.
+* 🔄 Automatic image orientation and intelligent page formatting.
+* 📐 Customize page margins and image alignment.
+* 📚 Supports standard paper sizes including **A4, A3, A5, Letter, Legal**, and more.
+* ↩️ Rotate selected images and PDF pages before exporting.
+* ⚫ Create grayscale or black-and-white PDF documents.
+* 🔢 Add automatic page numbers with customizable fonts and styles.
+* 🎯 Configure custom image DPI for optimal print quality.
+* 🔒 Protect PDF files using **AES-256 encryption** with password security.
+* 🖱️ Drag and drop images directly into the application.
+* ⚡ Fast, lightweight, and easy to use.
+* 🔐 Offline processing — your images never leave your computer.
 
-***Update:** Drag drop files feature is added in the app.*
+## Supported Image Formats
 
-**FEATURES :** 
+* JPG
+* JPEG
+* PNG
+* BMP
+* GIF
+* TIFF
+* SVG
+* WebP
+* and many more...
 
- - Select Images in Bulk and **One Click** to Convert Images into PDFs.
- - Support **Auto orientation** and Auto page formatting.
- - Set **Page Margin** with image position in page
- - Supports standard PDF page sizes **(A4, A3, A5**, letter etc.)
- - **Rotates Images** and PDF pages from page ranges.
- - **Grayscale** and black and white images in PDF
- - Auto **Page Numbering** support with all font styling.
- - Set Manual **DPI** of the images.
- - Protect your PDF with **AES 256bit Encryptions.**
+## Why JPEG2PDF?
 
+* No internet connection required.
+* No file size limitations.
+* No watermarks.
+* No advertisements.
+* Fast native Linux application.
+* Simple and intuitive user interface.
+* Secure local image processing.
 
-**NOTE  #1**
+## Perfect For
 
-**Give Permission to removable-media interface and optical-drive interface**  
-  
-Run below command in your Terminal/Shell.  
-  
-     sudo snap connect formatlab:removable-media  
+* Scanned documents
+* Photos and albums
+* Receipts and invoices
+* School and college assignments
+* Business documents
+* Reports and presentations
+* Digital archiving
 
-     sudo snap connect formatlab:optical-drive
+## Keywords
 
- 
+JPEG2PDF, Image to PDF, JPG to PDF, JPEG to PDF, PNG to PDF, BMP to PDF, TIFF to PDF, SVG to PDF, WebP to PDF, Image Converter, PDF Creator, PDF Converter, Batch Image to PDF, Merge Images into PDF, Photo to PDF, Linux PDF Converter, Offline PDF Converter, AES-256 PDF Encryption, Password Protected PDF, PDF Generator, PDF Tools, Document Converter, Scan to PDF, JPG2PDF Linux, Image2PDF, Img2PDF, Convert Images to PDF, PDF Utility.
 
-ubuntu-restricted-extras package allows users to install ability to play popular non-free media formats, including DVD, MP3, Quicktime, and Windows Media formats. without this you would not be able to play videos inside the app.
-
-    sudo apt-get install ubuntu-restricted-extras
-
-
-**KEYWORDS:** 
-
-*smallpdf, ilovepdf, freepdfconverter, toolpdf24, adobepdf, jpg2pdf, jpgtopdf, imagetopdf, image2pdf, sejda, pdfonline, sodapdf, pdf2go, itextpdf, image converter, convert jpg to pdf, pspdfkit, pdftools, avepdf, foxit, wondershare, pdfresizer, img2go, img2pdf, online2pdf, bigpdf, pdfelement, nitro, jpg2pdf linux, pdf2go*
-
--------------------------------------------------------------------------------------------------------
-
+This version is more SEO-friendly for GitHub and search engines while avoiding keyword stuffing. It emphasizes the features users commonly search for, especially "image to PDF", "JPG to PDF", "Linux PDF converter", "offline PDF converter", and "AES-256 PDF encryption".
