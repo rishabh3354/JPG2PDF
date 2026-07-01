@@ -84,7 +84,7 @@ class ConvertToPdfThread(QtCore.QThread):
         self.v_value = self.convert_in_unit(self.pdf_settings.get("v_value", 0))
 
         self.ask_for_export = self.pdf_settings.get("ask_for_export", False)
-        self.export_file_name = self.pdf_settings.get("export_file_name", f"jpf2pdf_export_on_{str(datetime.datetime.now())}")
+        self.export_file_name = self.pdf_settings.get("export_file_name", f"jpeg2pdf_export_on_{str(int(datetime.datetime.now().timestamp()))}")
 
         #  page number settings:
         self.show_page_no = self.pdf_settings.get("show_page_no", False)
@@ -196,7 +196,7 @@ class ConvertToPdfThread(QtCore.QThread):
                 if self.ask_for_export:
                     export_pdf_title = f"{self.export_file_name}"
                 else:
-                    export_pdf_title = f"jpf2pdf_export_on_{str(datetime.datetime.now())}"
+                    export_pdf_title = f"jpeg2pdf_export_on_{str(int(datetime.datetime.now().timestamp()))}"
                 self.output_path = f"{self.download_path}{export_pdf_title}.pdf"
                 pdf.output(self.output_path)
                 status = {"status": True, "title": export_pdf_title, "file_path": self.download_path,

@@ -1,9 +1,12 @@
+from PyQt5.QtCore import QFile, QIODevice, QTextStream
+
 THEME_DICT = {"dark": "dark.qss", "light": "light.qss"}
 
 
-def set_theme(self, theme):
-    from jpg2pdf import THEME_PATH
-    self.setStyleSheet(open(THEME_PATH + THEME_DICT.get(theme, "dark"), 'r').read())
+def set_theme(self, theme=":/qss_icons/dark/dark.qss"):
+    theme_file = QFile(theme)
+    theme_file.open(QIODevice.OpenModeFlag.ReadOnly)
+    self.setStyleSheet(QTextStream(theme_file).readAll())
 
 
 def popup_theme(self):

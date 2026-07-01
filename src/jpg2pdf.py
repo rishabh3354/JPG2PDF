@@ -17,8 +17,7 @@ from pixmap_loading_thread import PixMapLoadingThread
 from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
-PRODUCT_NAME = 'JPG2PDF'
-THEME_PATH = '/snap/jpg2pdf/current/'
+PRODUCT_NAME = 'JPEG2PDF'
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -31,13 +30,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.donate_ui = DonatePage()
         self.ui.setupUi(self)
         self.setWindowTitle("JPEG2PDF PRO")
-        self.settings = QSettings("warlordsoft", "jpg2pdf")
+        self.settings = QSettings("warlordsoft", "jpeg2pdf")
 
         # jpg2pdf settings initials-------------------------------------------------------------------------------------
         self.image_hide = False
         self.ui.hide_image.setText("Hide icons")
         self.Default_loc = get_initial_download_dir()
-        self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+        self.ui.output_path.setText(self.Default_loc + "/JPEG2PDF")
         self.ui.checkBox_protect_pdf.setChecked(False)
         self.enable_pdf_password()
         self.show_full_path_flag = False
@@ -54,14 +53,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
         self.progress_bar_disable()
         largeWidth = QGuiApplication.primaryScreen().size().width()
-        self.ui.splitter_2.setSizes([largeWidth / 3, 120])
+        self.ui.splitter_2.setSizes([int(largeWidth / 3), 120])
         self.ui.image.setVisible(False)
         self.counter = 0
         self.toggle = 0
         self.default_selected = 0
 
         # general settings initials ------------------------------------------------------------------------------------
-        self.theme = 'dark'
+        self.theme = ':/qss_icons/dark/dark.qss'
         self.general_setting_ui.ui.dark.setChecked(True)
         self.file_dialog = 'native'
         self.main_table_pointer = 70
@@ -309,7 +308,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("created_on", self.advance_setting_ui.ui.created_on.text())
 
         # one time congratulate
-        self.settings.setValue("one_time_congratulate", self.one_time_congratulate)
+        # self.settings.setValue("one_time_congratulate", self.one_time_congratulate)
 
         # save window state
         self.settings.setValue("geometry", self.saveGeometry())
@@ -319,7 +318,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # jpg2pdf settings loads: --------------------------------------------------------------------------------------
         if self.settings.contains("Default_loc"):
             self.Default_loc = self.settings.value("Default_loc")
-            self.ui.output_path.setText(self.Default_loc + "/JPG2PDF")
+            self.ui.output_path.setText(self.Default_loc + "/JPEG2PDF")
         if self.settings.contains("status_protect_pdf"):
             self.ui.checkBox_protect_pdf.setChecked(json.loads(self.settings.value("status_protect_pdf")))
             self.enable_pdf_password()
@@ -503,7 +502,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def general_setting_defaults(self, default=True):
         if default:
-            self.theme = 'dark'
+            self.theme = ':/qss_icons/dark/dark.qss'
             self.general_setting_ui.ui.dark.setChecked(True)
             self.file_dialog = 'native'
             self.main_table_pointer = 70
@@ -526,9 +525,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.process_images_into_table()
 
         #  theme defaults
-        if self.theme == "dark":
+        if self.theme == ":/qss_icons/dark/dark.qss":
             self.general_setting_ui.ui.dark.setChecked(True)
-        elif self.theme == "light":
+        elif self.theme == ":/qss_icons/light/light.qss":
             self.general_setting_ui.ui.light.setChecked(True)
         else:
             self.general_setting_ui.ui.dark.setChecked(True)
@@ -855,13 +854,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def set_theme(self):
         if self.general_setting_ui.ui.dark.isChecked():
-            self.theme = 'dark'
+            self.theme = ':/qss_icons/dark/dark.qss'
             self.general_setting_ui.ui.dark.setChecked(True)
         elif self.general_setting_ui.ui.light.isChecked():
-            self.theme = 'light'
+            self.theme = ':/qss_icons/light/light.qss'
             self.general_setting_ui.ui.light.setChecked(True)
         else:
-            self.theme = 'dark'
+            self.theme = ':/qss_icons/dark/dark.qss'
         set_theme(self, self.theme)
         set_theme(self.advance_setting_ui, self.theme)
         set_theme(self.general_setting_ui, self.theme)
@@ -940,9 +939,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.msg.exec_()
         try:
             if self.msg.clickedButton() == open_folder:
-                QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
+                os.system(f'xdg-open "{folder_path}"')
             elif self.msg.clickedButton() == open_pdf:
-                QDesktopServices.openUrl(QUrl.fromLocalFile(str(play_path)))
+                os.system(f'xdg-open "{play_path}"')
             elif self.msg.clickedButton() == close:
                 pass
         except Exception as e:
@@ -1487,7 +1486,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                       QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
         if folder_loc:
             if check_default_location(folder_loc):
-                self.ui.output_path.setText(folder_loc + "/JPG2PDF")
+                self.ui.output_path.setText(folder_loc + "/JPEG2PDF")
                 self.Default_loc = folder_loc
             else:
                 self.popup_message(title="Export Path Invalid", message="Export Path Must Inside Home Directory")
@@ -1524,7 +1523,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def preview_image(self):
         if self.all_images_list:
-            QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.all_images_list[self.counter])))
+            print(str(self.all_images_list[self.counter]))
+            os.system(f'xdg-open "{str(self.all_images_list[self.counter])}"')
 
     def toggle_full_half_path(self):
         if self.all_images_list:
@@ -1732,7 +1732,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pdf_settings["ask_for_export"] = self.ask_for_export
 
             if str(self.ui.pdf_name.text()) in [None, ""]:
-                pdf_settings["export_file_name"] = f"jpf2pdf_export_on_{str(datetime.datetime.now())}"
+                pdf_settings["export_file_name"] = f"jpeg2pdf_export_on_{str(int(datetime.datetime.now().timestamp()))}"
             else:
                 pdf_settings["export_file_name"] = str(self.ui.pdf_name.text())
 
@@ -1839,9 +1839,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                 self.progress_bar_enable()
                                 self.start_convert_thread(selected_list_items, download_path, pdf_settings)
                             if self.msg.clickedButton() == open_folder:
-                                QDesktopServices.openUrl(QUrl(self.Default_loc + "/JPG2PDF"))
+                                os.system(f"xdg-open {self.Default_loc + '/JPEG2PDF'}")
                             if self.msg.clickedButton() == open_file:
-                                QDesktopServices.openUrl(QUrl(path))
+                                os.system(f'xdg-open "{path}"')
                             if self.msg.clickedButton() == close:
                                 pass
                         except Exception as e:

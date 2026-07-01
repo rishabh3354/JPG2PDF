@@ -72,16 +72,16 @@ def humanbytes(byte_str):
 def get_download_path(location):
     try:
         if location:
-            location += '/JPG2PDF/'
+            location += '/JPGE2PDF/'
             os.makedirs(location, exist_ok=True)
             return location
         else:
             HOME = get_initial_download_dir()
-            HOME += '/JPG2PDF/'
+            HOME += '/JPGE2PDF/'
             os.makedirs(HOME, exist_ok=True)
             return HOME
     except Exception as e:
-        return get_initial_download_dir() + '/JPG2PDF/'
+        return get_initial_download_dir() + '/JPGE2PDF/'
 
 
 def get_initial_download_dir():
