@@ -81,7 +81,6 @@ and run
 
 `flatpak run com.warlordsoftwares.jpeg2pdf`
 
-
-## Keywords
-
-JPEG2PDF, Image to PDF, JPG to PDF, JPEG to PDF, PNG to PDF, BMP to PDF, TIFF to PDF, SVG to PDF, WebP to PDF, Image Converter, PDF Creator, PDF Converter, Batch Image to PDF, Merge Images into PDF, Photo to PDF, Linux PDF Converter, Offline PDF Converter, AES-256 PDF Encryption, Password Protected PDF, PDF Generator, PDF Tools, Document Converter, Scan to PDF, JPG2PDF Linux, Image2PDF, Img2PDF, Convert Images to PDF, PDF Utility.
+<sub><sup>
+Keywords: JPEG2PDF, Image to PDF, JPG to PDF, JPEG to PDF, PNG to PDF, BMP to PDF, TIFF to PDF, SVG to PDF, WebP to PDF, Image Converter, PDF Creator, PDF Converter, Batch Image to PDF, Merge Images into PDF, Photo to PDF, Linux PDF Converter, Offline PDF Converter, AES-256 PDF Encryption, Password Protected PDF, PDF Generator, PDF Tools, Document Converter, Scan to PDF, JPG2PDF Linux, Image2PDF, Img2PDF, Convert Images to PDF, PDF Utility.
+</sub></sup>
