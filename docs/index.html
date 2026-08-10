@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPEG2PDF — Image to PDF Converter for Linux (JPG, PNG, TIFF)</title>
+<meta name="description" content="Free open-source image to PDF converter for Linux. Batch convert JPG, PNG, BMP, TIFF, SVG and WebP into PDF with custom page size, DPI and AES-256 encryption.">
+<meta name="google-site-verification" content="mL3uAdGxN4UUQe9QNljmbWKse_nSiBQhiplr9p4KsAw">
+<link rel="canonical" href="https://rishabh3354.github.io/JPG2PDF/">
+<meta name="author" content="Warlord Softwares">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Warlord Softwares">
+<meta property="og:title" content="JPEG2PDF — Image to PDF Converter for Linux (JPG, PNG, TIFF)">
+<meta property="og:description" content="Free open-source image to PDF converter for Linux. Batch convert JPG, PNG, BMP, TIFF, SVG and WebP into PDF with custom page size, DPI and AES-256 encryption.">
+<meta property="og:url" content="https://rishabh3354.github.io/JPG2PDF/">
+<meta property="og:image" content="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JPEG2PDF — Image to PDF Converter for Linux (JPG, PNG, TIFF)">
+<meta name="twitter:description" content="Free open-source image to PDF converter for Linux. Batch convert JPG, PNG, BMP, TIFF, SVG and WebP into PDF with custom page size, DPI and AES-256 encryption.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_1.png">
+<link rel="icon" href="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/icons/icon.png">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#ffffff;--panel:#f6f7f9;--text:#16181d;--muted:#5b6270;--line:#e3e6ea;
+  --accent:#c0392b;--code-bg:#f0f2f5;--shadow:0 1px 3px rgba(0,0,0,.07);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1115;--panel:#171a20;--text:#e9ecf1;--muted:#98a0ae;--line:#252a33;
+        --code-bg:#1c2028;--shadow:0 1px 3px rgba(0,0,0,.4)}
+}
+:root[data-theme="dark"]{--bg:#0f1115;--panel:#171a20;--text:#e9ecf1;--muted:#98a0ae;
+  --line:#252a33;--code-bg:#1c2028;--shadow:0 1px 3px rgba(0,0,0,.4)}
+:root[data-theme="light"]{--bg:#ffffff;--panel:#f6f7f9;--text:#16181d;--muted:#5b6270;
+  --line:#e3e6ea;--code-bg:#f0f2f5;--shadow:0 1px 3px rgba(0,0,0,.07)}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 1.25rem}
+header.hero{padding:3.5rem 0 2.5rem;text-align:center;border-bottom:1px solid var(--line)}
+h1{font-size:clamp(1.75rem,4.5vw,2.6rem);line-height:1.2;letter-spacing:-.02em;margin:0 0 .6rem}
+.sub{color:var(--muted);font-size:clamp(1rem,2.2vw,1.15rem);max-width:44rem;margin:0 auto 1.75rem}
+.banner{border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow);margin:0 0 2rem}
+.badges{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin:0 0 1.75rem}
+.badges img{display:inline-block}
+.cta{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+.btn{display:inline-block;padding:.7rem 1.3rem;border-radius:8px;font-weight:600;font-size:.95rem;
+  border:1px solid var(--line);background:var(--panel);color:var(--text)}
+.btn:hover{text-decoration:none;border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+section{padding:3rem 0;border-bottom:1px solid var(--line)}
+h2{font-size:clamp(1.3rem,3vw,1.7rem);letter-spacing:-.01em;margin:0 0 1.25rem}
+h3{font-size:1.02rem;margin:0 0 .35rem}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.2rem}
+.card p{margin:0;color:var(--muted);font-size:.93rem}
+.card h3{color:var(--text)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:.85rem 1rem;
+  overflow-x:auto;margin:.5rem 0 0}
+code{font:.88rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+dl.ref{margin:0;display:grid;gap:.9rem}
+dl.ref dt{font-weight:600;font-size:.9rem;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+dl.ref dd{margin:.25rem 0 0;color:var(--muted);font-size:.95rem;word-spacing:.1em}
+.shots{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.shots img{border-radius:10px;border:1px solid var(--line);box-shadow:var(--shadow)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:.9rem 1.1rem;margin:0 0 .6rem}
+details summary{cursor:pointer;font-weight:600;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";float:right;color:var(--accent);font-weight:700}
+details[open] summary::after{content:"\2212"}
+details p{margin:.7rem 0 0;color:var(--muted);font-size:.95rem}
+.notice{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:8px;padding:1rem 1.2rem;color:var(--muted);font-size:.93rem}
+footer{padding:2.5rem 0 3.5rem;color:var(--muted);font-size:.9rem}
+footer a{color:var(--muted);text-decoration:underline}
+footer nav{margin:0 0 1rem;display:flex;flex-wrap:wrap;gap:1rem}
+.tbl{width:100%;border-collapse:collapse;font-size:.94rem}
+.tbl th,.tbl td{text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.tbl td:first-child{font-weight:600;white-space:nowrap}
+.tbl td:last-child{color:var(--muted)}
+.scroll{overflow-x:auto}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"JPEG2PDF","applicationCategory":"UtilitiesApplication","operatingSystem":"Linux, Windows 10, Windows 11","description":"Free open-source image to PDF converter for Linux. Batch convert JPG, PNG, BMP, TIFF, SVG and WebP into PDF with custom page size, DPI and AES-256 encryption.","url":"https://rishabh3354.github.io/JPG2PDF/","downloadUrl":"https://flathub.org/apps/details/com.warlordsoftwares.jpeg2pdf","screenshot":"https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_1.png","softwareVersion":"latest","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"Warlord Softwares","url":"https://warlordsoftwares.com/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is JPEG2PDF free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is free to install from Flathub and the Snap Store, and the source is MIT licensed."}},{"@type":"Question","name":"Does it upload my images anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. All conversion happens locally on your machine. There is no upload, no account and no file-size limit, which matters if you are converting scanned IDs, contracts or medical records."}},{"@type":"Question","name":"Can it merge several images into one PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Add all the images, reorder them however you like, and export a single PDF. You can also export one PDF per image."}},{"@type":"Question","name":"Can it password protect the PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes, with AES-256 encryption. Set the password before exporting."}},{"@type":"Question","name":"What image formats does it support?","acceptedAnswer":{"@type":"Answer","text":"JPG, JPEG, PNG, BMP, GIF, TIFF, SVG and WebP, plus other formats Pillow can read."}},{"@type":"Question","name":"Can I control page size and margins?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 A4, A3, A5, Letter, Legal and more, with margins and image position configurable in mm, cm, pt or inches, and a custom DPI setting."}},{"@type":"Question","name":"Is it available for Windows or macOS?","acceptedAnswer":{"@type":"Answer","text":"Not currently. The packaged builds are Linux only. The source is Python and PyQt5, so it may run elsewhere, but that is untested and unsupported."}},{"@type":"Question","name":"Can I contribute?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is MIT licensed \u2014 open an issue or a pull request on GitHub."}}]}</script>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>JPEG2PDF — Image to PDF Converter for Linux (JPG, PNG, TIFF)</h1>
+    <p class="sub">Batch convert JPG, PNG, BMP, GIF, TIFF, SVG and WebP images into high-quality PDF documents — with page size and margin control, custom DPI, page numbering, grayscale output and AES-256 password protection. Runs entirely offline; your images never leave your computer. Open source under the MIT licence.</p>
+    <div class="badges">
+      <img src="https://img.shields.io/flathub/downloads/com.warlordsoftwares.jpeg2pdf?style=flat-square&label=Flathub%20installs&color=4A90D9" alt="Flathub installs" height="20">
+      <img src="https://img.shields.io/snapcraft/v/jpg2pdf/latest/stable?style=flat-square&label=Snap&color=E95420" alt="Snap Store version" height="20">
+      <img src="https://img.shields.io/github/v/release/rishabh3354/JPG2PDF?style=flat-square&label=Release&color=2ea44f" alt="Latest release" height="20">
+      <img src="https://img.shields.io/github/stars/rishabh3354/JPG2PDF?style=flat-square&color=f5c518" alt="GitHub stars" height="20">
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="https://flathub.org/apps/details/com.warlordsoftwares.jpeg2pdf">Flathub</a>
+      <a class="btn" href="https://snapcraft.io/jpg2pdf">Snap Store</a>
+      <a class="btn" href="https://github.com/rishabh3354/JPG2PDF">GitHub</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="screenshot-banner">
+    <div class="wrap">
+      <img class="banner" src="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_1.png" alt="JPEG2PDF — Image to PDF Converter for Linux" width="1600" height="600">
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="wrap">
+      <h2>Download and install JPEG2PDF</h2>
+      <h3>Linux — Snap</h3>
+      <pre><code>sudo snap install jpg2pdf</code></pre>
+      <h3>Linux — Flatpak</h3>
+      <pre><code>flatpak install flathub com.warlordsoftwares.jpeg2pdf</code></pre>
+
+        <h3>Run from source</h3>
+        <pre><code>git clone https://github.com/rishabh3354/JPG2PDF.git
+cd JPG2PDF
+pip install -r req.txt
+python3 src/jpg2pdf.py</code></pre>
+        <p>The application is MIT licensed — see the
+        <a href="https://github.com/rishabh3354/JPG2PDF">repository</a>.</p>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>Features</h2>
+      <div class="grid">
+        <div class="card"><h3>Batch conversion</h3><p>Turn a whole folder of images into PDFs in a single run.</p></div>
+        <div class="card"><h3>One PDF or many</h3><p>Merge every image into one document, or export one PDF per image.</p></div>
+        <div class="card"><h3>Reorder before export</h3><p>Move images up and down, duplicate them, or sort the queue.</p></div>
+        <div class="card"><h3>Page sizes and margins</h3><p>A4, A3, A5, Letter, Legal and more, with margins in mm, cm, pt or inches.</p></div>
+        <div class="card"><h3>Custom DPI</h3><p>Pick the image resolution that suits print or screen.</p></div>
+        <div class="card"><h3>Rotate images and pages</h3><p>Rotate individual images, or a page range in the output PDF.</p></div>
+        <div class="card"><h3>AES-256 encryption</h3><p>Password-protect the resulting PDF.</p></div>
+        <div class="card"><h3>Page numbering</h3><p>Automatic page numbers with configurable fonts and styles.</p></div>
+        <div class="card"><h3>Grayscale output</h3><p>Convert to grayscale or black and white to shrink scans.</p></div>
+        <div class="card"><h3>PDF metadata</h3><p>Set the title, subject and author on the exported document.</p></div>
+        <div class="card"><h3>Drag and drop</h3><p>Drop images straight onto the window, with a live zoomable preview.</p></div>
+        <div class="card"><h3>Fully offline</h3><p>No upload, no file-size limit, no watermark, no ads.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reference">
+    <div class="wrap">
+      <h2>Supported image formats</h2>
+      <dl class="ref">
+        <dt>Photos</dt><dd>JPG · JPEG · PNG · WebP</dd>
+        <dt>Scans &amp; documents</dt><dd>TIFF · TIF · BMP · GIF</dd>
+        <dt>Vector</dt><dd>SVG</dd>
+        <dt>Also</dt><dd>Any other format readable by Pillow</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="tasks">
+    <div class="wrap">
+      <h2>Common tasks</h2>
+      <div class="scroll">
+        <table class="tbl">
+          <thead><tr><th>Task</th><th>What JPEG2PDF does</th></tr></thead>
+          <tbody>
+          <tr><td>Convert JPG to PDF</td><td>Drop the images in and export — one click.</td></tr>
+          <tr><td>Merge images into one PDF</td><td>Queue them, reorder, export as a single document.</td></tr>
+          <tr><td>Convert a scanned document</td><td>Auto orientation and DPI control for readable scans.</td></tr>
+          <tr><td>Convert PNG to PDF</td><td>Transparency is flattened onto the page.</td></tr>
+          <tr><td>Convert TIFF to PDF</td><td>Mixed-format queues need no conversion step first.</td></tr>
+          <tr><td>Password protect a PDF</td><td>Enable Protect PDF and set an AES-256 password.</td></tr>
+          <tr><td>Make a grayscale PDF</td><td>Shrink scans and photos with grayscale output.</td></tr>
+          <tr><td>Add page numbers</td><td>Enable numbering and pick the font and style.</td></tr>
+          <tr><td>Set A4 or Letter size</td><td>Choose the page format, or leave it on Auto.</td></tr>
+          <tr><td>Convert a whole folder</td><td>Add folder, then Start Convert.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="screenshots">
+    <div class="wrap">
+      <h2>Screenshots</h2>
+      <div class="shots">
+        <img src="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_1.png" alt="JPEG2PDF main window in dark theme — image queue with dimensions, format and file size, live preview and PDF settings" loading="lazy" width="1200" height="750">
+        <img src="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_4.png" alt="JPEG2PDF main window in light theme showing the same batch conversion queue" loading="lazy" width="1200" height="750">
+        <img src="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_2.png" alt="JPEG2PDF app settings and advanced PDF settings — measure units, page margins, image position, DPI and page rotation" loading="lazy" width="1200" height="750">
+        <img src="https://raw.githubusercontent.com/rishabh3354/FLATPAK_JPEG2PDF/main/share/screenshots/jpeg2pdf_screenshot_3.png" alt="JPEG2PDF about dialog showing version and project links" loading="lazy" width="1200" height="750">
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Frequently asked questions</h2>
+        <details><summary>Is JPEG2PDF free?</summary><p>Yes. It is free to install from Flathub and the Snap Store, and the source is MIT licensed.</p></details>
+        <details><summary>Does it upload my images anywhere?</summary><p>No. All conversion happens locally on your machine. There is no upload, no account and no file-size limit, which matters if you are converting scanned IDs, contracts or medical records.</p></details>
+        <details><summary>Can it merge several images into one PDF?</summary><p>Yes. Add all the images, reorder them however you like, and export a single PDF. You can also export one PDF per image.</p></details>
+        <details><summary>Can it password protect the PDF?</summary><p>Yes, with AES-256 encryption. Set the password before exporting.</p></details>
+        <details><summary>What image formats does it support?</summary><p>JPG, JPEG, PNG, BMP, GIF, TIFF, SVG and WebP, plus other formats Pillow can read.</p></details>
+        <details><summary>Can I control page size and margins?</summary><p>Yes — A4, A3, A5, Letter, Legal and more, with margins and image position configurable in mm, cm, pt or inches, and a custom DPI setting.</p></details>
+        <details><summary>Is it available for Windows or macOS?</summary><p>Not currently. The packaged builds are Linux only. The source is Python and PyQt5, so it may run elsewhere, but that is untested and unsupported.</p></details>
+        <details><summary>Can I contribute?</summary><p>Yes. It is MIT licensed — open an issue or a pull request on GitHub.</p></details>
+    </div>
+  </section>
+
+  <section id="other-apps">
+    <div class="wrap">
+      <h2>Other apps by Warlord Softwares</h2>
+      <div class="scroll">
+        <table class="tbl">
+          <thead><tr><th>App</th><th>What it does</th></tr></thead>
+          <tbody>
+          <tr><td><a href="https://rishabh3354.github.io/FORMAT_LAB/">FormatLab</a></td><td>Video &amp; Audio Converter for Linux and Windows</td></tr>
+          <tr><td><a href="https://rishabh3354.github.io/4KTUBE/">4KTUBE</a></td><td>YouTube Downloader for Linux and Windows</td></tr>
+          <tr><td><a href="https://rishabh3354.github.io/4KWALL/">4KWALL</a></td><td>Wallpaper Manager &amp; Auto Wallpaper Changer</td></tr>
+          <tr><td><a href="https://rishabh3354.github.io/YOUTUBE-DL-PRO/">DL-YouTube</a></td><td>Media Downloader for 1400+ Sites</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav>
+      <a href="https://github.com/rishabh3354/JPG2PDF">GitHub repository</a>
+      <a href="https://github.com/rishabh3354/JPG2PDF/releases/latest">Releases</a>
+      <a href="https://github.com/rishabh3354/JPG2PDF/issues">Report an issue</a>
+      <a href="https://flathub.org/apps/details/com.warlordsoftwares.jpeg2pdf">Flathub</a>
+      <a href="https://snapcraft.io/jpg2pdf">Snap Store</a>
+      <a href="https://warlordsoftwares.com/">Website</a>
+      <a href="https://warlordsoftwares.com/privacy-policy/">Privacy policy</a>
+    </nav>
+    <p>JPEG2PDF is proprietary software. &copy; 2024&ndash;2026 Rishabh Bhardwaj / Warlord Softwares.</p>
+  </div>
+</footer>
+
+</body>
+</html>
