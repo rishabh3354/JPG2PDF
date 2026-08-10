@@ -7,3 +7,6 @@ migrations/
 build
 dist
 *.spec
+
+# The blanket *.xml rule above is for IDE files; the Pages sitemap must ship.
+!docs/sitemap.xml
