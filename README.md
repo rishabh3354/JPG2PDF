@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/Offline-100%25%20local-success?style=flat-square" alt="Runs entirely offline">
 </p>
 
-> ⭐ **Installed 28,000+ times on Flathub.** If it saved you a trip to an online converter that wanted your scanned documents, [star the repo](https://github.com/rishabh3354/JPG2PDF/stargazers).
+> **Installed 28,000+ times on Flathub.**
 
 ---
 
@@ -205,15 +205,7 @@ Yes. It is MIT licensed — open an [issue](https://github.com/rishabh3354/JPG2P
 
 ## 🧩 More apps by Warlord Softwares
 
-| App | What it does |
-|---|---|
-| **[FormatLab](https://github.com/rishabh3354/FORMAT_LAB)** | Convert and compress video and audio between 40+ formats |
-| **[4KTUBE](https://github.com/rishabh3354/4KTUBE)** | Download YouTube videos and playlists in 4K / 8K |
-| **[DL-YouTube](https://github.com/rishabh3354/YOUTUBE-DL-PRO)** | Download video and audio from 1400+ websites |
-| **[4KWALL](https://github.com/rishabh3354/4KWALL)** | Wallpaper manager with auto-rotation and multi-monitor support |
-| **[PDF2OCR](https://github.com/rishabh3354/PDF2OCR)** | Turn scanned PDFs and images into editable text with Tesseract OCR |
-
-**Packaging building blocks:** [pyqt5-runtime-core22](https://github.com/rishabh3354/pyqt5-runtime-core22) · [pyqt5-runtime-core22-lite](https://github.com/rishabh3354/pyqt5-runtime-core22-lite) · [content-snap-core22](https://github.com/rishabh3354/content-snap-core22)
+Other apps by Warlord Softwares are listed on [warlordsoftwares.com](https://warlordsoftwares.com/).
 
 ---
 
@@ -231,9 +223,3 @@ Yes. It is MIT licensed — open an [issue](https://github.com/rishabh3354/JPG2P
 [MIT](LICENSE) © Rishabh Bhardwaj / Warlord Softwares.
 
 Built with [PyQt5](https://pypi.org/project/PyQt5/), [Pillow](https://python-pillow.org/), [fpdf2](https://py-pdf.github.io/fpdf2/) and [pikepdf](https://pikepdf.readthedocs.io/).
-
----
-
-<p align="center">
-  <strong>Found this useful? ⭐ Star the repo — it genuinely helps other people find it.</strong>
-</p>
