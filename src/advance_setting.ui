@@ -65,677 +65,317 @@ p, li { white-space: pre-wrap; }
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QGroupBox" name="groupBox_8">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>MEASURE UNIT</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_15">
-              <item>
-               <layout class="QGridLayout" name="gridLayout_27">
-                <item row="0" column="0">
-                 <widget class="QRadioButton" name="mm">
-                  <property name="focusPolicy">
-                   <enum>Qt::StrongFocus</enum>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
-                  </property>
-                  <property name="text">
-                   <string>mm (default)</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="inch">
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
-                  </property>
-                  <property name="text">
-                   <string>inch</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="cm">
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
-                  </property>
-                  <property name="text">
-                   <string>cm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="pt">
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
-                  </property>
-                  <property name="text">
-                   <string>pt</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_11">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>PAGE MARGIN</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_17">
-              <item>
-               <layout class="QGridLayout" name="gridLayout_29">
-                <item row="1" column="2">
-                 <widget class="QLabel" name="v_unit_2">
-                  <property name="text">
-                   <string>Bottom</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QDoubleSpinBox" name="r_margin">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="suffix">
-                   <string> mm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QDoubleSpinBox" name="b_margin">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="suffix">
-                   <string> mm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="h_unit_2">
-                  <property name="text">
-                   <string>Right</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_28">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Top</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QDoubleSpinBox" name="l_margin">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="suffix">
-                   <string> mm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="t_margin">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="suffix">
-                   <string> mm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_38">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Left</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="4">
-                 <widget class="QToolButton" name="info_margin">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="resource.qrc">
-                    <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_12">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>PDF VIEW</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_19">
-              <item>
-               <layout class="QGridLayout" name="gridLayout_31">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_39">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Magnification</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="zoom">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>If Angle is blank, No operation will perform</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>default</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>fullpage</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>fullwidth</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>real</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QComboBox" name="layout">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>If Angle is blank, No operation will perform</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>continuous</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>single</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>two</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>default</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_29">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Page Layout</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_9">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>IMAGE POSITION</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_16">
-              <item>
-               <layout class="QGridLayout" name="gridLayout_28">
-                <item row="0" column="3">
-                 <widget class="QToolButton" name="info_image_pos">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="resource.qrc">
-                    <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_27">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Horizontal position</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QSpinBox" name="dpi">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>Image size</string>
-                  </property>
-                  <property name="suffix">
-                   <string> DPI</string>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>10000</number>
-                  </property>
-                  <property name="value">
-                   <number>150</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_26">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Image resolution</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_25">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Vertical position</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QCheckBox" name="auto_resolution">
-                  <property name="styleSheet">
-                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
-                  </property>
-                  <property name="text">
-                   <string>Auto image size</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="2">
-                 <widget class="QDoubleSpinBox" name="h_value">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="suffix">
-                   <string> mm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1" colspan="2">
-                 <widget class="QDoubleSpinBox" name="v_value">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="suffix">
-                   <string> mm</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="QToolButton" name="info_dpi">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="resource.qrc">
-                    <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_7">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>ROTATE PAGES</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_13">
-              <item>
-               <layout class="QGridLayout" name="gridLayout_25">
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_21">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Rotate Angle</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_24">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Page from</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QComboBox" name="select_angle">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>If Angle is blank, No operation will perform</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Select angle</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>90 Degree</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>180 Degree</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>270 Degree</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLineEdit" name="page_from">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="toolTip">
-                   <string>If From page is blank, operation will perform from starting page</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>eg. 5</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLineEdit" name="page_to">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="toolTip">
-                   <string>If From page is blank, operation will perform to ending page</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>eg. 12</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_22">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Page to</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_13">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>GRAYSCALE IMAGE</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_20">
-              <item>
-               <layout class="QGridLayout" name="gridLayout_32">
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_23">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Type</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_36">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Page from</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QComboBox" name="select_scale">
-                  <property name="focusPolicy">
-                   <enum>Qt::ClickFocus</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>If Angle is blank, No operation will perform</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Select scale</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Grayscale</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Black and white</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLineEdit" name="page_from_grayscale">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="toolTip">
-                   <string>If From page is blank, operation will perform from starting page</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>eg. 5</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLineEdit" name="page_to_grayscale">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="toolTip">
-                   <string>If From page is blank, operation will perform to ending page</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>eg. 12</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_37">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Page to</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
+ <widget class="QGroupBox" name="groupBox_presets">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>PRESETS</string>
+  </property>
+  <layout class="QVBoxLayout" name="v_groupBox_presets">
+   <item>
+    <layout class="QGridLayout" name="g_groupBox_presets">
+     <item row="0" column="0" colspan="2">
+      <widget class="QComboBox" name="preset">
+       <property name="toolTip">
+        <string>Load settings you saved before</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Choose a preset</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="save_preset">
+       <property name="toolTip">
+        <string>Save all settings in this window, plus orientation and page size, under a name</string>
+       </property>
+       <property name="text">
+        <string>Save as preset...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="delete_preset">
+       <property name="toolTip">
+        <string>Delete the chosen preset</string>
+       </property>
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QGroupBox" name="groupBox_compression">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>MAKE PDF SMALLER</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_compression">
+   <item>
+    <layout class="QGridLayout" name="gridLayout_compression">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_compression">
+       <property name="text">
+        <string>Compression</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="compression">
+       <property name="toolTip">
+        <string>Makes the PDF file smaller. Higher settings give smaller files with slightly lower picture quality.</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Off (best quality)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Low (high quality, a bit smaller)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Medium (good quality, much smaller)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>High (smallest file)</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QLabel" name="compression_info">
+       <property name="text">
+        <string>Great for photos and big screenshots. Pages keep the same size. See-through areas turn white.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+<item>
+ <widget class="QGroupBox" name="groupBox_layout">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>PAGE LAYOUT</string>
+  </property>
+  <layout class="QVBoxLayout" name="v_groupBox_layout">
+   <item>
+    <layout class="QGridLayout" name="g_groupBox_layout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_per_page">
+       <property name="text">
+        <string>Images per page</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="3">
+      <widget class="QComboBox" name="images_per_page">
+       <property name="toolTip">
+        <string>Put several images on each page, for example receipts or both sides of an ID card</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>1 (one per page)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>9</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_custom_size">
+       <property name="text">
+        <string>Custom page size</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QDoubleSpinBox" name="custom_width">
+       <property name="toolTip">
+        <string>Page width, used when Page size is &quot;Custom size&quot;</string>
+       </property>
+       <property name="suffix">
+        <string> mm</string>
+       </property>
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="minimum">
+        <double>20</double>
+       </property>
+       <property name="maximum">
+        <double>5000</double>
+       </property>
+       <property name="value">
+        <double>210</double>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_times">
+       <property name="text">
+        <string>×</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QDoubleSpinBox" name="custom_height">
+       <property name="toolTip">
+        <string>Page height, used when Page size is &quot;Custom size&quot;</string>
+       </property>
+       <property name="suffix">
+        <string> mm</string>
+       </property>
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="minimum">
+        <double>20</double>
+       </property>
+       <property name="maximum">
+        <double>5000</double>
+       </property>
+       <property name="value">
+        <double>297</double>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="4">
+      <widget class="QLabel" name="layout_info">
+       <property name="text">
+        <string>With several images per page, pages use the Page size from the main window (Auto uses A4).</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QGroupBox" name="groupBox_cleanup">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>CLEAN UP SCANS</string>
+  </property>
+  <layout class="QVBoxLayout" name="v_groupBox_cleanup">
+   <item>
+    <layout class="QGridLayout" name="g_groupBox_cleanup">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="straighten">
+       <property name="styleSheet">
+        <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+       </property>
+       <property name="toolTip">
+        <string>Turns slightly crooked scans and photos of documents so the text lines are level</string>
+       </property>
+       <property name="text">
+        <string>Straighten tilted pages</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="trim_borders">
+       <property name="styleSheet">
+        <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+       </property>
+       <property name="toolTip">
+        <string>Removes plain white margins and dark scanner edges around the page</string>
+       </property>
+       <property name="text">
+        <string>Cut off empty or dark borders</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="contrast">
+       <property name="styleSheet">
+        <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+       </property>
+       <property name="toolTip">
+        <string>Makes faded or grey scans darker and crisper</string>
+       </property>
+       <property name="text">
+        <string>Make text clearer (more contrast)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="cleanup_info">
+       <property name="text">
+        <string>Best for scanned documents and receipts. Applies to all images in the PDF.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
             <widget class="QGroupBox" name="groupBox_10">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -744,7 +384,7 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <property name="title">
-              <string>PAGE NUMBER</string>
+              <string>PAGE NUMBERS</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_18">
               <item>
@@ -766,17 +406,17 @@ p, li { white-space: pre-wrap; }
                   </property>
                   <item>
                    <property name="text">
-                    <string>courier</string>
+                    <string>Courier</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>helvetica</string>
+                    <string>Helvetica</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>times</string>
+                    <string>Times</string>
                    </property>
                   </item>
                  </widget>
@@ -801,17 +441,17 @@ p, li { white-space: pre-wrap; }
                   </property>
                   <item>
                    <property name="text">
-                    <string>center</string>
+                    <string>Center</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>left</string>
+                    <string>Left</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>right</string>
+                    <string>Right</string>
                    </property>
                   </item>
                  </widget>
@@ -822,7 +462,7 @@ p, li { white-space: pre-wrap; }
                    <enum>Qt::ClickFocus</enum>
                   </property>
                   <property name="toolTip">
-                   <string>Image size</string>
+                   <string>The number shown on the first page</string>
                   </property>
                   <property name="minimum">
                    <number>1</number>
@@ -835,14 +475,14 @@ p, li { white-space: pre-wrap; }
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_3">
                   <property name="text">
-                   <string>Font align</string>
+                   <string>Position</string>
                   </property>
                  </widget>
                 </item>
                 <item row="5" column="0">
                  <widget class="QLabel" name="label_2">
                   <property name="text">
-                   <string>Font color (RGB)</string>
+                   <string>Colour (RGB)</string>
                   </property>
                  </widget>
                 </item>
@@ -878,7 +518,7 @@ p, li { white-space: pre-wrap; }
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Page no. starts from</string>
+                   <string>First page number</string>
                   </property>
                  </widget>
                 </item>
@@ -888,7 +528,7 @@ p, li { white-space: pre-wrap; }
                    <enum>Qt::ClickFocus</enum>
                   </property>
                   <property name="toolTip">
-                   <string>Image size</string>
+                   <string>Size of the page number text</string>
                   </property>
                   <property name="suffix">
                    <string>px</string>
@@ -913,7 +553,7 @@ p, li { white-space: pre-wrap; }
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Position from bottom</string>
+                   <string>Distance from bottom</string>
                   </property>
                  </widget>
                 </item>
@@ -923,7 +563,7 @@ p, li { white-space: pre-wrap; }
                    <enum>Qt::ClickFocus</enum>
                   </property>
                   <property name="toolTip">
-                   <string>Image size</string>
+                   <string>Distance of the page number from the bottom of the page</string>
                   </property>
                   <property name="suffix">
                    <string> mm</string>
@@ -1031,7 +671,826 @@ p, li { white-space: pre-wrap; }
              </layout>
             </widget>
            </item>
-           <item>
+<item>
+            <widget class="QGroupBox" name="groupBox_7">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>ROTATE PAGES</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_25">
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_21">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Rotate</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_24">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Page from</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QComboBox" name="select_angle">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="toolTip">
+                   <string>Turn pages in the PDF. Leave on "Don't rotate" to keep them as they are.</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Don't rotate</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>90° clockwise</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>180° (upside down)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>90° anticlockwise</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="page_from">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Leave empty to start from the first page</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>e.g. 5</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="page_to">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Leave empty to go to the last page</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>e.g. 12</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_22">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Page to</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+<item>
+ <widget class="QGroupBox" name="groupBox_output">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>SPLIT OR JOIN PDFs</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_output">
+   <item>
+    <layout class="QGridLayout" name="gridLayout_output">
+<item row="0" column="0" colspan="3">
+ <widget class="QCheckBox" name="per_image_pdf">
+  <property name="styleSheet">
+   <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+  </property>
+  <property name="toolTip">
+   <string>Each image is saved as its own PDF with the same name as the image file. A TIFF file with several pages becomes one PDF with all its pages.</string>
+  </property>
+  <property name="text">
+   <string>Make a separate PDF for each image (photo.tif → photo.pdf)</string>
+  </property>
+ </widget>
+</item>
+
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_split">
+       <property name="text">
+        <string>Pages per PDF file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QSpinBox" name="split_every">
+       <property name="toolTip">
+        <string>Save several smaller PDFs instead of one big one, named like name_part1.pdf, name_part2.pdf. Page numbers start again in each file.</string>
+       </property>
+       <property name="specialValueText">
+        <string>Off (save one PDF)</string>
+       </property>
+       <property name="suffix">
+        <string> pages</string>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="3">
+      <widget class="QCheckBox" name="append_pdf">
+  <property name="styleSheet">
+   <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+  </property>
+       <property name="toolTip">
+        <string>Makes a new PDF: the pages of the PDF you choose, followed by your images. The PDF you choose is not changed.</string>
+       </property>
+       <property name="text">
+        <string>Add the images to the end of another PDF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QLineEdit" name="append_pdf_path">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="placeholderText">
+        <string>No PDF chosen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="choose_append_pdf">
+       <property name="text">
+        <string>Choose PDF</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+<item>
+ <widget class="QGroupBox" name="groupBox_ocr">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>SEARCHABLE PDF</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_ocr">
+   <item>
+    <layout class="QGridLayout" name="gridLayout_ocr">
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="ocr_enabled">
+  <property name="styleSheet">
+   <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+  </property>
+       <property name="toolTip">
+        <string>The app reads the words in your images and adds them invisibly to the pages, so you can search the PDF and copy its text. Converting takes longer.</string>
+       </property>
+       <property name="text">
+        <string>Make the text in images searchable and copyable</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_ocr_language">
+       <property name="text">
+        <string>Text language</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="ocr_language">
+       <property name="toolTip">
+        <string>Language of the text: eng (English), deu (German), fra (French), spa (Spanish), ita (Italian). For two languages, write eng+deu.</string>
+       </property>
+       <property name="placeholderText">
+        <string>eng</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QLabel" name="ocr_status">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+<item>
+            <widget class="QGroupBox" name="groupBox_13">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>BLACK AND WHITE PAGES</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_20">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_32">
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_23">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Colour</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_36">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Page from</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QComboBox" name="select_scale">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="toolTip">
+                   <string>Turn pages grey or black and white. Leave on "Keep colours" to keep them as they are.</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Keep colours</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Grayscale</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Black and white</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="page_from_grayscale">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Leave empty to start from the first page</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>e.g. 5</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="page_to_grayscale">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Leave empty to go to the last page</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>e.g. 12</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_37">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Page to</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+<item>
+            <widget class="QGroupBox" name="groupBox_8">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>UNIT OF MEASUREMENT</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_15">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_27">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="mm">
+                  <property name="focusPolicy">
+                   <enum>Qt::StrongFocus</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
+                  <property name="text">
+                   <string>mm (default)</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QRadioButton" name="inch">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
+                  <property name="text">
+                   <string>inch</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="cm">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
+                  <property name="text">
+                   <string>cm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="pt">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
+                  </property>
+                  <property name="text">
+                   <string>pt</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+<item>
+            <widget class="QGroupBox" name="groupBox_11">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>PAGE MARGINS</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_17">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_29">
+                <item row="1" column="2">
+                 <widget class="QLabel" name="v_unit_2">
+                  <property name="text">
+                   <string>Bottom</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QDoubleSpinBox" name="r_margin">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="suffix">
+                   <string> mm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QDoubleSpinBox" name="b_margin">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="suffix">
+                   <string> mm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="h_unit_2">
+                  <property name="text">
+                   <string>Right</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Top</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QDoubleSpinBox" name="l_margin">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="suffix">
+                   <string> mm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QDoubleSpinBox" name="t_margin">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="suffix">
+                   <string> mm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_38">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Left</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QToolButton" name="info_margin">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="resource.qrc">
+                    <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+<item>
+            <widget class="QGroupBox" name="groupBox_9">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>IMAGE POSITION AND SIZE</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_28">
+                <item row="0" column="3">
+                 <widget class="QToolButton" name="info_image_pos">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="resource.qrc">
+                    <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_27">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Move right by</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QSpinBox" name="dpi">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="toolTip">
+                   <string>Width of the image on the page. Turn off "Auto image size" to set it yourself.</string>
+                  </property>
+                  <property name="suffix">
+                   <string> DPI</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>10000</number>
+                  </property>
+                  <property name="value">
+                   <number>150</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_26">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Image width</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_25">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Move down by</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QCheckBox" name="auto_resolution">
+                  <property name="styleSheet">
+                   <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
+                  </property>
+                  <property name="text">
+                   <string>Auto image size</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" colspan="2">
+                 <widget class="QDoubleSpinBox" name="h_value">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="suffix">
+                   <string> mm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1" colspan="2">
+                 <widget class="QDoubleSpinBox" name="v_value">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="suffix">
+                   <string> mm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QToolButton" name="info_dpi">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="resource.qrc">
+                    <normaloff>:/myresource/resource/icons8-info-104.png</normaloff>:/myresource/resource/icons8-info-104.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+<item>
+            <widget class="QGroupBox" name="groupBox_12">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>HOW THE PDF OPENS</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_19">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_31">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_39">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Zoom</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="zoom">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="toolTip">
+                   <string>How big the pages look when the PDF is opened</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Viewer default</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Fit whole page</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Fit page width</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Actual size</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="layout">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
+                  <property name="toolTip">
+                   <string>How pages are shown when the PDF is opened</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Continuous scroll</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>One page at a time</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Two pages side by side</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Viewer default</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_29">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Page layout</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+<item>
             <widget class="QGroupBox" name="groupBox_5">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1040,7 +1499,7 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <property name="title">
-              <string>ADD PDF METADATA</string>
+              <string>DOCUMENT DETAILS</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_12">
               <item>
@@ -1057,7 +1516,7 @@ p, li { white-space: pre-wrap; }
                    <string/>
                   </property>
                   <property name="placeholderText">
-                   <string>eg. keyword1 keyword2</string>
+                   <string>e.g. holiday receipts 2026</string>
                   </property>
                  </widget>
                 </item>
@@ -1102,7 +1561,7 @@ p, li { white-space: pre-wrap; }
                    <string/>
                   </property>
                   <property name="placeholderText">
-                   <string>Producer name</string>
+                   <string>e.g. JPEG2PDF</string>
                   </property>
                  </widget>
                 </item>
@@ -1118,7 +1577,7 @@ p, li { white-space: pre-wrap; }
                    <string/>
                   </property>
                   <property name="placeholderText">
-                   <string>Created on (eg. yyyy-mm-dd)</string>
+                   <string>e.g. 2026-01-25</string>
                   </property>
                  </widget>
                 </item>
@@ -1144,7 +1603,7 @@ p, li { white-space: pre-wrap; }
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Producer</string>
+                   <string>Made with</string>
                   </property>
                  </widget>
                 </item>

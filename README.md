@@ -81,25 +81,33 @@ Works on Ubuntu, Debian, Fedora, Arch, Linux Mint, Pop!\_OS and any other distri
 
 - **Batch convert** — turn a whole folder of images into PDFs in one click.
 - **One PDF or many** — merge every image into a single document, or export one PDF per image.
-- **Reorder before export** — move images up and down, duplicate, or sort the queue.
-- **Page sizes** — A4, A3, A5, Letter, Legal and more, with automatic orientation.
+- **Sort and reorder** — sort by name, date modified, file size or date taken, drag images into any order, or move them to the top or bottom.
+- **Ticked automatically** — new images are ready to convert; click the ✓ column header to tick or untick all.
+- **Page sizes** — A4, A3, A5, Letter, Legal or any custom size, with automatic orientation.
+- **Several images per page** — 2, 4, 6 or 9 per page, great for receipts and ID cards.
 - **Margins and positioning** — set page margins and image placement in mm, cm, pt or inches.
 - **Custom DPI** — pick the image resolution that suits print or screen.
-- **Rotate** — rotate individual images, or a page range in the output PDF.
+- **Rotate and crop** — fix single images (only the PDF changes, never your files), or rotate a page range.
+- **Clean up scans** — straighten tilted pages, cut off dark borders and make text clearer.
+- **Smaller PDFs** — compress images, split into several PDFs, or add images to an existing PDF.
+- **One PDF per image** — keeps each file's name (photo.tif → photo.pdf), including multi-page TIFFs.
+- **Searchable PDFs** — OCR makes the text searchable and copyable (snap).
 - **Grayscale and black-and-white** output.
 - **Page numbering** with configurable fonts and styles.
 - **AES-256 encryption** — password-protect the resulting PDF.
 - **PDF metadata** — set title, subject and author.
 - **Drag and drop** images straight into the window.
 - **Live preview** with zoom before you export.
-- **Dark and light themes.**
+- **Presets, preview and undo** — save favourite settings, preview the PDF before saving, undo list changes (Ctrl+Z).
+- **Save anywhere** — any folder, including USB drives; folders can be imported with their subfolders.
+- **Built-in help and shortcuts** (F1), adjustable text size, dark and light themes.
 - **Fully offline** — no upload, no file-size limit, no watermark, no ads.
 
 ---
 
 ## 🖼 Supported image formats
 
-`JPG` · `JPEG` · `PNG` · `BMP` · `GIF` · `TIFF` · `TIF` · `SVG` · `WebP`
+`JPG` · `JPEG` · `PNG` · `BMP` · `GIF` · `TIFF` · `TIF` · `SVG` · `WebP` · `HEIC` (snap)
 
 ...and other formats readable by Pillow.
 
@@ -114,11 +122,13 @@ Works on Ubuntu, Debian, Fedora, Arch, Linux Mint, Pop!\_OS and any other distri
 | **Merge multiple images into one PDF** | Queue them, reorder, export as a single document |
 | **Convert a scanned document to PDF** | Auto orientation and DPI control for readable scans |
 | **Convert TIFF to PDF** | Multi-format queue, no conversion step needed first |
-| **Password protect a PDF** | Enable Protect PDF and set an AES-256 password |
+| **Password protect a PDF** | Tick Password and set an AES-256 password |
 | **Make a grayscale PDF** | Toggle grayscale to shrink scans and photos |
 | **Add page numbers** | Enable numbering and pick the font and style |
-| **Set A4 or Letter page size** | Choose the page format, or leave it on Auto |
-| **Convert a whole folder** | Add folder, then Start Convert |
+| **Set A4 or Letter page size** | Choose the page size, or leave it on Auto |
+| **Convert a whole folder** | Add a folder of images, then Create PDF |
+| **One PDF per image, same file names** | Advanced settings → Split or join PDFs → Make a separate PDF for each image |
+| **Several receipts on one page** | Advanced settings → Page layout → Images per page |
 
 ---
 
@@ -178,11 +188,11 @@ JPG, JPEG, PNG, BMP, GIF, TIFF, SVG and WebP, plus other formats Pillow can read
 
 ### Can I control page size and margins?
 
-Yes — A4, A3, A5, Letter, Legal and more, with margins and image position configurable in mm, cm, pt or inches, and a custom DPI setting.
+Yes — A4, A3, A5, Letter, Legal or a custom size, with margins and image position configurable in mm, cm, pt or inches, and a custom DPI setting.
 
 ### Does it work on Wayland?
 
-The packaged builds run under XWayland (`DISABLE_WAYLAND=1` is set in the snap) for compatibility.
+Yes. The packaged builds run under XWayland for compatibility (the snap sets `QT_QPA_PLATFORM=xcb`, so it also starts when the session asks for a Wayland Qt plugin).
 
 ### Is it available for Windows or macOS?
 

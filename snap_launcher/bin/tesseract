@@ -1,0 +1,6 @@
+#!/bin/bash
+# Runs the staged Tesseract with its own libraries and language data,
+# without changing the library path of the app itself.
+export LD_LIBRARY_PATH="$SNAP/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export TESSDATA_PREFIX="$SNAP/usr/share/tesseract-ocr/4.00/tessdata"
+exec "$SNAP/usr/lib/tesseract-bin/tesseract" "$@"
