@@ -12,13 +12,28 @@
 * 📄 Create a single PDF from multiple images or generate separate PDF files.
 * 🔄 Automatic image orientation and intelligent page formatting.
 * 📐 Customize page margins and image alignment.
-* 📚 Supports standard paper sizes including **A4, A3, A5, Letter, Legal**, and more.
+* 📚 Supports standard paper sizes **A4, A3, A5, Letter, Legal**, and custom sizes.
 * ↩️ Rotate selected images and PDF pages before exporting.
 * ⚫ Create grayscale or black-and-white PDF documents.
 * 🔢 Add automatic page numbers with customizable fonts and styles.
 * 🎯 Configure custom image DPI for optimal print quality.
 * 🔒 Protect PDF files using **AES-256 encryption** with password security.
 * 🖱️ Drag and drop images directly into the application.
+* 🔀 Sort by name, date modified, file size or date taken, drag rows to reorder, or move images to the top/bottom.
+* 🗜️ Compress images to make much smaller PDFs.
+* 🔍 Make searchable PDFs with OCR (text can be searched and copied).
+* ✂️ Split into several PDFs, or add images to the end of an existing PDF.
+* 🗂️ Batch convert each image into its own PDF with the same name (photo.tif → photo.pdf), including multi-page TIFFs.
+* ☑️ New images are ticked automatically; click the ✓ column header to tick or untick all.
+* ✂️ Rotate or crop single images (only the PDF changes, never your files).
+* 🧾 Put 2, 4, 6 or 9 images on one page — great for receipts and ID cards.
+* 📏 Page sizes A3, A4, A5, Letter, Legal or any custom size.
+* 🧹 Clean up scans: straighten tilted pages, cut off dark borders, make text clearer.
+* 💾 Save your favourite settings as presets.
+* 👀 Preview the PDF before saving, and undo changes to the image list (Ctrl+Z).
+* 💽 Save to any folder, including USB drives.
+* ❓ Built-in help (F1) and keyboard shortcuts.
+* 📁 Import folders including subfolders, and HEIC photos from iPhones.
 * ⚡ Fast, lightweight, and easy to use.
 * 🔐 Offline processing — your images never leave your computer.
 

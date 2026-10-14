@@ -54,7 +54,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Double click to select</string>
+           <string>Double-click an image to tick it. Drag images to change their order, or right-click for more options.</string>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
@@ -114,13 +114,16 @@
         <item>
          <widget class="QGroupBox" name="groupBox_4">
           <property name="title">
-           <string>OPTIONS</string>
+           <string>IMAGE LIST</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
             <layout class="QGridLayout" name="gridLayout_25">
              <item row="3" column="7">
               <widget class="QPushButton" name="stop">
+<property name="toolTip">
+ <string>Stop creating the PDF</string>
+</property>
                <property name="text">
                 <string>Stop</string>
                </property>
@@ -138,6 +141,9 @@
              </item>
              <item row="0" column="4" colspan="3">
               <widget class="QPushButton" name="show_full_path">
+<property name="toolTip">
+ <string>Show or hide the folder of each image</string>
+</property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -145,7 +151,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>full path</string>
+                <string>Show file location</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -161,6 +167,9 @@
              </item>
              <item row="0" column="0" colspan="4">
               <widget class="QComboBox" name="selectall">
+<property name="toolTip">
+ <string>Tick or untick all images</string>
+</property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -169,23 +178,24 @@
                </property>
                <item>
                 <property name="text">
-                 <string>Select Item</string>
+                 <string>Tick images</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Select All</string>
+                 <string>Tick all</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Deselect All</string>
+                 <string>Untick all</string>
                 </property>
                </item>
               </widget>
              </item>
              <item row="3" column="8" colspan="2">
               <widget class="QPushButton" name="start_convert">
+<property name="toolTip"><string>Make a PDF from the ticked images. If no image is ticked, all images are used.</string></property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -193,7 +203,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Start Convert</string>
+                <string>Create PDF</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -234,6 +244,7 @@ height: 28px;
              </item>
              <item row="0" column="7">
               <widget class="QPushButton" name="moveup">
+<property name="toolTip"><string>Move the highlighted images up. Click an image, or Ctrl/Shift-click several. Tip: you can also drag images, or right-click for more options.</string></property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -247,7 +258,7 @@ border: none;
 }</string>
                </property>
                <property name="text">
-                <string>Move Up</string>
+                <string>Move up</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -263,6 +274,7 @@ border: none;
              </item>
              <item row="0" column="8">
               <widget class="QPushButton" name="movedown">
+<property name="toolTip"><string>Move the highlighted images down. Click an image, or Ctrl/Shift-click several. Tip: you can also drag images, or right-click for more options.</string></property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -276,7 +288,7 @@ border: none;
 }</string>
                </property>
                <property name="text">
-                <string>Move Down</string>
+                <string>Move down</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -292,6 +304,9 @@ border: none;
              </item>
              <item row="0" column="9">
               <widget class="QPushButton" name="duplicate">
+<property name="toolTip">
+ <string>Remove images that are in the list more than once</string>
+</property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -299,7 +314,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Duplicate</string>
+                <string>Remove duplicates</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -315,6 +330,9 @@ border: none;
              </item>
              <item row="2" column="9">
               <widget class="QPushButton" name="hide_image">
+<property name="toolTip">
+ <string>Show or hide the small pictures in the list</string>
+</property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -322,7 +340,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Hide icons</string>
+                <string>Hide thumbnails</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -338,6 +356,9 @@ border: none;
              </item>
              <item row="2" column="8">
               <widget class="QPushButton" name="change">
+<property name="toolTip">
+ <string>Choose the folder where your PDFs are saved</string>
+</property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -345,7 +366,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Export path</string>
+                <string>Save to...</string>
                </property>
                <property name="icon">
                 <iconset resource="resource.qrc">
@@ -361,25 +382,61 @@ border: none;
              </item>
              <item row="2" column="0" colspan="3">
               <widget class="QComboBox" name="sort">
+               <property name="toolTip">
+                <string>Sort the images. "Date taken" is when the photo was taken; for images without that date, such as screenshots, the date the file was last changed is used.</string>
+               </property>
                <item>
                 <property name="text">
-                 <string>Sort item</string>
+                 <string>Sort by</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Asc</string>
+                 <string>Name: A to Z</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Desc</string>
+                 <string>Name: Z to A</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Modified: oldest</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Modified: newest</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Size: smallest</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Size: largest</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Date taken: oldest</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Date taken: newest</string>
                 </property>
                </item>
               </widget>
              </item>
              <item row="2" column="3" colspan="5">
               <widget class="QLineEdit" name="output_path">
+<property name="toolTip">
+ <string>Your PDFs are saved in this folder</string>
+</property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -439,6 +496,9 @@ border: none;
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QToolButton" name="select_item">
+<property name="toolTip">
+ <string>Tick or untick this image</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -446,7 +506,7 @@ border: none;
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Select</string>
+             <string>Tick</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
@@ -462,6 +522,9 @@ border: none;
           </item>
           <item>
            <widget class="QToolButton" name="preview_2">
+<property name="toolTip">
+ <string>Open this image in your image viewer</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -469,7 +532,7 @@ border: none;
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Preview</string>
+             <string>Open</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
@@ -485,6 +548,9 @@ border: none;
           </item>
           <item>
            <widget class="QToolButton" name="zoomin">
+<property name="toolTip">
+ <string>Zoom in</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -508,6 +574,9 @@ border: none;
           </item>
           <item>
            <widget class="QToolButton" name="zoomout">
+<property name="toolTip">
+ <string>Zoom out</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -530,7 +599,32 @@ border: none;
            </widget>
           </item>
           <item>
+ <widget class="QToolButton" name="rotate_left">
+  <property name="toolTip">
+   <string>Turn this image to the left (also in the PDF). Turns all highlighted images when several are highlighted.</string>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="text">
+   <string>Rotate left</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>25</width>
+    <height>25</height>
+   </size>
+  </property>
+ </widget>
+</item>
+<item>
            <widget class="QToolButton" name="rotate">
+<property name="toolTip">
+ <string>Turn this image to the right (also in the PDF). Turns all highlighted images when several are highlighted.</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -541,7 +635,7 @@ border: none;
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>Rotate</string>
+             <string>Rotate right</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
@@ -555,8 +649,34 @@ border: none;
             </property>
            </widget>
           </item>
+<item>
+ <widget class="QToolButton" name="crop">
+  <property name="toolTip">
+   <string>Cut away the parts of this image you don't want in the PDF</string>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="text">
+   <string>Crop</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>25</width>
+    <height>25</height>
+   </size>
+  </property>
+ </widget>
+</item>
+
           <item>
            <widget class="QToolButton" name="remove_2">
+<property name="toolTip">
+ <string>Remove this image from the list</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -584,6 +704,9 @@ border: none;
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QPushButton" name="prev">
+<property name="toolTip">
+ <string>Show the previous image</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -591,7 +714,7 @@ border: none;
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Prev</string>
+             <string>Previous</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
@@ -607,6 +730,9 @@ border: none;
           </item>
           <item>
            <widget class="QPushButton" name="next">
+<property name="toolTip">
+ <string>Show the next image</string>
+</property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -639,7 +765,7 @@ border: none;
            </sizepolicy>
           </property>
           <property name="title">
-           <string>   PDF PROPERTIES</string>
+           <string>   PDF DETAILS</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_12">
            <item>
@@ -653,7 +779,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="toolTip">
-                <string>Set Password to PDF</string>
+                <string>Ask for a password when the PDF is opened</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
@@ -698,7 +824,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Author name</string>
+                <string>Author</string>
                </property>
               </widget>
              </item>
@@ -711,7 +837,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Protect PDF (OFF)</string>
+                <string>Password (off)</string>
                </property>
               </widget>
              </item>
@@ -733,7 +859,7 @@ border: none;
                 <string/>
                </property>
                <property name="placeholderText">
-                <string>Set password</string>
+                <string>Password</string>
                </property>
               </widget>
              </item>
@@ -749,7 +875,7 @@ border: none;
                 <string/>
                </property>
                <property name="placeholderText">
-                <string>Author name</string>
+                <string>Your name</string>
                </property>
               </widget>
              </item>
@@ -765,7 +891,7 @@ border: none;
                 <string/>
                </property>
                <property name="placeholderText">
-                <string>Subject</string>
+                <string>What it's about</string>
                </property>
               </widget>
              </item>
@@ -781,7 +907,7 @@ border: none;
                 <string/>
                </property>
                <property name="placeholderText">
-                <string>Enter Pdf Title</string>
+                <string>PDF title</string>
                </property>
               </widget>
              </item>
@@ -810,7 +936,7 @@ border: none;
                 <string/>
                </property>
                <property name="placeholderText">
-                <string>PDF export name</string>
+                <string>PDF file name</string>
                </property>
               </widget>
              </item>
@@ -830,7 +956,7 @@ border: none;
              <item row="0" column="0">
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>PDF Export name</string>
+                <string>File name</string>
                </property>
               </widget>
              </item>
@@ -851,11 +977,37 @@ border: none;
                </property>
               </widget>
              </item>
+<item row="4" column="0" colspan="3">
+ <widget class="QPushButton" name="preview_pdf">
+  <property name="toolTip">
+   <string>Make a quick PDF of the first 10 images and open it, without saving it</string>
+  </property>
+  <property name="text">
+   <string>Preview PDF</string>
+  </property>
+  <property name="icon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/myresource/resource/icons8-file-preview-96.png</normaloff>
+    :/myresource/resource/icons8-file-preview-96.png
+   </iconset>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>20</width>
+    <height>20</height>
+   </size>
+  </property>
+ </widget>
+</item>
+
              <item row="2" column="1" colspan="2">
               <widget class="QComboBox" name="page_format">
+<property name="toolTip">
+ <string>Auto makes each page the same size as its image</string>
+</property>
                <item>
                 <property name="text">
-                 <string>Auto</string>
+                 <string>Auto (same as image)</string>
                 </property>
                </item>
                <item>
@@ -878,32 +1030,52 @@ border: none;
                  <string>Letter</string>
                 </property>
                </item>
+<item>
+ <property name="text">
+  <string>Legal</string>
+ </property>
+</item>
+<item>
+ <property name="text">
+  <string>Custom size</string>
+ </property>
+</item>
                <item>
                 <property name="text">
-                 <string>A3 (Fit view)</string>
+                 <string>A3 (stretch to fill)</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>A4 (Fit view)</string>
+                 <string>A4 (stretch to fill)</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>A5 (Fit view)</string>
+                 <string>A5 (stretch to fill)</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Letter (Fit view)</string>
+                 <string>Letter (stretch to fill)</string>
                 </property>
                </item>
-              </widget>
+<item>
+ <property name="text">
+  <string>Legal (stretch to fill)</string>
+ </property>
+</item>
+<item>
+ <property name="text">
+  <string>Custom size (stretch to fill)</string>
+ </property>
+</item>
+</widget>
              </item>
              <item row="3" column="2">
               <widget class="QToolButton" name="info_main">
                <property name="toolTip">
-                <string>pdf setting help</string>
+                <string>Help with orientation and page size</string>
                </property>
                <property name="text">
                 <string/>
@@ -922,6 +1094,9 @@ border: none;
              </item>
              <item row="1" column="1" colspan="2">
               <widget class="QComboBox" name="orientation">
+<property name="toolTip">
+ <string>Auto turns each page to match its image</string>
+</property>
                <item>
                 <property name="text">
                  <string>Auto</string>
@@ -929,12 +1104,12 @@ border: none;
                </item>
                <item>
                 <property name="text">
-                 <string>Portrait</string>
+                 <string>Portrait (tall)</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Landscape</string>
+                 <string>Landscape (wide)</string>
                 </property>
                </item>
               </widget>
@@ -948,7 +1123,7 @@ border: none;
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Page format</string>
+                <string>Page size</string>
                </property>
               </widget>
              </item>
@@ -1002,7 +1177,7 @@ border: none;
      <normaloff>:/myresource/resource/icons8-add-folder-96.png</normaloff>:/myresource/resource/icons8-add-folder-96.png</iconset>
    </property>
    <property name="text">
-    <string>Add folder</string>
+    <string>Add a folder of images</string>
    </property>
   </action>
   <action name="actionClear_all">
@@ -1011,7 +1186,7 @@ border: none;
      <normaloff>:/myresource/resource/icons8-delete-bin-96.png</normaloff>:/myresource/resource/icons8-delete-bin-96.png</iconset>
    </property>
    <property name="text">
-    <string>Clear all</string>
+    <string>Clear the list</string>
    </property>
   </action>
   <action name="actionRemove_Selected">
@@ -1020,7 +1195,7 @@ border: none;
      <normaloff>:/myresource/resource/icons8-multiply-52.png</normaloff>:/myresource/resource/icons8-multiply-52.png</iconset>
    </property>
    <property name="text">
-    <string>Remove Selected</string>
+    <string>Remove ticked images</string>
    </property>
   </action>
   <action name="actionSettings">
@@ -1029,7 +1204,7 @@ border: none;
      <normaloff>:/myresource/resource/icons8-settings-96.png</normaloff>:/myresource/resource/icons8-settings-96.png</iconset>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>App settings</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -1050,7 +1225,7 @@ border: none;
     <string>Donate</string>
    </property>
    <property name="toolTip">
-    <string>Support the Developer</string>
+    <string>Support the developer</string>
    </property>
   </action>
  </widget>

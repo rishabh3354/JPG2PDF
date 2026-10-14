@@ -1,3 +1,4 @@
+import copy
 import datetime
 import json
 import os
@@ -5,19 +6,47 @@ import sys
 import webbrowser
 from PIL import Image
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QProcessEnvironment, QUrl, QSettings
-from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon, QDesktopServices
+from PyQt5.QtCore import QProcessEnvironment, QUrl, QSettings, QItemSelection, QItemSelectionModel, QStandardPaths
+from PyQt5.QtGui import QPixmap, QGuiApplication, QIcon, QDesktopServices, QKeySequence
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog, QGraphicsView, \
-    QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle
+    QGraphicsScene, QGraphicsPixmapItem, QMessageBox, QAbstractItemView, QStyle, QMenu, QShortcut, QInputDialog, \
+    QComboBox, QSpinBox, QDoubleSpinBox, QCheckBox, QRadioButton, QLineEdit
 from helper import load_images_from_folder, check_default_location, humanbytes, get_download_path, \
-    check_for_already_file_exists, get_valid_images, get_initial_download_dir
-from convert_pdf_threads import ConvertToPdfThread
+    check_for_already_file_exists, can_save_in, get_valid_images, get_initial_download_dir, IMAGE_SORT_KEYS, load_qimage, \
+    get_image_info, pdf_names_for_images, apply_qimage_edits, rotate_crop_box
+from convert_pdf_threads import ConvertToPdfThread, ocr_available
 from setting_module import AdvanceSettingPage, AppSettingPage, AboutPage, DonatePage
 from pixmap_loading_thread import PixMapLoadingThread
+from crop_dialog import CropDialog
+from help_dialog import HelpDialog
+from app_icons import crop_icon, mirrored_icon, undo_icon, help_icon
+from app_font import load_app_font, app_font, header_css, DEFAULT_TEXT_SIZE
 from theme_set import set_theme, popup_theme
 from jpg2pdf_ui import Ui_MainWindow
 
 PRODUCT_NAME = 'JPEG2PDF'
+
+# sort combobox index -> (IMAGE_SORT_KEYS key, descending); index 0 is the "Sort by" placeholder
+SORT_OPTIONS = {
+    1: ("name", False), 2: ("name", True),
+    3: ("modified", False), 4: ("modified", True),
+    5: ("size", False), 6: ("size", True),
+    7: ("taken", False), 8: ("taken", True),
+}
+
+# advanced settings dropdown index -> value used for the PDF
+ROTATION_ANGLES = {1: "90", 2: "180", 3: "270"}
+COLOUR_MODES = {1: "L", 2: "1"}  # grayscale, black and white
+ZOOM_MODES = ["default", "fullpage", "fullwidth", "real"]
+LAYOUT_MODES = ["continuous", "single", "two", "default"]
+# main window dropdown index -> value used for the PDF
+ORIENTATIONS = ["Auto", "Portrait", "Landscape"]
+PAGE_FORMATS = ["Auto", "A3", "A4", "A5", "Letter", "Legal", "Custom", "A3 (Fit view)", "A4 (Fit view)", "A5 (Fit view)",
+                "Letter (Fit view)", "Legal (Fit view)", "Custom (Fit view)"]
+IMAGES_PER_PAGE = [1, 2, 4, 6, 9]
+UNDO_STEPS = 30
+# advanced settings that are not part of a preset
+PRESET_SKIP = {"preset", "append_pdf", "append_pdf_path"}
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -34,13 +63,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # jpg2pdf settings initials-------------------------------------------------------------------------------------
         self.image_hide = False
-        self.ui.hide_image.setText("Hide icons")
+        self.ui.hide_image.setText("Hide thumbnails")
         self.Default_loc = get_initial_download_dir()
         self.ui.output_path.setText(self.Default_loc + "/JPEG2PDF")
         self.ui.checkBox_protect_pdf.setChecked(False)
         self.enable_pdf_password()
         self.show_full_path_flag = False
-        self.ui.show_full_path.setText("Show full path")
+        self.ui.show_full_path.setText("Show file location")
 
         self.pop_up_stylesheet = 'background-color:rgb(48,48,48);color:white;'
         self.all_images_list = []
@@ -48,6 +77,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image_size = []
         self.image_extension = []
         self.all_pixmap_data = []
+        self.image_info = {}
         self.selected_list = []
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
@@ -74,6 +104,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tiff = True
         self.bmp = True
         self.all_files = True
+        self.remember_last_folder = True
+        self.include_subfolders = False
+        self.last_import_dir = ""
+        self.sort_index = 0
+        self.tick_new_images = True
+        self.text_size = DEFAULT_TEXT_SIZE
+        self.table_paths = []
+        self.pending_ticks = set()
+        self.image_edits = {}  # image path -> {"rotate": degrees, "crop": box}
+        self.undo_stack = []
+        self.rebuilding_table = False
 
         # advance settings initials ------------------------------------------------------------------------------------
         self.mm = True
@@ -112,10 +153,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.producer = ""
         self.creator = ""
         self.created_on = ""
+        self.compression = 0
+        self.split_every = 0
+        self.per_image_pdf = False
+        self.ocr_enabled = False
+        self.ocr_language = "eng"
+        self.images_per_page = 0
+        self.custom_width = 210.0
+        self.custom_height = 297.0
+        self.straighten = False
+        self.trim_borders = False
+        self.contrast = False
 
         self.load_settings()
         self.general_setting_defaults(default=False)
         self.advance_settings_defaults(default=False)
+        self.ui.sort.setCurrentIndex(self.sort_index if self.sort_index in SORT_OPTIONS else 0)
+        self.setup_table_reordering()
+        self.setup_extra_actions()
+        self.load_presets()
 
         self.ui.actionAdd_image.triggered.connect(self.load_images)
         self.ui.actionSettings.triggered.connect(self.show_general_setting)
@@ -126,7 +182,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.actionRemove_Selected.triggered.connect(self.remove_selected)
         self.ui.zoomin.clicked.connect(self.zoom_in_functionality)
         self.ui.zoomout.clicked.connect(self.zoom_out_functionality)
-        self.ui.rotate.clicked.connect(self.rotate_functionality)
+        self.ui.rotate.clicked.connect(lambda: self.rotate_images(90))
+        self.ui.rotate_left.clicked.connect(lambda: self.rotate_images(-90))
+        self.ui.crop.clicked.connect(self.crop_image)
+        self.ui.preview_pdf.clicked.connect(self.preview_pdf)
         self.ui.change.clicked.connect(self.open_download_path)
         self.ui.preview_2.clicked.connect(self.preview_image)
         self.ui.show_full_path.clicked.connect(self.toggle_full_half_path)
@@ -139,7 +198,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.moveup.clicked.connect(self.move_up_item)
         self.ui.movedown.clicked.connect(self.move_down_item)
         self.ui.start_convert.clicked.connect(self.start_convert_process)
-        self.ui.sort.currentIndexChanged.connect(self.sort_asc_desc)
+        self.ui.sort.activated.connect(self.sort_images)
         self.ui.more_setting_button.clicked.connect(self.show_advance_setting)
         self.ui.hide_image.clicked.connect(self.hide_image_thumbnail)
         self.ui.duplicate.clicked.connect(self.remove_duplicate)
@@ -165,6 +224,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.info_image_pos.clicked.connect(self.image_pos_info)
         self.advance_setting_ui.ui.info_margin.clicked.connect(self.margin_info_details)
         self.advance_setting_ui.ui.reset_defaults.clicked.connect(self.reset_advanced_settings)
+        self.advance_setting_ui.ui.append_pdf.clicked.connect(self.toggle_append_pdf)
+        self.advance_setting_ui.ui.per_image_pdf.clicked.connect(self.update_output_options)
+        self.advance_setting_ui.ui.preset.activated.connect(self.choose_preset)
+        self.advance_setting_ui.ui.save_preset.clicked.connect(self.save_preset)
+        self.advance_setting_ui.ui.delete_preset.clicked.connect(self.delete_preset)
+        self.advance_setting_ui.ui.choose_append_pdf.clicked.connect(self.choose_append_pdf)
 
         # general settings
         self.general_setting_ui.ui.dark.clicked.connect(self.set_theme)
@@ -184,6 +249,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.general_setting_ui.ui.icon_size.valueChanged.connect(self.adjust_thumbnail_size)
         self.general_setting_ui.ui.reset_default.clicked.connect(self.reset_app_settings)
         self.general_setting_ui.ui.change_import.clicked.connect(self.change_import_path)
+        self.general_setting_ui.ui.remember_last_folder.clicked.connect(self.set_import_options)
+        self.general_setting_ui.ui.include_subfolders.clicked.connect(self.set_import_options)
+        self.general_setting_ui.ui.tick_new_images.clicked.connect(self.set_import_options)
+        self.general_setting_ui.ui.text_size.currentIndexChanged.connect(self.change_text_size)
 
         # about page
         self.about_ui.ui.warlordsoft_button.clicked.connect(self.redirect_to_warlordsoft)
@@ -209,7 +278,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def dropEvent(self, event):
         event.setDropAction(QtCore.Qt.CopyAction)
-        self.load_images = [item.toLocalFile() for item in event.mimeData().urls()]
+        dropped = [item.toLocalFile() for item in event.mimeData().urls()]
         try:
             is_running = self.convert_pdf_thread.isRunning()
         except Exception as e:
@@ -221,24 +290,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             is_running_pixmap = False
 
         if is_running or is_running_pixmap:
-            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
-        else:
-            self.ui.stop.setEnabled(False)
+            self.popup_message(title="Please wait", message="The app is still busy with the last task. Try again when it has finished.")
+            return False
+        self.ui.stop.setEnabled(False)
+
+        # dropped folders are imported like Add folder
+        self.load_images = []
+        for path in dropped:
+            if os.path.isdir(path):
+                self.load_images += load_images_from_folder(path, self.filter_array, self.include_subfolders)
+            elif path:
+                self.load_images.append(path)
 
         if len(self.load_images) == 0:
+            self.ui.stop.setEnabled(True)
             return False
 
         self.load_images, invalid_list = get_valid_images(self.load_images)
         if invalid_list:
-            message = "\n\n".join(
+            message = "These files are not images the app can use:\n\n" + "\n".join(
                 [f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
-            self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
+            self.popup_message(title="Some files were not added",
                                message=message)
-        self.all_images_list += self.load_images
-        self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
-        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
-        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
-        self.pixmap_load_thread.start()
+        self.start_loading_images(self.load_images)
 
         event.accept()
 
@@ -261,6 +335,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("tiff", self.general_setting_ui.ui.tiff.isChecked())
         self.settings.setValue("bmp", self.general_setting_ui.ui.bmp.isChecked())
         self.settings.setValue("all_files", self.general_setting_ui.ui.all_files.isChecked())
+        self.settings.setValue("remember_last_folder", self.remember_last_folder)
+        self.settings.setValue("include_subfolders", self.include_subfolders)
+        self.settings.setValue("last_import_dir", self.last_import_dir)
+        self.settings.setValue("sort_index", self.ui.sort.currentIndex())
+        self.settings.setValue("tick_new_images", self.tick_new_images)
+        self.settings.setValue("text_size", self.text_size)
 
         # advance settings save:----------------------------------------------------------------------------------------
         self.settings.setValue("mm", self.advance_setting_ui.ui.mm.isChecked())
@@ -306,6 +386,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings.setValue("producer", self.advance_setting_ui.ui.producer.text())
         self.settings.setValue("creator", self.advance_setting_ui.ui.creator.text())
         self.settings.setValue("created_on", self.advance_setting_ui.ui.created_on.text())
+        self.settings.setValue("compression", self.advance_setting_ui.ui.compression.currentIndex())
+        self.settings.setValue("split_every", self.advance_setting_ui.ui.split_every.value())
+        self.settings.setValue("per_image_pdf", self.advance_setting_ui.ui.per_image_pdf.isChecked())
+        self.settings.setValue("images_per_page", self.advance_setting_ui.ui.images_per_page.currentIndex())
+        self.settings.setValue("custom_width", self.advance_setting_ui.ui.custom_width.value())
+        self.settings.setValue("custom_height", self.advance_setting_ui.ui.custom_height.value())
+        self.settings.setValue("straighten", self.advance_setting_ui.ui.straighten.isChecked())
+        self.settings.setValue("trim_borders", self.advance_setting_ui.ui.trim_borders.isChecked())
+        self.settings.setValue("contrast", self.advance_setting_ui.ui.contrast.isChecked())
+        self.settings.setValue("ocr_enabled", self.advance_setting_ui.ui.ocr_enabled.isChecked())
+        self.settings.setValue("ocr_language", self.advance_setting_ui.ui.ocr_language.text())
 
         # one time congratulate
         # self.settings.setValue("one_time_congratulate", self.one_time_congratulate)
@@ -350,6 +441,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.bmp = json.loads(self.settings.value("bmp"))
         if self.settings.contains("all_files"):
             self.all_files = json.loads(self.settings.value("all_files"))
+        if self.settings.contains("remember_last_folder"):
+            self.remember_last_folder = json.loads(self.settings.value("remember_last_folder"))
+        if self.settings.contains("include_subfolders"):
+            self.include_subfolders = json.loads(self.settings.value("include_subfolders"))
+        if self.settings.contains("last_import_dir"):
+            self.last_import_dir = self.settings.value("last_import_dir")
+        if self.settings.contains("sort_index"):
+            self.sort_index = int(self.settings.value("sort_index"))
+        if self.settings.contains("tick_new_images"):
+            self.tick_new_images = json.loads(self.settings.value("tick_new_images"))
+        if self.settings.contains("text_size"):
+            self.text_size = int(self.settings.value("text_size"))
 
         # advance setting load:-----------------------------------------------------------------------------------------
         if self.settings.contains("mm"):
@@ -433,6 +536,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.creator = self.settings.value("creator")
         if self.settings.contains("created_on"):
             self.created_on = self.settings.value("created_on")
+        if self.settings.contains("compression"):
+            self.compression = int(self.settings.value("compression"))
+        if self.settings.contains("split_every"):
+            self.split_every = int(self.settings.value("split_every"))
+        if self.settings.contains("per_image_pdf"):
+            self.per_image_pdf = json.loads(self.settings.value("per_image_pdf"))
+        if self.settings.contains("images_per_page"):
+            self.images_per_page = int(self.settings.value("images_per_page"))
+        if self.settings.contains("custom_width"):
+            self.custom_width = float(self.settings.value("custom_width"))
+        if self.settings.contains("custom_height"):
+            self.custom_height = float(self.settings.value("custom_height"))
+        for name in ("straighten", "trim_borders", "contrast"):
+            if self.settings.contains(name):
+                setattr(self, name, json.loads(self.settings.value(name)))
+        if self.settings.contains("ocr_enabled"):
+            self.ocr_enabled = json.loads(self.settings.value("ocr_enabled"))
+        if self.settings.contains("ocr_language"):
+            self.ocr_language = self.settings.value("ocr_language")
 
         # one time congratulate
         if self.settings.contains("one_time_congratulate"):
@@ -452,38 +574,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().closeEvent(event)
 
     def main_info(self):
-        title = "Image Orientation and page format detail info!"
-        message = "Tip1: Orientation = 'Auto' | Page format = 'Auto'\nAutomatically adjust page orientation and page format (Best fit).\n\n" \
-                  "Tip2: Orientation = 'Auto' | Page format = Fixed (for eg. A4)\nAutomatically adjust page orientation with specified page format.\n\n" \
-                  "Tip3: Orientation = 'Auto' | Page format = Fixed (Fit view) (for eg. A4)\nAutomatically adjust page orientation with image streched in specified page format.\n\n" \
-                  "Tip4: Orientation = Fixed (for eg. Portrait) | Page format = Fixed\nSpecified page orientation with specified page format.\n\n" \
-                  "Tip5: For custom options, use Advanced settings."
+        title = "Orientation and page size"
+        message = "Auto + Auto (same as image):\nEach page gets the size and shape of its image (best fit).\n\n" \
+                  "Auto + a paper size (for example A4):\nPages use that paper size and turn sideways for wide images.\n\n" \
+                  "Auto + a paper size with (stretch to fill):\nThe same, and each image is stretched to fill the page.\n\n" \
+                  "Portrait or Landscape + a paper size:\nEvery page uses that paper size and direction.\n\n" \
+                  "More options are in Advanced PDF settings."
         self.popup_message(title, message)
 
     def margin_info_details(self):
-        title = "Page Margin detail info!"
-        message = "A margin is the area between the main content of a page and the page edges.\n\n" \
-                  "Note: Bottom margin is restricted in following pdf settings.\n\n" \
-                  "1: Orientation = Auto  | Page format = Fixed\n" \
-                  "2: Orientation = Fixed | Page format = Fixed\n" \
-                  "3: Orientation = Fixed | Page format = Auto\n"
+        title = "Page margins"
+        message = "Margins are the empty space between the image and the edges of the page.\n\n" \
+                  "The bottom margin is not used when:\n" \
+                  "- Orientation is Auto and Page size is a paper size like A4\n" \
+                  "- Orientation is Portrait/Landscape and Page size is a paper size like A4\n" \
+                  "- Orientation is Portrait/Landscape and Page size is Auto"
         self.popup_message(title, message)
 
     def dpi_info(self):
-        title = "Image resolution DPI info!"
-        message = "DPI is a measure of the resolution of the given image.\n\n" \
-                  "Note: DPI option will be force set to 'Auto image size' in following pdf settings.\n\n" \
-                  "1: Orientation = Auto  | Page format = Auto\n" \
-                  "2: Orientation = Auto  | Page format = Fixed (Fit view)\n" \
-                  "3: Orientation = Fixed | Page format = Fixed (Fit view)\n\n" \
-                  "Tip: Use 'Auto image size' option for best fit images in pdf."
+        title = "Image size"
+        message = "Sets how wide the image is on the page.\n\n" \
+                  "Leave \"Auto image size\" on for the best fit. It is always used when:\n" \
+                  "- Orientation and Page size are both Auto\n" \
+                  "- Page size is a (stretch to fill) size"
         self.popup_message(title, message)
 
     def image_pos_info(self):
-        title = "Image position on page info!"
-        message = "Horizontal position and vertical position is the position of image on the page.\n" \
-                  "Position will start from Top-left side of the page\n\n" \
-                  "Note: If page margin were given, then position of image will be consider according to the margins."
+        title = "Image position"
+        message = "Moves the image right and down on the page, measured from the top-left corner.\n\n" \
+                  "If you set page margins, the image moves from inside the margins."
         self.popup_message(title, message)
 
     def enable_auto_manual_resolution(self):
@@ -508,7 +627,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.main_table_pointer = 70
             self.ask_for_export = True
             self.overwrite_warning = True
-            self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME')
+            self.Default_loc_import = QProcessEnvironment().systemEnvironment().value('SNAP_REAL_HOME') or \
+                os.path.expanduser("~")
             self.jpg = True
             self.jpeg = True
             self.png = True
@@ -516,6 +636,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.tiff = True
             self.bmp = True
             self.all_files = True
+            self.remember_last_folder = True
+            self.include_subfolders = False
+            self.tick_new_images = True
+            self.text_size = DEFAULT_TEXT_SIZE
 
         #  table icon setting defaults
         self.table_view_default_setting()
@@ -524,7 +648,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             self.process_images_into_table()
 
-        #  theme defaults
+        #  text size and theme defaults (font first: Qt applies widget fonts again with the style sheet)
+        self.apply_text_size()
         if self.theme == ":/qss_icons/dark/dark.qss":
             self.general_setting_ui.ui.dark.setChecked(True)
         elif self.theme == ":/qss_icons/light/light.qss":
@@ -546,6 +671,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         #  Import defaults
         self.general_setting_ui.ui.import_path.setText(self.Default_loc_import)
+        self.general_setting_ui.ui.remember_last_folder.setChecked(self.remember_last_folder)
+        self.general_setting_ui.ui.include_subfolders.setChecked(self.include_subfolders)
+        self.general_setting_ui.ui.tick_new_images.setChecked(self.tick_new_images)
+        self.general_setting_ui.ui.text_size.blockSignals(True)
+        self.general_setting_ui.ui.text_size.setCurrentIndex(self.text_size)
+        self.general_setting_ui.ui.text_size.blockSignals(False)
 
         #  overwrite defaults
         self.general_setting_ui.ui.overwrite_warning.setChecked(self.overwrite_warning)
@@ -575,7 +706,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.msg.setStyleSheet(self.pop_up_stylesheet)
         self.msg.setIcon(QMessageBox.Information)
-        self.msg.setText("Are you sure want to reset to default settings?")
+        self.msg.setText("Reset all of these settings to their defaults?")
         yes_button = self.msg.addButton(QMessageBox.Yes)
         no_button = self.msg.addButton(QMessageBox.No)
         self.msg.exec_()
@@ -622,6 +753,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.producer = ""
             self.creator = ""
             self.created_on = ""
+            self.compression = 0
+            self.split_every = 0
+            self.per_image_pdf = False
+            self.ocr_enabled = False
+            self.ocr_language = "eng"
+            self.images_per_page = 0
+            self.custom_width = 210.0
+            self.custom_height = 297.0
+            self.straighten = False
+            self.trim_borders = False
+            self.contrast = False
 
         if self.mm:
             self.advance_setting_ui.ui.mm.setChecked(True)
@@ -681,12 +823,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.advance_setting_ui.ui.creator.setText(self.creator)
         self.advance_setting_ui.ui.created_on.setText(self.created_on)
 
+        # compression, output files, OCR
+        self.advance_setting_ui.ui.compression.setCurrentIndex(self.compression)
+        self.advance_setting_ui.ui.split_every.setValue(self.split_every)
+        self.advance_setting_ui.ui.per_image_pdf.setChecked(self.per_image_pdf)
+        self.advance_setting_ui.ui.images_per_page.setCurrentIndex(self.images_per_page)
+        self.advance_setting_ui.ui.custom_width.setValue(self.custom_width)
+        self.advance_setting_ui.ui.custom_height.setValue(self.custom_height)
+        self.advance_setting_ui.ui.straighten.setChecked(self.straighten)
+        self.advance_setting_ui.ui.trim_borders.setChecked(self.trim_borders)
+        self.advance_setting_ui.ui.contrast.setChecked(self.contrast)
+        self.advance_setting_ui.ui.append_pdf.setChecked(False)
+        self.advance_setting_ui.ui.append_pdf_path.clear()
+        self.toggle_append_pdf()
+        self.advance_setting_ui.ui.ocr_language.setText(self.ocr_language)
+        if ocr_available():
+            self.advance_setting_ui.ui.ocr_enabled.setChecked(self.ocr_enabled)
+            self.advance_setting_ui.ui.ocr_status.setText("Converting takes longer when this is on.")
+        else:
+            self.advance_setting_ui.ui.ocr_enabled.setChecked(False)
+            self.advance_setting_ui.ui.ocr_enabled.setEnabled(False)
+            self.advance_setting_ui.ui.ocr_language.setEnabled(False)
+            self.advance_setting_ui.ui.ocr_status.setText("This option is not available in this version of the app.")
+
     def reset_advanced_settings(self):
         self.msg = QMessageBox()
         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.msg.setStyleSheet(self.pop_up_stylesheet)
         self.msg.setIcon(QMessageBox.Information)
-        self.msg.setText("Are you sure want to reset to default settings?")
+        self.msg.setText("Reset all of these settings to their defaults?")
         yes_button = self.msg.addButton(QMessageBox.Yes)
         no_button = self.msg.addButton(QMessageBox.No)
         self.msg.exec_()
@@ -779,6 +944,72 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.overwrite_warning = False
 
+    def apply_text_size(self):
+        font = app_font(self.text_size)
+        QApplication.setFont(font)
+        # these widgets have a fixed font in the .ui files
+        for widget in (self.ui.tableWidget, self.advance_setting_ui.ui.show_page_no):
+            widget.setFont(font)
+
+    def change_text_size(self, index):
+        self.text_size = index
+        self.apply_text_size()
+        self.set_theme()
+        self.set_detail_column_widths(3 if self.image_hide else 4)
+
+    def set_detail_column_widths(self, first_column):
+        # Dimension, File size and Format columns wide enough for their text at the chosen text size;
+        # the Name column (just before them) takes the rest of the width
+        metrics = QtGui.QFontMetrics(app_font(self.text_size))
+        for offset, sample in enumerate(("8888 × 8888", "888.88 KB", "Format")):
+            self.ui.tableWidget.setColumnWidth(first_column + offset, metrics.horizontalAdvance(sample) + 24)
+        header = self.ui.tableWidget.horizontalHeader()
+        header.setStretchLastSection(False)
+        for column in range(self.ui.tableWidget.columnCount()):
+            if column > 1 and column != first_column - 1 and header.sectionResizeMode(column) == QHeaderView.Stretch:
+                header.setSectionResizeMode(column, QHeaderView.Interactive)
+        header.setSectionResizeMode(first_column - 1, QHeaderView.Stretch)
+
+    def set_import_options(self):
+        self.remember_last_folder = self.general_setting_ui.ui.remember_last_folder.isChecked()
+        self.include_subfolders = self.general_setting_ui.ui.include_subfolders.isChecked()
+        self.tick_new_images = self.general_setting_ui.ui.tick_new_images.isChecked()
+
+    def import_start_dir(self):
+        if self.remember_last_folder and self.last_import_dir and os.path.isdir(self.last_import_dir):
+            return self.last_import_dir
+        return self.Default_loc_import
+
+    def toggle_append_pdf(self):
+        if self.advance_setting_ui.ui.append_pdf.isChecked() and not self.advance_setting_ui.ui.append_pdf_path.text():
+            self.choose_append_pdf()
+        self.update_output_options()
+
+    def update_output_options(self):
+        ui = self.advance_setting_ui.ui
+        per_image = ui.per_image_pdf.isChecked()
+        appending = ui.append_pdf.isChecked() and not per_image
+        # one PDF per image can't also be split or added to another PDF
+        ui.split_every.setEnabled(not per_image and not appending)
+        ui.label_split.setEnabled(not per_image and not appending)
+        ui.append_pdf.setEnabled(not per_image)
+        ui.append_pdf_path.setEnabled(not per_image)
+        ui.choose_append_pdf.setEnabled(not per_image)
+
+    def choose_append_pdf(self):
+        start_dir = os.path.dirname(self.advance_setting_ui.ui.append_pdf_path.text()) or self.Default_loc
+        options = QFileDialog.Options()
+        if self.file_dialog != "native":
+            options |= QFileDialog.DontUseNativeDialog
+        path, _ = QFileDialog.getOpenFileName(self.advance_setting_ui, "Choose the PDF to add images to", start_dir,
+                                              "PDF files (*.pdf *.PDF)", options=options)
+        if path:
+            self.advance_setting_ui.ui.append_pdf_path.setText(path)
+            self.advance_setting_ui.ui.append_pdf.setChecked(True)
+        elif not self.advance_setting_ui.ui.append_pdf_path.text():
+            self.advance_setting_ui.ui.append_pdf.setChecked(False)
+        self.update_output_options()
+
     def select_item_one(self):
         if self.all_images_list:
             item = self.ui.tableWidget.item(self.counter, 0)
@@ -800,20 +1031,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
             self.msg.setStyleSheet(self.pop_up_stylesheet)
             self.msg.setIcon(QMessageBox.Information)
-            self.msg.setText("Are you sure want to remove duplicate image files?")
+            self.msg.setText("Remove images that are in the list more than once?")
             yes_button = self.msg.addButton(QMessageBox.Yes)
             no_button = self.msg.addButton(QMessageBox.No)
             self.msg.exec_()
             if self.msg.clickedButton() == yes_button:
                 if self.all_images_list:
-                    temp = []
-                    for item in self.all_images_list:
-                        if item not in temp:
-                            temp.append(item)
-                    self.all_images_list = temp
-                    self.all_pixmap_data = [QtGui.QPixmap(item) for item in self.all_images_list]
+                    self.push_undo()
+                    unique = {}
+                    for path, pixmap in zip(self.all_images_list, self.all_pixmap_data):
+                        unique.setdefault(path, pixmap)
+                    removed = len(self.all_images_list) - len(unique)
+                    self.all_images_list = list(unique)
+                    self.all_pixmap_data = list(unique.values())
+                    self.counter = min(self.counter, len(self.all_images_list) - 1)
                     self.process_images_into_table()
-                    self.popup_message("Duplicate images have been successfully removed!", "")
+                    if removed:
+                        self.popup_message(f"Removed {removed} duplicate image{'s' if removed > 1 else ''}", "")
+                    else:
+                        self.popup_message("No duplicates found", "Every image is in the list only once.")
             if self.msg.clickedButton() == no_button:
                 pass
 
@@ -821,13 +1057,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             if self.toggle % 2 == 0:
                 self.image_hide = True
-                self.ui.hide_image.setText("Show icons")
+                self.ui.hide_image.setText("Show thumbnails")
                 self.get_all_selected_items()
                 self.no_image_q_table_setting()
                 self.process_images_into_table()
             else:
                 self.image_hide = False
-                self.ui.hide_image.setText("Hide icons")
+                self.ui.hide_image.setText("Hide thumbnails")
                 self.get_all_selected_items()
                 self.table_view_default_setting()
                 self.process_images_into_table()
@@ -839,14 +1075,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.setColumnCount(6)
         self.ui.tableWidget.setRowCount(15)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(30)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Name', 'Dimension', 'File size', "Format"])
+        self.ui.tableWidget.setHorizontalHeaderLabels(['✓', 'No.', 'Name', 'Dimension', 'File size', "Format"])
+        self.label_tick_column()
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 40)
         self.ui.tableWidget.setColumnWidth(1, 45)
         self.ui.tableWidget.setColumnWidth(2, 350)
-        self.ui.tableWidget.setColumnWidth(3, 95)
-        self.ui.tableWidget.setColumnWidth(4, 90)
-        self.ui.tableWidget.setColumnWidth(5, 80)
+        self.set_detail_column_widths(3)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setStyleSheet(
@@ -861,11 +1096,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.general_setting_ui.ui.light.setChecked(True)
         else:
             self.theme = ':/qss_icons/dark/dark.qss'
-        set_theme(self, self.theme)
-        set_theme(self.advance_setting_ui, self.theme)
-        set_theme(self.general_setting_ui, self.theme)
-        set_theme(self.about_ui, self.theme)
-        set_theme(self.donate_ui, self.theme)
+        extra_css = header_css(self.text_size)
+        set_theme(self, self.theme, extra_css)
+        set_theme(self.advance_setting_ui, self.theme, extra_css)
+        set_theme(self.general_setting_ui, self.theme, extra_css)
+        set_theme(self.about_ui, self.theme, extra_css)
+        set_theme(self.donate_ui, self.theme, extra_css)
         self.pop_up_stylesheet = popup_theme(self)
 
     def set_file_dialog(self):
@@ -908,7 +1144,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
             self.msg.setStyleSheet(self.pop_up_stylesheet)
             self.msg.setIcon(QMessageBox.Information)
-            self.msg.setText("Are you sure want to stop running process?")
+            self.msg.setText("Stop creating the PDF?")
             yes_button = self.msg.addButton(QMessageBox.Yes)
             no_button = self.msg.addButton(QMessageBox.No)
             self.msg.exec_()
@@ -950,30 +1186,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def validation_for_angle(self):
         page_to = self.advance_setting_ui.ui.page_to.text()
         page_from = self.advance_setting_ui.ui.page_from.text()
-        rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
-        if rotation_angle != "Select angle" and (page_to or page_from) in [None, ""]:
-            self.popup_message(title="All Page selection!",
-                               message="Operation will perform for all pages.")
+        if self.advance_setting_ui.ui.select_angle.currentIndex() != 0 and (page_to or page_from) in [None, ""]:
+            self.popup_message(title="All pages",
+                               message="No page range is set, so this will apply to every page.")
         try:
             if (page_to and page_from) not in [None, ""]:
                 page_to = int(page_to)
                 page_from = int(page_from)
                 if page_from > page_to:
-                    self.popup_message(title="Invalid page selection",
-                                       message="'Page To' must to greater or equal to 'Page From'.")
+                    self.popup_message(title="Check the page range",
+                                       message="\"Page to\" can't be smaller than \"Page from\".")
                     self.advance_setting_ui.ui.page_to.clear()
                     self.advance_setting_ui.ui.page_from.clear()
                     self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
 
                 if (page_to or page_from) == 0:
-                    self.popup_message(title="Invalid page selection",
-                                       message="'Page value must be greater than 0")
+                    self.popup_message(title="Check the page range",
+                                       message="Page numbers start at 1.")
                     self.advance_setting_ui.ui.page_to.clear()
                     self.advance_setting_ui.ui.page_from.clear()
                     self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
         except Exception as e:
-            self.popup_message(title="Invalid page selection",
-                               message="Page value must be integer")
+            self.popup_message(title="Check the page range",
+                               message="Please type page numbers as whole numbers, for example 5.")
             self.advance_setting_ui.ui.select_angle.setCurrentIndex(0)
             self.advance_setting_ui.ui.page_to.clear()
             self.advance_setting_ui.ui.page_from.clear()
@@ -982,30 +1217,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def validation_for_scale(self):
         page_to = self.advance_setting_ui.ui.page_to_grayscale.text()
         page_from = self.advance_setting_ui.ui.page_from_grayscale.text()
-        rotation_angle = str(self.advance_setting_ui.ui.select_scale.currentText())
-        if rotation_angle != "Select scale" and (page_to or page_from) in [None, ""]:
-            self.popup_message(title="All Page selection!",
-                               message="Operation will perform for all pages.")
+        if self.advance_setting_ui.ui.select_scale.currentIndex() != 0 and (page_to or page_from) in [None, ""]:
+            self.popup_message(title="All pages",
+                               message="No page range is set, so this will apply to every page.")
         try:
             if (page_to and page_from) not in [None, ""]:
                 page_to = int(page_to)
                 page_from = int(page_from)
                 if page_from > page_to:
-                    self.popup_message(title="Invalid page selection",
-                                       message="'Page To' must to greater or equal to 'Page From'.")
+                    self.popup_message(title="Check the page range",
+                                       message="\"Page to\" can't be smaller than \"Page from\".")
                     self.advance_setting_ui.ui.page_to_grayscale.clear()
                     self.advance_setting_ui.ui.page_from_grayscale.clear()
                     self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
 
                 if (page_to or page_from) == 0:
-                    self.popup_message(title="Invalid page selection",
-                                       message="'Page value must be greater than 0")
+                    self.popup_message(title="Check the page range",
+                                       message="Page numbers start at 1.")
                     self.advance_setting_ui.ui.page_to_grayscale.clear()
                     self.advance_setting_ui.ui.page_from_grayscale.clear()
                     self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
         except Exception as e:
-            self.popup_message(title="Invalid page selection",
-                               message="Page value must be integer")
+            self.popup_message(title="Check the page range",
+                               message="Please type page numbers as whole numbers, for example 5.")
             self.advance_setting_ui.ui.select_scale.setCurrentIndex(0)
             self.advance_setting_ui.ui.page_to_grayscale.clear()
             self.advance_setting_ui.ui.page_from_grayscale.clear()
@@ -1067,69 +1301,188 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.donate_ui.raise_()
         self.donate_ui.activateWindow()
 
-    def sort_asc_desc(self):
-        if self.all_images_list:
-            if self.ui.sort.currentText() != "Sort item":
-                self.selected_list = []
-                self.all_images_list.reverse()
-                self.image_dimension.reverse()
-                self.image_size.reverse()
-                self.image_extension.reverse()
-                self.all_pixmap_data.reverse()
-                self.process_images_into_table()
+    def sort_images(self):
+        self.sort_index = self.ui.sort.currentIndex()
+        if self.all_images_list and self.sort_index in SORT_OPTIONS:
+            try:
+                is_running_pixmap = self.pixmap_load_thread.isRunning()
+            except Exception as e:
+                is_running_pixmap = False
+            if is_running_pixmap:
+                self.popup_message(title="Please wait", message="Images are still loading. Try again in a moment.")
+                return
+            self.push_undo()
+            self.apply_sort()
+
+    def apply_sort(self):
+        sort_by, descending = SORT_OPTIONS[self.ui.sort.currentIndex()]
+        sort_key = IMAGE_SORT_KEYS[sort_by]
+        new_order = sorted(range(len(self.all_images_list)), key=lambda row: sort_key(self.all_images_list[row]),
+                           reverse=descending)
+        self.counter = 0
+        self.apply_order(new_order)
+        self.ui.tableWidget.selectRow(0)
+
+    def apply_order(self, new_order, focus_rows=None):
+        # new_order lists the current row numbers in their new order; ticks move with their images
+        self.get_all_selected_items()
+        checked = set(self.selected_list)
+        self.all_images_list = [self.all_images_list[row] for row in new_order]
+        self.all_pixmap_data = [self.all_pixmap_data[row] for row in new_order]
+        new_rows = {old_row: new_row for new_row, old_row in enumerate(new_order)}
+        if focus_rows:
+            self.counter = new_rows[focus_rows[0]]
+        self.process_images_into_table()
+        for old_row in checked:
+            item = self.ui.tableWidget.item(new_rows[old_row], 0)
+            if item:
+                item.setCheckState(QtCore.Qt.Checked)
+        self.get_all_selected_items()
+        if focus_rows:
+            table = self.ui.tableWidget
+            model = table.model()
+            selection = QItemSelection()
+            for old_row in focus_rows:
+                row = new_rows[old_row]
+                selection.select(model.index(row, 0), model.index(row, table.columnCount() - 1))
+            table.selectionModel().select(selection, QItemSelectionModel.ClearAndSelect)
+            table.scrollTo(model.index(new_rows[focus_rows[0]], 0))
+
+    def reorder_manually(self, new_order, rows):
+        if new_order != list(range(len(new_order))):
+            self.push_undo()
+            # the list is no longer in the chosen sort order
+            self.ui.sort.setCurrentIndex(0)
+            self.sort_index = 0
+            self.apply_order(new_order, focus_rows=rows)
+
+    def highlighted_rows(self):
+        return sorted({index.row() for index in self.ui.tableWidget.selectionModel().selectedIndexes()
+                       if index.row() < len(self.all_images_list)})
+
+    def rows_for_action(self, action_name):
+        # highlighted rows, otherwise ticked rows
+        rows = self.highlighted_rows()
+        if not rows:
+            self.get_all_selected_items()
+            rows = sorted(self.selected_list)
+        if not rows:
+            self.popup_message(title="No image chosen",
+                               message=f"Click an image first to {action_name}.")
+        return rows
 
     def move_up_item(self):
         if self.all_images_list:
-            self.get_all_selected_items()
-            if len(self.selected_list) == 0:
-                self.popup_message(title="No image checkbox selected!",
-                                   message="Please select an image's checkbox in order to move up")
-                return
-            for selected_item in self.selected_list:
-                pos2 = selected_item
-                pos1 = pos2 - 1
-                if pos1 == -1:
-                    return False
-                self.all_images_list[pos1], self.all_images_list[pos2] = self.all_images_list[pos2], \
-                                                                         self.all_images_list[pos1]
-                self.image_dimension[pos1], self.image_dimension[pos2] = self.image_dimension[pos2], \
-                                                                         self.image_dimension[pos1]
-                self.image_size[pos1], self.image_size[pos2] = self.image_size[pos2], self.image_size[pos1]
-                self.image_extension[pos1], self.image_extension[pos2] = self.image_extension[pos2], \
-                                                                         self.image_extension[pos1]
-                self.all_pixmap_data[pos1], self.all_pixmap_data[pos2] = self.all_pixmap_data[pos2], \
-                                                                         self.all_pixmap_data[pos1]
-
-            self.process_images_into_table()
-            self.keep_selected_items(operation="up")
+            rows = self.rows_for_action("move it up")
+            moving = set(rows)
+            new_order = list(range(len(self.all_images_list)))
+            for pos in range(1, len(new_order)):
+                if new_order[pos] in moving and new_order[pos - 1] not in moving:
+                    new_order[pos - 1], new_order[pos] = new_order[pos], new_order[pos - 1]
+            self.reorder_manually(new_order, rows)
 
     def move_down_item(self):
         if self.all_images_list:
-            self.get_all_selected_items()
-            self.selected_list.reverse()
-            if len(self.selected_list) == 0:
-                self.popup_message(title="No image checkbox selected!",
-                                   message="Please select an image's checkbox in order to move down")
-                return
-            for selected_item in self.selected_list:
-                pos2 = selected_item
-                pos1 = pos2 + 1
-                if pos1 == len(self.all_images_list):
-                    return False
-                self.all_images_list[pos1], self.all_images_list[pos2] = self.all_images_list[pos2], \
-                                                                         self.all_images_list[pos1]
-                self.image_dimension[pos1], self.image_dimension[pos2] = self.image_dimension[pos2], \
-                                                                         self.image_dimension[
-                                                                             pos1]
-                self.image_size[pos1], self.image_size[pos2] = self.image_size[pos2], self.image_size[pos1]
-                self.image_extension[pos1], self.image_extension[pos2] = self.image_extension[pos2], \
-                                                                         self.image_extension[
-                                                                             pos1]
-                self.all_pixmap_data[pos1], self.all_pixmap_data[pos2] = self.all_pixmap_data[pos2], \
-                                                                         self.all_pixmap_data[
-                                                                             pos1]
-            self.process_images_into_table()
-            self.keep_selected_items(operation="down")
+            rows = self.rows_for_action("move it down")
+            moving = set(rows)
+            new_order = list(range(len(self.all_images_list)))
+            for pos in range(len(new_order) - 2, -1, -1):
+                if new_order[pos] in moving and new_order[pos + 1] not in moving:
+                    new_order[pos + 1], new_order[pos] = new_order[pos], new_order[pos + 1]
+            self.reorder_manually(new_order, rows)
+
+    def move_to_top(self):
+        if self.all_images_list:
+            rows = self.rows_for_action("move it to the top")
+            if rows:
+                self.reorder_manually(rows + [r for r in range(len(self.all_images_list)) if r not in rows], rows)
+
+    def move_to_bottom(self):
+        if self.all_images_list:
+            rows = self.rows_for_action("move it to the bottom")
+            if rows:
+                self.reorder_manually([r for r in range(len(self.all_images_list)) if r not in rows] + rows, rows)
+
+    def move_rows_to(self, rows, target):
+        # drag and drop: put rows before row number `target` (len = end of list)
+        remaining = [r for r in range(len(self.all_images_list)) if r not in rows]
+        insert_at = target - sum(1 for r in rows if r < target)
+        self.reorder_manually(remaining[:insert_at] + rows + remaining[insert_at:], rows)
+
+    def label_tick_column(self):
+        header_item = self.ui.tableWidget.horizontalHeaderItem(0)
+        if header_item:
+            header_item.setToolTip("Click to tick or untick all images")
+
+    def tick_column_clicked(self, section):
+        if section != 0 or not self.all_images_list:
+            return
+        items = [self.ui.tableWidget.item(row, 0) for row in range(len(self.all_images_list))]
+        items = [item for item in items if item]
+        all_ticked = all(item.checkState() == QtCore.Qt.Checked for item in items)
+        for item in items:
+            item.setCheckState(QtCore.Qt.Unchecked if all_ticked else QtCore.Qt.Checked)
+
+    def setup_table_reordering(self):
+        table = self.ui.tableWidget
+        table.setDragEnabled(True)
+        table.setAcceptDrops(True)
+        table.viewport().setAcceptDrops(True)
+        table.setDragDropMode(QAbstractItemView.DragDrop)
+        table.setDragDropOverwriteMode(False)
+        table.setDropIndicatorShown(True)
+        table.viewport().installEventFilter(self)
+        table.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        table.customContextMenuRequested.connect(self.show_table_menu)
+        table.horizontalHeader().sectionClicked.connect(self.tick_column_clicked)
+
+    def eventFilter(self, source, event):
+        if source is self.ui.tableWidget.viewport() and event.type() in (QtCore.QEvent.DragEnter,
+                                                                         QtCore.QEvent.DragMove,
+                                                                         QtCore.QEvent.Drop):
+            if event.source() is not self.ui.tableWidget:
+                # files dragged in from outside: import them
+                if event.mimeData().hasUrls():
+                    if event.type() == QtCore.QEvent.Drop:
+                        self.dropEvent(event)
+                    event.acceptProposedAction()
+                    return True
+                return False
+            if event.type() == QtCore.QEvent.Drop:
+                table = self.ui.tableWidget
+                rows = sorted({index.row() for index in table.selectionModel().selectedIndexes()
+                               if index.row() < len(self.all_images_list)})
+                row = table.rowAt(event.pos().y())
+                if row == -1 or row >= len(self.all_images_list):
+                    target = len(self.all_images_list)
+                else:
+                    rect = table.visualRect(table.model().index(row, 0))
+                    target = row + 1 if event.pos().y() > rect.center().y() else row
+                # IgnoreAction so the view doesn't delete the dragged rows itself
+                event.setDropAction(QtCore.Qt.IgnoreAction)
+                event.accept()
+                if rows:
+                    QtCore.QTimer.singleShot(0, lambda: self.move_rows_to(rows, target))
+                return True
+        return super().eventFilter(source, event)
+
+    def show_table_menu(self, pos):
+        if not self.all_images_list:
+            return
+        menu = QMenu(self)
+        menu.addAction("Move to top", self.move_to_top)
+        menu.addAction("Move up", self.move_up_item)
+        menu.addAction("Move down", self.move_down_item)
+        menu.addAction("Move to bottom", self.move_to_bottom)
+        menu.addSeparator()
+        menu.addAction("Rotate right", lambda: self.rotate_images(90))
+        menu.addAction("Rotate left", lambda: self.rotate_images(-90))
+        menu.addAction("Crop...", self.crop_image)
+        menu.addSeparator()
+        menu.addAction("Remove from list", self.remove_highlighted)
+        undo = menu.addAction("Undo", self.undo)
+        undo.setEnabled(bool(self.undo_stack))
+        menu.exec_(self.ui.tableWidget.viewport().mapToGlobal(pos))
 
     def select_item_on_double_clicked(self, item):
         if item.column() == 0:
@@ -1148,50 +1501,47 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(self.ui.tableWidget.rowCount()):
             item = self.ui.tableWidget.item(i, 0)
             if item:
-                if self.ui.selectall.currentText() == "Select All":
+                if self.ui.selectall.currentIndex() == 1:  # tick all
                     item.setCheckState(QtCore.Qt.Checked)
-                elif self.ui.selectall.currentText() == "Deselect All":
+                elif self.ui.selectall.currentIndex() == 2:  # untick all
                     item.setCheckState(QtCore.Qt.Unchecked)
         self.ui.selectall.setCurrentIndex(0)
 
-    def get_image_dimension(self):
+    def refresh_image_details(self):
+        details = []
         for image_path in self.all_images_list:
-            im = Image.open(image_path)
-            width, height = im.size
-            self.image_dimension.append(f"{width} × {height}")
+            if image_path not in self.image_info:
+                self.image_info[image_path] = get_image_info(image_path)
+            details.append(self.image_info[image_path])
+        self.image_dimension = [detail[0] for detail in details]
+        self.image_size = [detail[1] for detail in details]
+        self.image_extension = [detail[2] for detail in details]
 
-    def get_image_size(self):
-        for image_path in self.all_images_list:
-            self.image_size.append(f"{humanbytes(os.stat(image_path).st_size)}")
-
-    def get_image_extension(self):
-        for image_path in self.all_images_list:
-            img = Image.open(image_path)
-            self.image_extension.append(f"{img.format}")
+    def load_preview(self, image_path):
+        return QPixmap.fromImage(apply_qimage_edits(load_qimage(image_path), self.image_edits.get(image_path)))
 
     def enable_pdf_password(self):
         if self.ui.checkBox_protect_pdf.isChecked():
             self.ui.protect_pdf.setEnabled(True)
-            self.ui.pdf_protect_indicator.setText("Protect PDF (ON)")
+            self.ui.pdf_protect_indicator.setText("Password (on)")
         else:
             self.ui.protect_pdf.clear()
             self.ui.protect_pdf.setEnabled(False)
-            self.ui.pdf_protect_indicator.setText("Protect PDF (OFF)")
+            self.ui.pdf_protect_indicator.setText("Password (off)")
 
     def table_view_default_setting(self):
         self.ui.tableWidget.setColumnCount(7)
         self.ui.tableWidget.setRowCount(15)
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(self.main_table_pointer - 32)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['St', 'Sn', 'Icon', 'Name', 'Dimension', 'File size', "Format"])
+        self.ui.tableWidget.setHorizontalHeaderLabels(['✓', 'No.', 'Image', 'Name', 'Dimension', 'File size', "Format"])
+        self.label_tick_column()
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Fixed)
         self.ui.tableWidget.setColumnWidth(0, 40)
         self.ui.tableWidget.setColumnWidth(1, 45)
         self.ui.tableWidget.setColumnWidth(2, self.main_table_pointer + 7)
         self.ui.tableWidget.setColumnWidth(3, 350)
-        self.ui.tableWidget.setColumnWidth(4, 95)
-        self.ui.tableWidget.setColumnWidth(5, 90)
-        self.ui.tableWidget.setColumnWidth(6, 80)
+        self.set_detail_column_widths(4)
         self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setStyleSheet(
@@ -1199,6 +1549,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def remove_item_from_table(self):
         if self.all_images_list:
+            self.push_undo()
             self.all_images_list.pop(self.counter)
             self.image_dimension.pop(self.counter)
             self.image_size.pop(self.counter)
@@ -1220,7 +1571,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             if self.all_images_list:
                 self.counter += 1
-                pixmap = self.all_pixmap_data[self.counter]
+                pixmap = self.load_preview(self.all_images_list[self.counter])
                 self.setPhoto(pixmap)
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
@@ -1235,7 +1586,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             if self.all_images_list:
                 self.counter -= 1
-                pixmap = self.all_pixmap_data[self.counter]
+                pixmap = self.load_preview(self.all_images_list[self.counter])
                 self.setPhoto(pixmap)
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
@@ -1254,7 +1605,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image_extension = []
         self.selected_list = []
         self.all_pixmap_data = []
-        self.ui.sort.setCurrentIndex(0)
+        self.image_info = {}
+        self.image_edits = {}
         self.ui.image_label.setText(f"Image 0 of 0")
 
     def load_images(self):
@@ -1269,32 +1621,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             is_running_pixmap = False
 
         if is_running or is_running_pixmap:
-            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
+            self.popup_message(title="Please wait", message="The app is still busy with the last task. Try again when it has finished.")
         else:
             self.ui.stop.setEnabled(False)
             if self.file_dialog == "native":
-                self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
+                self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.import_start_dir(),
                                                                    self.filter)
             else:
                 options = QFileDialog.Options()
                 options |= QFileDialog.DontUseNativeDialog
-                self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.Default_loc_import,
+                self.load_images, _ = QFileDialog.getOpenFileNames(self, 'Select Image', self.import_start_dir(),
                                                                    self.filter,
                                                                    options=options)
             if len(self.load_images) == 0:
+                self.ui.stop.setEnabled(True)
                 return False
+            self.last_import_dir = os.path.dirname(self.load_images[0])
 
             self.load_images, invalid_list = get_valid_images(self.load_images)
             if invalid_list:
-                message = "\n\n".join(
+                message = "These files are not images the app can use:\n\n" + "\n".join(
                     [f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
-                self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
+                self.popup_message(title="Some files were not added",
                                    message=message)
-            self.all_images_list += self.load_images
-            self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
-            self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
-            self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
-            self.pixmap_load_thread.start()
+            self.start_loading_images(self.load_images)
 
     def load_folder(self):
         try:
@@ -1308,54 +1658,88 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             is_running_pixmap = False
 
         if is_running or is_running_pixmap:
-            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
+            self.popup_message(title="Please wait", message="The app is still busy with the last task. Try again when it has finished.")
         else:
             self.ui.stop.setEnabled(False)
-            self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.Default_loc_import,
+            self.select_folder = QFileDialog.getExistingDirectory(self, "Select Folder", self.import_start_dir(),
                                                                   QFileDialog.ShowDirsOnly
                                                                   | QFileDialog.DontResolveSymlinks)
             if not self.select_folder:
+                self.ui.stop.setEnabled(True)
                 return False
+            self.last_import_dir = os.path.dirname(self.select_folder.rstrip("/")) or self.select_folder
 
-            self.load_images = load_images_from_folder(self.select_folder, self.filter_array)
+            self.load_images = load_images_from_folder(self.select_folder, self.filter_array, self.include_subfolders)
 
             if len(self.load_images) == 0:
-                self.popup_message(title="Images not found!",
-                                   message="Selected folder might be empty or image extension does not match.\n\n"
-                                           "TIP: Go to settings and enable specific image extension")
+                self.ui.stop.setEnabled(True)
+                self.popup_message(title="No images found",
+                                   message="This folder has no images the app can add.\n\n"
+                                           "Tip: in Settings, check which types are ticked under \"File types to add\".")
                 return False
 
             self.load_images, invalid_list = get_valid_images(self.load_images)
             if invalid_list:
-                message = "\n\n".join(
+                message = "These files are not images the app can use:\n\n" + "\n".join(
                     [f"{count}: {str(item).split('/')[-1]}" for count, item in enumerate(invalid_list, 1)])
-                self.popup_message(title="Invalid image file(s) in your Import!\nBelow file(s) Could not be imported!",
+                self.popup_message(title="Some files were not added",
                                    message=message)
-            self.all_images_list += self.load_images
-            self.pixmap_load_thread = PixMapLoadingThread(self.load_images)
-            self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
-            self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
-            self.pixmap_load_thread.start()
+            self.start_loading_images(self.load_images)
+
+    def start_loading_images(self, images):
+        if not images:
+            self.ui.stop.setEnabled(True)
+            return
+        self.push_undo()
+        if self.tick_new_images:
+            self.pending_ticks |= set(images)
+        self.all_images_list += images
+        self.loading_count = len(images)
+        self.pixmap_load_thread = PixMapLoadingThread(images)
+        self.pixmap_load_thread.finish.connect(self.setProgressVal_pixmap_finish)
+        self.pixmap_load_thread.progress.connect(self.setProgressVal_pixmap)
+        self.pixmap_load_thread.start()
 
     def setProgressVal_pixmap(self, pixmap_dict):
         progress = pixmap_dict.get("progress")
-        pixmap = pixmap_dict.get("pixmap")
-        display_status = "Loading image {0} of {1}".format(progress, len(self.load_images))
-        if len(self.load_images) != 1:
-            self.ui.progress_bar.setRange(0, len(self.load_images))
+        image = pixmap_dict.get("image")
+        pixmap = QPixmap.fromImage(image) if image is not None and not image.isNull() else QPixmap()
+        self.image_info[pixmap_dict.get("path")] = pixmap_dict.get("info")
+        display_status = "Loading image {0} of {1}".format(progress, self.loading_count)
+        if self.loading_count != 1:
+            self.ui.progress_bar.setRange(0, self.loading_count)
             self.ui.progress_bar.setFormat(display_status)
             self.ui.progress_bar.setValue(progress)
         self.all_pixmap_data.append(pixmap)
 
     def setProgressVal_pixmap_finish(self, response):
+        # drop images whose thumbnail never arrived so every list stays in step
+        del self.all_images_list[len(self.all_pixmap_data):]
         if response["status"] is False:
-            self.popup_message(title="Could not load images!", message=response["message"], error=True)
+            self.popup_message(title="Some images could not be loaded",
+                               message="They may be damaged, or in a format the app can't open.", error=True)
+            self.process_images_into_table()
+        elif self.ui.sort.currentIndex() in SORT_OPTIONS:
+            self.apply_sort()
         else:
             self.process_images_into_table()
         self.progress_bar_disable()
         self.ui.stop.setEnabled(True)
 
+    def ticked_paths(self):
+        paths = self.table_paths
+        ticked = set()
+        for row in range(min(len(paths), self.ui.tableWidget.rowCount())):
+            item = self.ui.tableWidget.item(row, 0)
+            if item and item.checkState() == QtCore.Qt.Checked:
+                ticked.add(paths[row])
+        return ticked
+
     def process_images_into_table(self):
+        # images that were ticked stay ticked when the table is rebuilt
+        ticked = self.ticked_paths() | self.pending_ticks
+        self.pending_ticks = set()
+        self.rebuilding_table = True
         try:
             self.ui.image.setVisible(True)
             if self.image_hide:
@@ -1369,20 +1753,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 input_images = self.all_images_list
 
             if self.all_images_list:
-                if self.counter == len(self.all_images_list) - 1:
-                    pixmap = QPixmap(self.all_images_list[0])
-                else:
-                    pixmap = QPixmap(self.all_images_list[self.counter])
-                self.setPhoto(pixmap)
+                self.counter = max(0, min(self.counter, len(self.all_images_list) - 1))
+                self.setPhoto(self.load_preview(self.all_images_list[self.counter]))
                 self.ui.image.setText(str(self.all_images_list[self.counter]).split("/")[-1])
                 self.ui.image_label.setText(f"Image {self.counter + 1} of {len(self.all_images_list)}")
             else:
                 self.setPhoto(QPixmap())
 
+            self.ui.tableWidget.setUpdatesEnabled(False)
             self.ui.tableWidget.setRowCount(len(self.all_images_list))
-            self.get_image_dimension()
-            self.get_image_size()
-            self.get_image_extension()
+            self.refresh_image_details()
 
             for row in range(len(self.image_dimension)):
                 item = QTableWidgetItem(f"{row + 1}")
@@ -1394,8 +1774,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 chkBoxItem.setSizeHint(QtCore.QSize())
                 chkBoxItem.setText("")
                 chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-                chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
+                chkBoxItem.setCheckState(QtCore.Qt.Checked if self.all_images_list[row] in ticked
+                                         else QtCore.Qt.Unchecked)
                 self.ui.tableWidget.setItem(row, 0, chkBoxItem)
+            self.table_paths = list(self.all_images_list)
 
             if self.image_hide:
                 col_num = 1
@@ -1403,7 +1785,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 col_num = 0
                 for row, string in enumerate(input_images, 0):
                     icon = QtGui.QIcon()
-                    icon.addPixmap(self.all_pixmap_data[row], QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    thumbnail = self.all_pixmap_data[row]
+                    edits = self.image_edits.get(self.all_images_list[row])
+                    if edits and not thumbnail.isNull():
+                        thumbnail = QPixmap.fromImage(apply_qimage_edits(thumbnail.toImage(), edits))
+                    icon.addPixmap(thumbnail, QtGui.QIcon.Normal, QtGui.QIcon.Off)
                     chkBoxItem = QTableWidgetItem(icon, string)
                     chkBoxItem.setSizeHint(QtCore.QSize())
                     chkBoxItem.setText("")
@@ -1419,9 +1805,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ui.tableWidget.setItem(row, col, item)
 
             self.ui.tableWidget.setIconSize(QtCore.QSize(self.t_width, self.t_height))
+            self.ui.tableWidget.setUpdatesEnabled(True)
+            self.rebuilding_table = False
         except Exception as e:
+            self.rebuilding_table = False
+            self.ui.tableWidget.setUpdatesEnabled(True)
             self.table_view_default_setting()
-            self.popup_message(title="Could not load images!", message="Please select valid image file", error=True)
+            self.popup_message(title="Could not show the images",
+                               message="Please add image files such as JPG or PNG.", error=True)
 
     def setPhoto(self, pixmap=None):
         self._zoom = 0
@@ -1477,19 +1868,277 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self._zoom = 0
 
-    def rotate_functionality(self):
-        self.ui.graphicsView.rotate(90)
+    # ---------------------------------------------------------------- per-image rotate and crop
+    def edit_rows(self):
+        # several highlighted images, otherwise the image in the preview
+        rows = self.highlighted_rows()
+        if len(rows) > 1:
+            return rows
+        return [self.counter] if self.all_images_list else []
+
+    def set_edits(self, path, edits):
+        if edits.get("rotate", 0) % 360 or edits.get("crop"):
+            self.image_edits[path] = edits
+        else:
+            self.image_edits.pop(path, None)
+
+    def refresh_after_edit(self, rows):
+        self.process_images_into_table()
+        model = self.ui.tableWidget.model()
+        selection = QItemSelection()
+        for row in rows:
+            selection.select(model.index(row, 0), model.index(row, self.ui.tableWidget.columnCount() - 1))
+        self.ui.tableWidget.selectionModel().select(selection, QItemSelectionModel.ClearAndSelect)
+
+    def rotate_images(self, degrees):
+        rows = self.edit_rows()
+        if not rows:
+            return
+        self.push_undo()
+        for path in {self.all_images_list[row] for row in rows}:
+            edits = dict(self.image_edits.get(path, {}))
+            edits["rotate"] = (edits.get("rotate", 0) + degrees) % 360
+            edits["crop"] = rotate_crop_box(edits.get("crop"), degrees)
+            self.set_edits(path, edits)
+        self.refresh_after_edit(rows)
+
+    def crop_image(self):
+        if not self.all_images_list:
+            return
+        path = self.all_images_list[self.counter]
+        edits = dict(self.image_edits.get(path, {}))
+        image = apply_qimage_edits(load_qimage(path), {"rotate": edits.get("rotate", 0)})
+        if image.isNull():
+            self.popup_message(title="Can't crop this image", message="The image could not be opened.", error=True)
+            return
+        dialog = CropDialog(image, edits.get("crop"), self)
+        if dialog.exec_():
+            self.push_undo()
+            edits["crop"] = dialog.crop()
+            self.set_edits(path, edits)
+            self.refresh_after_edit([self.counter])
+
+    def show_clicked_image(self, row, column, previous_row, previous_column):
+        # clicking an image in the list shows it in the preview
+        if self.rebuilding_table or row < 0 or row >= len(self.all_images_list) or row == self.counter:
+            return
+        self.counter = row
+        self.setPhoto(self.load_preview(self.all_images_list[row]))
+        self.ui.image.setText(str(self.all_images_list[row]).split("/")[-1])
+        self.ui.image_label.setText(f"Image {row + 1} of {len(self.all_images_list)}")
+
+    def remove_highlighted(self):
+        rows = self.rows_for_action("remove it")
+        if not rows:
+            return
+        self.push_undo()
+        keep = [row for row in range(len(self.all_images_list)) if row not in set(rows)]
+        self.all_images_list = [self.all_images_list[row] for row in keep]
+        self.all_pixmap_data = [self.all_pixmap_data[row] for row in keep]
+        self.counter = min(rows[0], max(0, len(self.all_images_list) - 1))
+        self.process_images_into_table()
+        if not self.all_images_list:
+            self.setPhoto(QPixmap())
+            self.ui.image.setVisible(False)
+            self.ui.image_label.setText("Image 0 of 0")
+
+    # ---------------------------------------------------------------- undo
+    def push_undo(self):
+        self.undo_stack.append((list(self.all_images_list), list(self.all_pixmap_data), copy.deepcopy(self.image_edits),
+                                self.ticked_paths(), self.counter))
+        del self.undo_stack[:-UNDO_STEPS]
+
+    def undo(self):
+        if self.loading_or_converting():
+            self.popup_message(title="Please wait", message="The app is still busy. Try again when it has finished.")
+            return
+        if not self.undo_stack:
+            self.popup_message(title="Nothing to undo", message="There are no changes to the list to undo.")
+            return
+        images, pixmaps, edits, ticked, counter = self.undo_stack.pop()
+        self.all_images_list, self.all_pixmap_data, self.image_edits = images, pixmaps, edits
+        self.counter = min(counter, max(0, len(images) - 1))
+        self.table_paths = []
+        self.pending_ticks = set(ticked)
+        self.ui.sort.setCurrentIndex(0)
+        self.process_images_into_table()
+        if not images:
+            self.setPhoto(QPixmap())
+            self.ui.image.setVisible(False)
+            self.ui.image_label.setText("Image 0 of 0")
+
+    def loading_or_converting(self):
+        for thread_name in ("pixmap_load_thread", "convert_pdf_thread", "preview_thread"):
+            thread = getattr(self, thread_name, None)
+            if thread is not None and thread.isRunning():
+                return True
+        return False
+
+    # ---------------------------------------------------------------- toolbar extras, shortcuts, help
+    def setup_extra_actions(self):
+        self.ui.rotate_left.setIcon(mirrored_icon(":/myresource/resource/icons8-rotate-96.png"))
+        self.ui.crop.setIcon(crop_icon())
+        self.ui.tableWidget.currentCellChanged.connect(self.show_clicked_image)
+        self.undo_action = self.ui.toolBar.addAction(undo_icon(), "Undo (Ctrl+Z)", self.undo)
+        self.help_action = self.ui.toolBar.addAction(help_icon(), "Help (F1)", self.show_help)
+        shortcuts = [("Ctrl+O", self.load_images), ("Ctrl+Shift+O", self.load_folder), ("Ctrl+T", lambda: self.tick_column_clicked(0)),
+                     ("Ctrl+R", lambda: self.rotate_images(90)), ("Ctrl+L", lambda: self.rotate_images(-90)),
+                     ("Ctrl+Z", self.undo), ("Ctrl+P", self.preview_pdf), ("Ctrl+Return", self.start_convert_process),
+                     ("Ctrl+Enter", self.start_convert_process), ("F1", self.show_help)]
+        self.shortcuts = [QShortcut(QKeySequence(keys), self, slot) for keys, slot in shortcuts]
+        delete = QShortcut(QKeySequence(QKeySequence.Delete), self.ui.tableWidget, self.remove_highlighted)
+        delete.setContext(QtCore.Qt.WidgetShortcut)
+        self.shortcuts.append(delete)
+
+    def show_help(self):
+        HelpDialog(self).exec_()
+
+    # ---------------------------------------------------------------- preview PDF
+    def preview_pdf(self):
+        if self.loading_or_converting():
+            self.popup_message(title="Please wait", message="The app is still busy with the last task. Try again when it has finished.")
+            return
+        if not self.all_images_list:
+            self.popup_message(title="No images added yet",
+                               message="Add images with the buttons at the top, or drag them into the window.", error=True)
+            return
+        self.get_all_selected_items()
+        rows = self.selected_list or list(range(len(self.all_images_list)))
+        pdf_settings, status, _ = self.get_pdf_setting_all()
+        if not status:
+            self.popup_message(title="Please check the advanced settings",
+                               message="Something there isn't filled in correctly, for example a page number. "
+                                       "Fix it and try again.", error=True)
+            return
+        # a quick look: the first pages, nothing saved next to the user's PDFs, no slow or extra steps
+        for key in ("password", "ocr", "append_pdf_path"):
+            pdf_settings.pop(key, None)
+        pdf_settings.update(per_image_pdf=False, split_every=0, ask_for_export=True, export_file_name="preview",
+                            output_names=None)
+        preview_dir = os.path.join(QStandardPaths.writableLocation(QStandardPaths.CacheLocation) or
+                                   os.path.expanduser("~/.cache"), "jpeg2pdf-preview")
+        os.makedirs(preview_dir, exist_ok=True)
+        images = [self.all_images_list[row] for row in rows][:10 * IMAGES_PER_PAGE[
+            self.advance_setting_ui.ui.images_per_page.currentIndex()]]
+        self.preview_thread = ConvertToPdfThread(images, preview_dir + "/", pdf_settings)
+        self.preview_thread.finish.connect(self.preview_ready)
+        self.preview_thread.progress.connect(self.setProgressVal_progress)
+        self.progress_bar_enable()
+        self.preview_thread.start()
+
+    def preview_ready(self, json_data):
+        self.progress_bar_disable()
+        if json_data.get("status"):
+            os.system(f'xdg-open "{json_data.get("play_path")}"')
+        else:
+            self.popup_message(title="The preview could not be made", message=json_data.get("message"), error=True)
+
+    # ---------------------------------------------------------------- presets
+    def preset_widgets(self):
+        widgets = {}
+        for name, widget in vars(self.advance_setting_ui.ui).items():
+            if name not in PRESET_SKIP and isinstance(widget, (QComboBox, QSpinBox, QDoubleSpinBox, QCheckBox,
+                                                               QRadioButton, QLineEdit)):
+                widgets[name] = widget
+        widgets["main.orientation"] = self.ui.orientation
+        widgets["main.page_format"] = self.ui.page_format
+        return widgets
+
+    def current_preset_values(self):
+        values = {}
+        for name, widget in self.preset_widgets().items():
+            if isinstance(widget, QComboBox):
+                values[name] = widget.currentIndex()
+            elif isinstance(widget, (QSpinBox, QDoubleSpinBox)):
+                values[name] = widget.value()
+            elif isinstance(widget, (QCheckBox, QRadioButton)):
+                values[name] = widget.isChecked()
+            else:
+                values[name] = widget.text()
+        return values
+
+    def apply_preset_values(self, values):
+        for name, widget in self.preset_widgets().items():
+            if name not in values:
+                continue
+            widget.blockSignals(True)
+            value = values[name]
+            if isinstance(widget, QComboBox):
+                widget.setCurrentIndex(int(value))
+            elif isinstance(widget, QSpinBox):
+                widget.setValue(int(value))
+            elif isinstance(widget, QDoubleSpinBox):
+                widget.setValue(float(value))
+            elif isinstance(widget, (QCheckBox, QRadioButton)):
+                widget.setChecked(bool(value))
+            else:
+                widget.setText(str(value))
+            widget.blockSignals(False)
+        if not ocr_available():
+            self.advance_setting_ui.ui.ocr_enabled.setChecked(False)
+        self.change_default_unit()
+        self.on_page_no()
+        self.enable_auto_manual_resolution()
+        self.update_output_options()
+
+    def stored_presets(self):
+        try:
+            return json.loads(self.settings.value("presets", "{}"))
+        except Exception as e:
+            return {}
+
+    def load_presets(self, selected=None):
+        combo = self.advance_setting_ui.ui.preset
+        combo.blockSignals(True)
+        combo.clear()
+        combo.addItem("Choose a preset")
+        for name in sorted(self.stored_presets(), key=str.lower):
+            combo.addItem(name)
+        combo.setCurrentIndex(max(0, combo.findText(selected)) if selected else 0)
+        combo.blockSignals(False)
+        self.advance_setting_ui.ui.delete_preset.setEnabled(combo.count() > 1)
+
+    def choose_preset(self, index):
+        if index <= 0:
+            return
+        values = self.stored_presets().get(self.advance_setting_ui.ui.preset.currentText())
+        if values:
+            self.apply_preset_values(values)
+
+    def save_preset(self):
+        current = self.advance_setting_ui.ui.preset.currentText()
+        name, ok = QInputDialog.getText(self.advance_setting_ui, "Save preset",
+                                        "Name for these settings, for example \"Receipts\":",
+                                        text="" if self.advance_setting_ui.ui.preset.currentIndex() == 0 else current)
+        name = name.strip()
+        if not ok or not name:
+            return
+        presets = self.stored_presets()
+        presets[name] = self.current_preset_values()
+        self.settings.setValue("presets", json.dumps(presets))
+        self.load_presets(selected=name)
+
+    def delete_preset(self):
+        combo = self.advance_setting_ui.ui.preset
+        if combo.currentIndex() <= 0:
+            self.popup_message(title="No preset chosen", message="Choose the preset you want to delete first.")
+            return
+        presets = self.stored_presets()
+        presets.pop(combo.currentText(), None)
+        self.settings.setValue("presets", json.dumps(presets))
+        self.load_presets()
 
     def open_download_path(self):
         folder_loc = QFileDialog.getExistingDirectory(self, "Select Downloads Directory",
                                                       self.Default_loc,
                                                       QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
         if folder_loc:
-            if check_default_location(folder_loc):
+            if can_save_in(folder_loc):
                 self.ui.output_path.setText(folder_loc + "/JPEG2PDF")
                 self.Default_loc = folder_loc
             else:
-                self.popup_message(title="Export Path Invalid", message="Export Path Must Inside Home Directory")
+                self.popup_message(title="Please choose another folder",
+                                   message="PDFs can't be saved in this folder. Choose a folder you can save files in.")
                 return False
 
     def change_import_path(self):
@@ -1501,8 +2150,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.general_setting_ui.ui.import_path.setText(folder_loc)
                 self.Default_loc_import = folder_loc
             else:
-                self.popup_message(title="Import Path Invalid",
-                                   message="Import Path Must Inside Home Directory or Home")
+                self.popup_message(title="Please choose another folder",
+                                   message="This folder can't be opened. Choose another one.")
                 return False
 
         self.general_setting_ui.setWindowState(
@@ -1530,10 +2179,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.all_images_list:
             if self.toggle % 2 == 0:
                 self.show_full_path_flag = True
-                self.ui.show_full_path.setText("Hide full path")
+                self.ui.show_full_path.setText("Hide file location")
             else:
                 self.show_full_path_flag = False
-                self.ui.show_full_path.setText("Show full path")
+                self.ui.show_full_path.setText("Show file location")
             self.toggle += 1
             self.get_all_selected_items()
             self.process_images_into_table()
@@ -1573,11 +2222,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
                 self.msg.setStyleSheet(self.pop_up_stylesheet)
                 self.msg.setIcon(QMessageBox.Information)
-                self.msg.setText("Are you sure want to remove selected images ?")
+                self.msg.setText("Remove the ticked images from the list?\n\nYour image files are not deleted.")
                 yes_button = self.msg.addButton(QMessageBox.Yes)
                 no_button = self.msg.addButton(QMessageBox.No)
                 self.msg.exec_()
                 if self.msg.clickedButton() == yes_button:
+                    self.push_undo()
                     if len(self.selected_list) == len(self.all_images_list):
                         self.reset_cache()
                     else:
@@ -1595,10 +2245,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.msg.clickedButton() == no_button:
                     pass
             else:
-                self.popup_message(title="OOps! No image selected",
-                                   message="Please select an image items checkbox to remove")
+                self.popup_message(title="No image ticked",
+                                   message="Tick the images you want to remove from the list.")
         except Exception as e:
-            self.popup_message(title="OOps! Something went wrong", message="Error while removing the selected images!",
+            self.popup_message(title="Something went wrong", message="The images could not be removed. Please try again.",
                                error=True)
             pass
 
@@ -1609,11 +2259,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
                 self.msg.setStyleSheet(self.pop_up_stylesheet)
                 self.msg.setIcon(QMessageBox.Information)
-                self.msg.setText("Are you sure want to clear all images ?")
+                self.msg.setText("Remove all images from the list?\n\nYour image files are not deleted.")
                 yes_button = self.msg.addButton(QMessageBox.Yes)
                 no_button = self.msg.addButton(QMessageBox.No)
                 self.msg.exec_()
                 if self.msg.clickedButton() == yes_button:
+                    self.push_undo()
                     self.reset_cache()
                     self.setPhoto(QPixmap())
                     self.toggle_full_half_path()
@@ -1625,11 +2276,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pass
 
             except Exception as e:
-                self.popup_message(title="OOps! Something went wrong", message="Error while deleting the file!",
+                self.popup_message(title="Something went wrong", message="The list could not be cleared. Please try again.",
                                    error=True)
                 pass
         else:
-            self.popup_message(title="OOps! No image found", message="No Images/files to clear")
+            self.popup_message(title="Nothing to clear", message="The list is already empty.")
 
     def progress_bar_enable(self):
         self.ui.progress_bar.setRange(0, 0)
@@ -1641,8 +2292,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         status = True
         pdf_settings = dict()
         try:
-            pdf_settings["orientation"] = str(self.ui.orientation.currentText())
-            pdf_settings["page_format"] = str(self.ui.page_format.currentText())
+            pdf_settings["orientation"] = ORIENTATIONS[self.ui.orientation.currentIndex()]
+            pdf_settings["page_format"] = PAGE_FORMATS[self.ui.page_format.currentIndex()]
 
             if str(self.ui.title.text()) not in [None, ""]:
                 pdf_settings["title"] = str(self.ui.title.text())
@@ -1665,9 +2316,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # rotate page
             page_to = self.advance_setting_ui.ui.page_to.text()
             page_from = self.advance_setting_ui.ui.page_from.text()
-            rotation_angle = str(self.advance_setting_ui.ui.select_angle.currentText())
-
-            if rotation_angle != "Select angle":
+            if self.advance_setting_ui.ui.select_angle.currentIndex() in ROTATION_ANGLES:
                 if page_from == "":
                     pdf_settings["page_from"] = "start"
                 else:
@@ -1684,16 +2333,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     else:
                         pdf_settings["page_to"] = page_to
 
-                pdf_settings["rotation_angle"] = \
-                    str(self.advance_setting_ui.ui.select_angle.currentText()).split("Degree")[
-                        0].strip()
+                pdf_settings["rotation_angle"] = ROTATION_ANGLES[self.advance_setting_ui.ui.select_angle.currentIndex()]
 
             #  grayscale page
             page_to = self.advance_setting_ui.ui.page_to_grayscale.text()
             page_from = self.advance_setting_ui.ui.page_from_grayscale.text()
-            rotation_angle = str(self.advance_setting_ui.ui.select_scale.currentText())
-
-            if rotation_angle != "Select scale":
+            if self.advance_setting_ui.ui.select_scale.currentIndex() in COLOUR_MODES:
                 if page_from == "":
                     pdf_settings["page_from_grayscale"] = "start"
                 else:
@@ -1710,8 +2355,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     else:
                         pdf_settings["page_to_grayscale"] = page_to
 
-                scale_dict = {"Grayscale": "L", "Black and white": "1"}
-                pdf_settings["scale_type"] = scale_dict[str(self.advance_setting_ui.ui.select_scale.currentText())]
+                pdf_settings["scale_type"] = COLOUR_MODES[self.advance_setting_ui.ui.select_scale.currentIndex()]
 
             if self.advance_setting_ui.ui.mm.isChecked():
                 pdf_settings["unit"] = 'mm'
@@ -1757,9 +2401,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             #  page display mode:-
             if self.advance_setting_ui.ui.zoom.currentIndex() != 0:
-                pdf_settings["magnification"] = self.advance_setting_ui.ui.zoom.currentText()
+                pdf_settings["magnification"] = ZOOM_MODES[self.advance_setting_ui.ui.zoom.currentIndex()]
             if self.advance_setting_ui.ui.layout.currentIndex() != 0:
-                pdf_settings["layout"] = self.advance_setting_ui.ui.layout.currentText()
+                pdf_settings["layout"] = LAYOUT_MODES[self.advance_setting_ui.ui.layout.currentIndex()]
 
             # page margins:-
             if self.advance_setting_ui.ui.l_margin.value() > 0:
@@ -1775,6 +2419,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pdf_settings["dpi"] = self.advance_setting_ui.ui.dpi.value()
             if not self.advance_setting_ui.ui.auto_resolution.isChecked():
                 pdf_settings["auto_resolution"] = False
+
+            # compression, output files, OCR
+            pdf_settings["compression"] = self.advance_setting_ui.ui.compression.currentIndex()
+            pdf_settings["split_every"] = self.advance_setting_ui.ui.split_every.value()
+            pdf_settings["per_image_pdf"] = self.advance_setting_ui.ui.per_image_pdf.isChecked()
+            pdf_settings["images_per_page"] = IMAGES_PER_PAGE[self.advance_setting_ui.ui.images_per_page.currentIndex()]
+            pdf_settings["custom_size"] = (self.advance_setting_ui.ui.custom_width.value(),
+                                           self.advance_setting_ui.ui.custom_height.value())
+            pdf_settings["straighten"] = self.advance_setting_ui.ui.straighten.isChecked()
+            pdf_settings["trim_borders"] = self.advance_setting_ui.ui.trim_borders.isChecked()
+            pdf_settings["contrast"] = self.advance_setting_ui.ui.contrast.isChecked()
+            pdf_settings["image_edits"] = copy.deepcopy(self.image_edits)
+            if self.advance_setting_ui.ui.append_pdf.isChecked() and self.advance_setting_ui.ui.append_pdf_path.text() \
+                    and not pdf_settings["per_image_pdf"]:
+                pdf_settings["append_pdf_path"] = self.advance_setting_ui.ui.append_pdf_path.text()
+            if self.advance_setting_ui.ui.ocr_enabled.isChecked() and ocr_available():
+                pdf_settings["ocr"] = True
+                pdf_settings["ocr_language"] = self.advance_setting_ui.ui.ocr_language.text().strip() or "eng"
 
         except Exception as e:
             status = False
@@ -1800,13 +2462,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             is_running_pixmap = False
 
         if is_running or is_running_pixmap:
-            self.popup_message(title="Task Already In Queue", message="Please wait for the Running task to finish!")
+            self.popup_message(title="Please wait", message="The app is still busy with the last task. Try again when it has finished.")
         else:
             self.get_all_selected_items()
-            if self.selected_list:
-                selected_list_items = [self.all_images_list[i] for i in self.selected_list]
+            # nothing ticked: convert every image in the list
+            image_rows = self.selected_list or list(range(len(self.all_images_list)))
+            if image_rows:
+                selected_list_items = [self.all_images_list[i] for i in image_rows]
                 download_path = get_download_path(self.Default_loc)
                 pdf_settings, status, pro_plan_status = self.get_pdf_setting_all()
+                if pdf_settings.get("per_image_pdf"):
+                    pdf_settings["output_names"] = pdf_names_for_images(selected_list_items)
+                split_every = pdf_settings.get("split_every", 0)
+                pdf_settings["split_into_parts"] = bool(split_every and not pdf_settings.get("append_pdf_path")
+                                                        and len(selected_list_items) > split_every)
                 if status:
                     self.progress_bar_enable()
                     if self.overwrite_warning:
@@ -1819,16 +2488,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         self.msg.setWindowFlag(QtCore.Qt.FramelessWindowHint)
                         self.msg.setStyleSheet(self.pop_up_stylesheet)
                         self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText(f"'{title}.pdf' already exists in your output directory!")
+                        self.msg.setText(f"{title} already exists.")
                         self.msg.setInformativeText(
-                            "TIP: Change the PDF Export name.\n\nDo you want to replace existing one ?")
+                            "Do you want to replace it?\n\nTip: give the PDF another name to keep both.")
                         open_file = self.msg.addButton(QMessageBox.Yes)
                         open_folder = self.msg.addButton(QMessageBox.Yes)
                         close = self.msg.addButton(QMessageBox.Yes)
                         yes_button = self.msg.addButton(QMessageBox.Yes)
-                        open_folder.setText('See PDF location')
+                        open_folder.setText('Show in folder')
                         open_file.setText('Open PDF')
-                        close.setText('No')
+                        close.setText('Cancel')
+                        yes_button.setText('Replace')
                         close.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
                         open_folder.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
                         open_file.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DirIcon)))
@@ -1849,15 +2519,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     else:
                         self.start_convert_thread(selected_list_items, download_path, pdf_settings)
                 else:
-                    self.popup_message(title="Invalid advance settings detected!",
-                                       message="Please check your advance settings once.", error=True)
+                    self.popup_message(title="Please check the advanced settings",
+                                       message="Something there isn't filled in correctly, for example a page number. "
+                                               "Fix it and try again.", error=True)
             else:
-                if self.all_images_list:
-                    self.popup_message(title="No Images checkbox selected!",
-                                       message="Please select images by clicking on checkbox next to images.", error=True)
-                else:
-                    self.popup_message(title="No Images files are loaded!",
-                                       message="Please import the images by clicking on Add image button or Drag n Drop image files.", error=True)
+                self.popup_message(title="No images added yet",
+                                   message="Add images with the buttons at the top, or drag them into the window.", error=True)
 
     def setProgressVal(self, json_data):
         self.progress_bar_disable()
@@ -1865,10 +2532,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             title = json_data.get("title")
             folder_path = json_data.get("file_path")
             play_path = json_data.get("play_path")
-            message = f"PDF created Successfully!\n\nExport file name:  {title}.pdf\n"
+            names_text = json_data.get("names_text") or f"{title}.pdf"
+            if json_data.get("file_count", 1) > 1:
+                message = f"{json_data.get('file_count')} PDF files created!\n\nFile names:  {names_text}\n"
+            else:
+                message = f"PDF created!\n\nFile name:  {names_text}\n"
             self.file_download_success_dialog(message, folder_path, play_path)
         else:
-            self.popup_message(title="OOps! Something went wrong", message=json_data.get("message"))
+            self.popup_message(title="The PDF could not be created", message=json_data.get("message"), error=True)
 
     def setProgressVal_progress(self, json_data):
         total = json_data.get("total")
@@ -1906,8 +2577,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         webbrowser.open(feedback_link)
 
 
+def use_available_qt_platform():
+    # The desktop session may ask for a Qt display plugin this package doesn't include
+    # (e.g. QT_QPA_PLATFORM=wayland-egl). Qt then refuses to start, so fall back to X11/XWayland.
+    requested = os.environ.get("QT_QPA_PLATFORM", "")
+    if not requested:
+        return
+    from PyQt5.QtCore import QLibraryInfo
+    plugin_dirs = [d for d in os.environ.get("QT_PLUGIN_PATH", "").split(":") if d]
+    plugin_dirs.append(QLibraryInfo.location(QLibraryInfo.PluginsPath))
+    installed = set()
+    for plugin_dir in plugin_dirs:
+        try:
+            installed.update(name.split(".")[0][len("libq"):] for name in os.listdir(os.path.join(plugin_dir, "platforms"))
+                             if name.startswith("libq"))
+        except OSError:
+            pass
+    wanted = [platform.split(":")[0] for platform in requested.split(";")]
+    if installed and not any(platform in installed for platform in wanted):
+        print(f"Qt platform '{requested}' is not available, using xcb")
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
+
+
 if __name__ == "__main__":
+    use_available_qt_platform()
+    # sharp, correctly sized text and icons on HiDPI and scaled screens
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+    try:
+        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    except AttributeError:
+        pass
     app = QApplication(sys.argv)
+    load_app_font()
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

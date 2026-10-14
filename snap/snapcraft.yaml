@@ -1,6 +1,6 @@
 name: jpg2pdf
 base: core22
-version: '2026.7.2'
+version: '2026.10.1'
 summary: Convert JPG, PNG, SVG, TIFF and BMP images into encrypted PDF files
 description: JPG2PDF converts JPG, JPEG, PNG, BMP, SVG, TIFF and many other image formats into high-quality PDF documents.
 grade: stable
@@ -33,6 +33,9 @@ apps:
     desktop: jpg2pdf.desktop
     environment:
       DISABLE_WAYLAND: 1
+      # the bundled Qt has no Wayland plugin; a session-wide QT_QPA_PLATFORM=wayland-egl
+      # would otherwise stop the app from starting (it runs through XWayland instead)
+      QT_QPA_PLATFORM: xcb
 
 plugs:
   gsettings:
@@ -78,3 +81,14 @@ parts:
           - fpdf2
           - Pillow
           - pikepdf
+          - pillow-heif
+
+  # OCR engine for "Searchable PDF". The binary is moved out of $SNAP/usr/bin so the
+  # bin/tesseract wrapper (from snap_launcher) runs it with its own library path.
+  tesseract:
+    plugin: nil
+    stage-packages:
+      - tesseract-ocr
+      - tesseract-ocr-eng
+    organize:
+      usr/bin/tesseract: usr/lib/tesseract-bin/tesseract

@@ -3,10 +3,10 @@ from PyQt5.QtCore import QFile, QIODevice, QTextStream
 THEME_DICT = {"dark": "dark.qss", "light": "light.qss"}
 
 
-def set_theme(self, theme=":/qss_icons/dark/dark.qss"):
+def set_theme(self, theme=":/qss_icons/dark/dark.qss", extra_css=""):
     theme_file = QFile(theme)
     theme_file.open(QIODevice.OpenModeFlag.ReadOnly)
-    self.setStyleSheet(QTextStream(theme_file).readAll())
+    self.setStyleSheet(QTextStream(theme_file).readAll() + extra_css)
 
 
 def popup_theme(self):

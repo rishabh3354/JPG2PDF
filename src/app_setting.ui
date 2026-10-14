@@ -69,7 +69,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="title">
-          <string>GENERAL PREFERENCE</string>
+          <string>GENERAL</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
@@ -80,7 +80,7 @@ p, li { white-space: pre-wrap; }
                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
               </property>
               <property name="text">
-               <string>Alert for overwrite existing files</string>
+               <string>Ask before replacing a PDF with the same name</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -93,15 +93,82 @@ p, li { white-space: pre-wrap; }
                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
               </property>
               <property name="text">
-               <string>Auto generate pdf export name</string>
+               <string>Name PDFs automatically</string>
               </property>
              </widget>
             </item>
+<item row="2" column="0">
+ <widget class="QCheckBox" name="tick_new_images">
+  <property name="styleSheet">
+   <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+  </property>
+  <property name="toolTip">
+   <string>When on, images you add are ticked straight away, ready to convert.</string>
+  </property>
+  <property name="text">
+   <string>Tick new images automatically</string>
+  </property>
+ </widget>
+</item>
            </layout>
           </item>
          </layout>
         </widget>
        </item>
+<item>
+ <widget class="QGroupBox" name="groupBox_text">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="title">
+   <string>TEXT SIZE</string>
+  </property>
+  <layout class="QVBoxLayout" name="v_groupBox_text">
+   <item>
+    <layout class="QGridLayout" name="g_groupBox_text">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_text_size">
+       <property name="text">
+        <string>Text size</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="text_size">
+       <property name="toolTip">
+        <string>Make all text in the app bigger or smaller</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Small</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Normal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Large</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Extra large</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+</item>
+
        <item>
         <widget class="QGroupBox" name="groupBox_11">
          <property name="sizePolicy">
@@ -111,7 +178,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="title">
-          <string>IMPORT PATH</string>
+          <string>IMPORT</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_18">
           <item>
@@ -119,7 +186,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>Current Directory</string>
+               <string>Start in folder</string>
               </property>
              </widget>
             </item>
@@ -133,6 +200,32 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
+<item row="1" column="0" colspan="3">
+ <widget class="QCheckBox" name="remember_last_folder">
+  <property name="styleSheet">
+   <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+  </property>
+  <property name="toolTip">
+   <string>When on, Add image and Add folder open the folder you used last time. When off, they always open the folder above.</string>
+  </property>
+  <property name="text">
+   <string>Open the folder I used last time</string>
+  </property>
+ </widget>
+</item>
+<item row="2" column="0" colspan="3">
+ <widget class="QCheckBox" name="include_subfolders">
+  <property name="styleSheet">
+   <string>QCheckBox::indicator { width: 20px;height:20px };</string>
+  </property>
+  <property name="toolTip">
+   <string>When on, Add folder also adds the images in folders inside it, one folder after another, in name order.</string>
+  </property>
+  <property name="text">
+   <string>Also add images from folders inside the folder</string>
+  </property>
+ </widget>
+</item>
            </layout>
           </item>
          </layout>
@@ -147,7 +240,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="title">
-          <string>THUMBNAIL ICON</string>
+          <string>THUMBNAILS</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
@@ -195,7 +288,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="title">
-          <string>FILE DIALOG (Add images)</string>
+          <string>FILE PICKER (Add images)</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
@@ -206,7 +299,7 @@ p, li { white-space: pre-wrap; }
                <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
               </property>
               <property name="text">
-               <string>Use QT File Dialog</string>
+               <string>Built-in file picker</string>
               </property>
              </widget>
             </item>
@@ -216,7 +309,7 @@ p, li { white-space: pre-wrap; }
                <string notr="true">QRadioButton::indicator { width: 20px;height:20px };</string>
               </property>
               <property name="text">
-               <string>Use Native File Dialog</string>
+               <string>System file picker</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -237,7 +330,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="title">
-          <string>IMPORT FILTER (Add Images/ folder)</string>
+          <string>FILE TYPES TO ADD</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
@@ -326,7 +419,7 @@ p, li { white-space: pre-wrap; }
                <string notr="true">QCheckBox::indicator { width: 20px;height:20px };</string>
               </property>
               <property name="text">
-               <string>all files</string>
+               <string>All types</string>
               </property>
               <property name="checked">
                <bool>false</bool>
